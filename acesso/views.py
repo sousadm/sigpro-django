@@ -1,12 +1,14 @@
 import requests
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from acesso.forms import LoginForm
-from core.controle import session_add_token, session_get
+from core.controle import session_add_token, session_get, session_get_token, session_required, require_token
 from core.settings import URL_API
+
 
 # Create your views here.
 
@@ -35,6 +37,8 @@ def login(request):
 
     return render(request, template_name, {"form": form})
 
+#decorator
+@require_token
 def home(request):
     username = session_get(request, 'username')
     template_name = 'acesso/home.html'
