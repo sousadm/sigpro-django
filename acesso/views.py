@@ -43,3 +43,8 @@ def home(request):
     username = session_get(request, 'username')
     template_name = 'acesso/home.html'
     return render(request, template_name, {'username': username})
+
+
+def logout(request):
+    request.session.clear()
+    return HttpResponseRedirect(reverse('login', kwargs={}))
