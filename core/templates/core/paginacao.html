@@ -1,0 +1,27 @@
+{% if lista.has_other_pages %}
+<ul class="pagination pagination-sm flex-wrap">
+
+    {% if lista.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ lista.previous_page_number }}">Anterior</a></li>
+    {% else %}
+        <li class="disabled page-item"><a class="page-link" href="#">Anterior</a></li>
+    {% endif %}
+
+    {% for l in  lista.paginator.page_range %}
+        {% if l <= lista.number|add:5 and l >= lista.number|add:-5 %}
+            {% if lista.number == l %}
+                <li class="page-item active"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if lista.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ lista.next_page_number }}">Próxima</a></li>
+    {% else %}
+        <li class="disabled page-item"><a class="page-link" href="#">Próxima</a></li>
+    {% endif %}
+
+</ul>
+{% endif %}

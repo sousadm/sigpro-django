@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+
+{% load bootstrap %}
+
+{% load static %}
+
+{% block title %} Login {% endblock %}
+{% block content %}
+
+<div class="container">
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="card" style="width:400px; margin-top:2%">
+            <div class="card-body">
+                {{ form|bootstrap }}
+                <button type="submit" class="btn btn-primary btn-md">Acessar Sistema</button>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for m in messages %}
+                <div class="alert alert-warning" role="alert">
+                  {{ m }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    </form>
+</div>
+
+{% endblock %}

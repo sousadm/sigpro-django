@@ -1,0 +1,40 @@
+<!doctype html>
+{% load static %}
+
+<html>
+
+  <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+        <title> {% block title %} Sousa {% endblock %} </title>
+  </head>
+
+<body>
+
+<div class="container">
+
+    <div id="content">
+        {% include 'core/messages.html' %}
+        <div style="margin-top: 2px">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+    {% block footer %}
+    <footer class="text-right mb-5 text-white">
+        <span style="color: #cccccc">Copyright © 2023 Contrate</span>
+    </footer>
+    {% endblock %}
+
+</div>
+
+</body>
+
+</html>
