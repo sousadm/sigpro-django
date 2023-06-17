@@ -20,8 +20,8 @@ def login(request):
             response = requests.post(URL_API, json=auth_data)
             # messages.success(request, response.status_code)
             if response.status_code == 200:
-                messages.success(request, response.text)
-                messages.success(request, response.json())
+                messages.success(request, 'Sucesso')
+                # messages.success(request, response.json())
             else:
                 messages.success(request, 'erro')
 
