@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from acesso.views import login
+from acesso.views import login, home
 
 urlpatterns = [
-    path('', login, name='login'),
+    path('', home, name='home'),
+    path('login/', login, name='login'),
     path('admin/', admin.site.urls),
 ]
