@@ -18,14 +18,10 @@ def login(request):
         if request.method == "POST":
             form = LoginForm(request.POST)
             if form.is_valid():
-                auth_data = {
-                    'login': form.cleaned_data.get('username'),
-                    'senha': form.cleaned_data.get('password')
-                }
-                response = requests.post(URL_API, json=auth_data)
+                response = requests.post(URL_API+'login', json=form.cleaned_data)
                 if response.status_code == 200:
                     session_add_token(request, response.json())
-                    return HttpResponseRedirect(reverse('home', kwargs={}))
+                    return HttpResponseRedirect(reverse('url_pessoa_add'))
                 else:
                     messages.error(request, 'erro ao acessar o sistema')
 

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'acesso',
+    'pessoa',
     'bootstrapform',
 ]
 
@@ -124,7 +125,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-URL_API = 'http://localhost:8080/login'
+URL_API = 'http://localhost:8080/'
 
 # Configurações de sessão
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'

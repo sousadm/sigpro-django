@@ -13,6 +13,14 @@ def require_token(view_func):
     return wrapper
 
 
+def session_get_headers(request):
+    token = session_get_token(request)
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
+    return headers
+
+
 def session_required(request):
     if session_get_token(request) is None:
         return HttpResponseRedirect(reverse('login', kwargs={}))

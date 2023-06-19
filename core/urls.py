@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path
 
 from acesso.views import login, home, logout
+from pessoa.views import pessoaNew
 
 urlpatterns = [
     path('', home, name='home'),
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
+    path('pessoa/add', pessoaNew, name='url_pessoa_add'),
     path('admin/', admin.site.urls),
 ]
