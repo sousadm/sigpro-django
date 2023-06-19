@@ -1,3 +1,5 @@
+import json
+
 import requests
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -31,3 +33,18 @@ def pessoaNew(request):
 
 
 
+def pessoaEdit(request, uuid):
+    template_name = 'pessoa/pessoa_edit.html'
+    try:
+        headers = session_get_headers(request)
+        response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=headers)
+        if response.status_code == 200:
+            form = PessoaForm(response.json())
+            return render(request, template_name, {'form': form})
+        else:
+            messages.error('registro não localizado')
+            return HttpResponseRedirect(reverse('url_pessoa_add'))
+    except Exception as e:
+        messages.error(request, e)
+        return None
+        # return HttpResponseRedirect(reverse('url_pessoa_add'))
