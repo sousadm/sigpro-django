@@ -11,6 +11,7 @@ cpf_regex = RegexValidator(
 
 
 class PessoaModel(models.Model):
+    uuid = models.CharField(max_length=254)
     nome = models.CharField(max_length=100)
     fone = models.CharField(max_length=20)
     email = models.EmailField(max_length=254)

@@ -17,14 +17,18 @@ def pessoaNew(request):
     try:
         if request.method == "POST":
             form = PessoaForm(request.POST)
-            if form.is_valid():
-                headers = session_get_headers(request)
-                response = requests.post(URL_API+'pessoa', json=form.cleaned_data, headers=headers)
-                if response.status_code == 201:
-                    uuid = response.json()['id']
-                    return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
-                else:
-                    messages.error(request, response.json()['mensagem'])
+            uuid = form.salvar(request)
+            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+            # if form.is_valid():
+            #     headers = session_get_headers(request)
+            #     response = requests.post(URL_API+'pessoa', json=form.cleaned_data, headers=headers)
+            #     if response.status_code == 201:
+            #         uuid = response.json()['id']
+            #         return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+            #     else:
+            #         messages.error(request, response.json()['mensagem'])
+            # else:
+            #     messages.error(request, form.errors)
         else:
             form = PessoaForm()
     except Exception as e:
