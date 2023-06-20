@@ -14,7 +14,25 @@
                 <h2>Cadastro de Pessoa</h2>
             </div>
             <div class="card-body">
-                {{ form|bootstrap }}
+
+                <div class="row">
+                    <div class="col-12 col-md-2">
+                        {{ form.uuid|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-10">
+                        {{ form.nome|bootstrap }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        {{ form.fone|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-8">
+                        {{ form.email|bootstrap }}
+                    </div>
+                </div>
+
             </div>
         </div>
 

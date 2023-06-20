@@ -20,20 +20,3 @@ body {
     position: fixed;
     bottom: 30px;
 }
-
-
-//BottomToolbar
-.aserp-toolbar {
-  background-color: var(--surface-ground);
-  position: fixed;
-  z-index: 100;
-  bottom: 0;
-  left: 204.80px;
-  transition: .17s;
-  box-shadow: 0 -1px 2px 1px rgba(28, 10, 29, 0.2) !important;
-  width: calc(100% - 204.80px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}

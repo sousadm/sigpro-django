@@ -15,15 +15,14 @@ class PessoaForm(forms.ModelForm):
     class Meta:
         model = PessoaModel
         fields = '__all__'
-        exclude = ['uuid']
+        # exclude = ['uuid']
         labels = {
+            'uuid':'Código',
             'nome':'Nome',
             'email':'E-mail',
             'fone': 'Fone',
         }
-        widgets = {
-            'uuid': forms.TextInput(attrs={'type': 'hidden'}),
-        }
+
 
     def salvar(self, request, uuid=None):
         if self.is_valid():
@@ -39,7 +38,11 @@ class PessoaForm(forms.ModelForm):
         else:
             raise ValueError(self.errors)
 
-    # def __init__(self, *args, **kwargs):
-    #     super(PessoaForm, self).__init__(*args, **kwargs)
-    #     self.fields['nome'].widget.attrs['autofocus'] = True
+    def __init__(self, *args, **kwargs):
+        super(PessoaForm, self).__init__(*args, **kwargs)
+        self.fields['nome'].widget.attrs['autofocus'] = True
+        self.fields['uuid'].widget.attrs['disabled'] = 'disabled'
+        self.fields['uuid'].required = False
+
+
 
