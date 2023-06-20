@@ -35,7 +35,10 @@ def pessoa_render(request, uuid=None):
         else:
             form = PessoaForm()
 
-        if request.method == "POST":
+        if request.POST.get('btn_novo'):
+            return HttpResponseRedirect(reverse('url_pessoa_add'))
+
+        if request.POST.get('btn_salvar'):
             form = PessoaForm(request.POST)
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
