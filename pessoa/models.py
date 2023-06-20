@@ -15,6 +15,8 @@ class PessoaModel(models.Model):
     nome = models.CharField(max_length=100)
     fone = models.CharField(max_length=20)
     email = models.EmailField(max_length=254)
+    created_dt = models.DateTimeField()
+    updated_dt = models.DateTimeField()
     # definição para pessoa física
     # cpf = models.CharField(
     #     max_length=14,

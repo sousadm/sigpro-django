@@ -15,7 +15,7 @@ class PessoaForm(forms.ModelForm):
     class Meta:
         model = PessoaModel
         fields = '__all__'
-        # exclude = ['uuid']
+        exclude = ['created_dt','updated_dt']
         labels = {
             'uuid':'Código',
             'nome':'Nome',
