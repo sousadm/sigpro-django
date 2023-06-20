@@ -11,44 +11,37 @@ from core.settings import URL_API
 from pessoa.forms import PessoaForm
 
 
+
 @require_token
 def pessoaNew(request):
-    template_name = 'pessoa/pessoa_edit.html'
-    try:
-        if request.method == "POST":
-            form = PessoaForm(request.POST)
-            uuid = form.salvar(request)
-            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
-            # if form.is_valid():
-            #     headers = session_get_headers(request)
-            #     response = requests.post(URL_API+'pessoa', json=form.cleaned_data, headers=headers)
-            #     if response.status_code == 201:
-            #         uuid = response.json()['id']
-            #         return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
-            #     else:
-            #         messages.error(request, response.json()['mensagem'])
-            # else:
-            #     messages.error(request, form.errors)
-        else:
-            form = PessoaForm()
-    except Exception as e:
-        messages.error(request, e)
-    return render(request, template_name, {"form": form})
-
+    return pessoa_render(request, None)
 
 
 def pessoaEdit(request, uuid):
+    return pessoa_render(request, uuid)
+
+
+@require_token
+def pessoa_render(request, uuid=None):
+    headers = session_get_headers(request)
     template_name = 'pessoa/pessoa_edit.html'
     try:
-        headers = session_get_headers(request)
-        response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=headers)
-        if response.status_code == 200:
-            form = PessoaForm(response.json())
-            return render(request, template_name, {'form': form})
+        if uuid:
+            response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=headers)
+            if response.status_code == 200:
+                form = PessoaForm(response.json())
+            else:
+                messages.error(request, 'registro não localizado')
         else:
-            messages.error('registro não localizado')
-            return HttpResponseRedirect(reverse('url_pessoa_add'))
+            form = PessoaForm()
+
+        if request.method == "POST":
+            form = PessoaForm(request.POST)
+            uuid = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados')
+            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+
     except Exception as e:
         messages.error(request, e)
-        return None
-        # return HttpResponseRedirect(reverse('url_pessoa_add'))
+
+    return render(request, template_name, {"form": form})

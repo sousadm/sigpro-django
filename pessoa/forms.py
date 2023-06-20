@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from core.controle import session_get_token, session_get_headers
+from core.controle import session_get_token, session_get_headers, tratar_error
 from core.settings import URL_API
 from pessoa.models import PessoaModel
 from django import forms
@@ -25,16 +25,19 @@ class PessoaForm(forms.ModelForm):
             'uuid': forms.TextInput(attrs={'type': 'hidden'}),
         }
 
-    def salvar(self, request):
+    def salvar(self, request, uuid=None):
         if self.is_valid():
             headers = session_get_headers(request)
-            response = requests.post(URL_API+'pessoa', json=self.cleaned_data, headers=headers)
-            if response.status_code == 201:
+            if uuid:
+                response = requests.patch(URL_API + 'pessoa/'+str(uuid), json=self.cleaned_data, headers=headers)
+            else:
+                response = requests.post(URL_API+'pessoa', json=self.cleaned_data, headers=headers)
+            if response.status_code in [200,201]:
                 return response.json()['uuid']
             else:
-                messages.error(request, response.json()['mensagem'])
+                raise Exception(tratar_error(response))
         else:
-            messages.error(request, self.errors)
+            raise ValueError(self.errors)
 
     # def __init__(self, *args, **kwargs):
     #     super(PessoaForm, self).__init__(*args, **kwargs)

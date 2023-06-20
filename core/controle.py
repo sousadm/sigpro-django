@@ -51,3 +51,7 @@ def session_get(request, chave):
 # Remove parâmetro gravado na sessão
 def session_delete(request, chave):
     del request.session[chave]
+
+
+def tratar_error(response):
+    return response.json()['message']
