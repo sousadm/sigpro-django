@@ -17,6 +17,7 @@ class PessoaForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['created_dt','updated_dt']
         labels = {
+            'tipoPessoa':'Tipo de Pessoa',
             'uuid':'Código',
             'nome':'Nome',
             'email':'E-mail',

@@ -12,7 +12,23 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-**********" crossorigin="anonymous" />
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
         <title> {% block title %} Sousa {% endblock %} </title>
+
+      <script>
+        $(document).ready(function() {
+
+            function handleCategoryChange() {
+                var selectElement = document.getElementById('id_tipoPessoa');
+                var selectedOption = selectElement.options[selectElement.selectedIndex].value;
+                alert(selectedOption);
+            }
+
+            $('#id_tipoPessoa').change(handleCategoryChange);
+        }
+      </script>
+
   </head>
 
 <body>

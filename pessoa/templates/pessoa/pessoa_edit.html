@@ -1,7 +1,12 @@
+<script>
+
+</script>
+
 {% extends "core/base.html" %}
 {% load bootstrap %}
 {% load static %}
 {% block title %} Pessoa {% endblock %}
+
 {% block content %}
 
 <div class="container">
@@ -25,12 +30,27 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-3">
                         {{ form.fone|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-8">
+                    <div class="col-12 col-md-6">
                         {{ form.email|bootstrap }}
                     </div>
+                    <div class="col-12 col-md-3">
+                        {{ form.tipoPessoa|bootstrap }}
+                    </div>
+                </div>
+
+                <div id="fisica">
+                    <h1>Pessoa Física</h1>
+                </div>
+
+                <div id="juridica">
+                    <h2>Pessoa JURIDICA</h2>
+                </div>
+
+                <div id="indefinida">
+                    <h3>Pessoa INDEFINIDA</h3>
                 </div>
 
             </div>

@@ -9,8 +9,14 @@ cpf_regex = RegexValidator(
     message="CPF must be in the format XXX.XXX.XXX-XX"
 )
 
+TIPO_CHOICES =(
+    ("INDEFINIDO", "Indefinida"),
+    ("FISICA", "Física"),
+    ("JURIDICA", "Jurídica"),
+)
 
 class PessoaModel(models.Model):
+    tipoPessoa = models.CharField(max_length=20, choices=TIPO_CHOICES, default='INDEFINIDO')
     uuid = models.CharField(max_length=254)
     nome = models.CharField(max_length=100)
     fone = models.CharField(max_length=20)
