@@ -1,7 +1,6 @@
+import json
+
 import requests
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 
 from core.controle import session_get_token, session_get_headers, tratar_error
 from core.settings import URL_API
@@ -26,12 +25,20 @@ class PessoaForm(forms.ModelForm):
 
 
     def salvar(self, request, uuid=None):
+        post_data = dict(self.data)  # Converter QueryDict para dicionário
+        post_data.pop('cpf', None)
+        post_data.pop('identidade', None)
+        post_data.pop('orgao', None)
+        post_data.pop('pai', None)
+        post_data.pop('mae', None)
+        # if self.cleaned_data.get('tipoPessoa') == 'INDEFINIDO':
+        #     limpar_pessoa_fisica(self)
         if self.is_valid():
             headers = session_get_headers(request)
             if uuid:
-                response = requests.patch(URL_API + 'pessoa/'+str(uuid), json=self.cleaned_data, headers=headers)
+                response = requests.patch(URL_API + 'pessoa/'+str(uuid), json=json.dumps(post_data), headers=headers)
             else:
-                response = requests.post(URL_API+'pessoa', json=self.cleaned_data, headers=headers)
+                response = requests.post(URL_API+'pessoa', json=json.dumps(post_data), headers=headers)
             if response.status_code in [200,201]:
                 return response.json()['uuid']
             else:
@@ -52,3 +59,6 @@ class PessoaForm(forms.ModelForm):
 
 
 
+def limpar_pessoa_fisica(self):
+    self.fields[''] = ''
+    print('')

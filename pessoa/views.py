@@ -40,9 +40,18 @@ def pessoa_render(request, uuid=None):
 
         if request.POST.get('btn_salvar'):
             form = PessoaForm(request.POST)
-            uuid = form.salvar(request, uuid)
-            messages.success(request, 'sucesso ao gravar dados')
-            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+            post_data = dict(form.data)  # Converter QueryDict para dicionário
+            post_data.pop('cpf', None)
+            post_data.pop('identidade', None)
+            post_data.pop('orgao', None)
+            post_data.pop('pai', None)
+            post_data.pop('mae', None)
+            json_data = json.dumps(post_data)
+            # json_data = post_data.clear();
+            messages.warning(request, json_data.replace("[","").replace("]",""))
+            # uuid = form.salvar(request, uuid)
+            # messages.success(request, 'sucesso ao gravar dados')
+            # return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
 
     except Exception as e:
         messages.error(request, e)
