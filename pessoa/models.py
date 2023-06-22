@@ -24,16 +24,16 @@ class PessoaModel(models.Model):
     created_dt = models.DateTimeField()
     updated_dt = models.DateTimeField()
     # definição para pessoa física
-    # cpf = models.CharField(
-    #     max_length=14,
-    #     validators=[cpf_regex]
-    # )
-    # identidade = models.CharField(max_length=20)
-    # pai = models.CharField(max_length=100)
-    # mae = models.CharField(max_length=100)
+    cpf = models.CharField(
+        max_length=14,
+        validators=[cpf_regex]
+    )
+    identidade = models.CharField(max_length=20)
+    pai = models.CharField(max_length=100)
+    mae = models.CharField(max_length=100)
     # nascimento = models.DateField()
     # emissao = models.DateField()
-    # orgao = models.CharField(max_length=10)
+    orgao = models.CharField(max_length=10)
     # idEstrangeiro = models.CharField(max_length=10)
     # nacionalidade = models.CharField(max_length=30)
     # naturalidade = models.CharField(max_length=30)

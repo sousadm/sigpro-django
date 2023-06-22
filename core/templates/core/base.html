@@ -16,19 +16,6 @@
 
         <title> {% block title %} Sousa {% endblock %} </title>
 
-      <script>
-        $(document).ready(function() {
-
-            function handleCategoryChange() {
-                var selectElement = document.getElementById('id_tipoPessoa');
-                var selectedOption = selectElement.options[selectElement.selectedIndex].value;
-                alert(selectedOption);
-            }
-
-            $('#id_tipoPessoa').change(handleCategoryChange);
-        }
-      </script>
-
   </head>
 
 <body>

@@ -44,6 +44,11 @@ class PessoaForm(forms.ModelForm):
         self.fields['nome'].widget.attrs['autofocus'] = True
         self.fields['uuid'].widget.attrs['disabled'] = 'disabled'
         self.fields['uuid'].required = False
+        self.fields['cpf'].required = False
+        self.fields['identidade'].required = False
+        self.fields['pai'].required = False
+        self.fields['mae'].required = False
+        self.fields['orgao'].required = False
 
 
 

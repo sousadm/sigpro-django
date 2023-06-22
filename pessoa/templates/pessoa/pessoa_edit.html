@@ -37,26 +37,41 @@
                         {{ form.email|bootstrap }}
                     </div>
                     <div class="col-12 col-md-3">
-                        {{ form.tipoPessoa|bootstrap }}
+                        <label>Tipo de Pessoa</label>
+                        <select name="tipoPessoa" id="tipoPessoa" class="form-control" onchange="selecionaTipoChange(this)">
+                            {% for choice in form.tipoPessoa.field.choices %}
+                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
 
-                <div id="fisica">
-                    <h1>Pessoa Física</h1>
+                <div class="row" id="fisica">
+                    <div class="col-12 col-md-4">
+                        {{ form.cpf|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.identidade|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.orgao|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-6">
+                        {{ form.pai|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-6">
+                        {{ form.mae|bootstrap }}
+                    </div>
                 </div>
 
-                <div id="juridica">
+                <div class="row" id="juridica">
                     <h2>Pessoa JURIDICA</h2>
-                </div>
-
-                <div id="indefinida">
-                    <h3>Pessoa INDEFINIDA</h3>
                 </div>
 
             </div>
         </div>
 
-        <div class="footer bgred">
+        <div class="footer bg-red">
             <button type="submit" value="btn_novo" name="btn_novo" class="btn btn-secondary">
                 <i class="fa fa-file"></i> Novo
             </button>
@@ -67,5 +82,24 @@
 
     </form>
 </div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var sel = document.getElementById('tipoPessoa');
+        selecionaTipoChange(sel);
+    });
+
+    function selecionaTipoChange(sel) {
+
+        var element_fisica = document.getElementById('fisica');
+        element_fisica.style.display = sel.value == 'FISICA' ? 'flex' : 'none';
+
+        var element_juridica = document.getElementById('juridica');
+        element_juridica.style.display = sel.value == 'JURIDICA' ? 'flex' : 'none';
+
+    }
+
+</script>
 
 {% endblock %}
