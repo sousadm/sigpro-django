@@ -37,8 +37,11 @@
                         {{ form.email|bootstrap }}
                     </div>
                     <div class="col-12 col-md-3">
+                        {{ tipo_definido }}
                         <label>Tipo de Pessoa</label>
-                        <select name="tipoPessoa" id="tipoPessoa" class="form-control" onchange="selecionaTipoChange(this)">
+                        <select name="tipoPessoa" id="tipoPessoa" class="form-control"
+                                {% if tipo_definido %} disabled {% endif %}
+                                onchange="selecionaTipoChange(this)">
                             {% for choice in form.tipoPessoa.field.choices %}
                                 <option value="{{ choice.0 }}" {% if choice.0 == tipo_selected %} selected {% endif %}>{{ choice.1 }}</option>
                             {% endfor %}

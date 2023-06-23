@@ -31,7 +31,8 @@ def pessoa_render(request, uuid=None):
             response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=headers)
             if response.status_code == 200:
                 form = PessoaForm(response.json())
-                form.data['cpf'] = format_cpf(form.data.get('cpf'))
+                if form.data.get('cpf'):
+                    form.data['cpf'] = format_cpf(form.data.get('cpf'))
                 tipo_selected = form.data.get('tipoPessoa')
             else:
                 messages.error(request, 'registro não localizado')
@@ -56,5 +57,9 @@ def pessoa_render(request, uuid=None):
     except Exception as e:
         messages.error(request, e)
 
-    context = {"form": form, 'tipo_selected': tipo_selected}
+    context = {
+        "form": form,
+        "tipo_selected": tipo_selected,
+        "tipo_definido": tipo_selected != 'INDEFINIDO',
+    }
     return render(request, template_name, context)
