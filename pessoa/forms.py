@@ -4,7 +4,7 @@ import requests
 
 from core.controle import session_get_token, session_get_headers, tratar_error
 from core.settings import URL_API
-from pessoa.models import PessoaModel
+from pessoa.models import PessoaModel, TIPO_CHOICES
 from django import forms
 
 # Create your tests here.
@@ -23,22 +23,13 @@ class PessoaForm(forms.ModelForm):
             'fone': 'Fone',
         }
 
-
     def salvar(self, request, uuid=None):
-        post_data = dict(self.data)  # Converter QueryDict para dicionário
-        post_data.pop('cpf', None)
-        post_data.pop('identidade', None)
-        post_data.pop('orgao', None)
-        post_data.pop('pai', None)
-        post_data.pop('mae', None)
-        # if self.cleaned_data.get('tipoPessoa') == 'INDEFINIDO':
-        #     limpar_pessoa_fisica(self)
         if self.is_valid():
             headers = session_get_headers(request)
             if uuid:
-                response = requests.patch(URL_API + 'pessoa/'+str(uuid), json=json.dumps(post_data), headers=headers)
+                response = requests.patch(URL_API + 'pessoa/'+str(uuid), json=self.json(), headers=headers)
             else:
-                response = requests.post(URL_API+'pessoa', json=json.dumps(post_data), headers=headers)
+                response = requests.post(URL_API+'pessoa', json=self.json(), headers=headers)
             if response.status_code in [200,201]:
                 return response.json()['uuid']
             else:
@@ -57,8 +48,16 @@ class PessoaForm(forms.ModelForm):
         self.fields['mae'].required = False
         self.fields['orgao'].required = False
 
+    def json(self):
+        post_data = dict(self.data)  # Converter QueryDict para dicionário
+        post_data.pop('csrfmiddlewaretoken', None)
+        post_data.pop('btn_salvar', None)
+        if self.data.get('tipoPessoa') != TIPO_CHOICES[1]:
+            post_data.pop('cpf', None)
+            post_data.pop('identidade', None)
+            post_data.pop('orgao', None)
+            post_data.pop('pai', None)
+            post_data.pop('mae', None)
+        json_data = json.dumps(post_data).replace("[", "").replace("]", "")
+        return json.loads(json_data)
 
-
-def limpar_pessoa_fisica(self):
-    self.fields[''] = ''
-    print('')

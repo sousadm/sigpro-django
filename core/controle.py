@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -54,4 +56,10 @@ def session_delete(request, chave):
 
 
 def tratar_error(response):
-    return response.json()['message']
+    try:
+        data = json.loads(response.json())
+        mensagem = data.get("mensagem", None)
+        message = data.get("message", None)
+        return message or mensagem or data
+    except:
+        return response.json()

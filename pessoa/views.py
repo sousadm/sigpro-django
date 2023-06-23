@@ -9,7 +9,7 @@ from django.urls import reverse
 from core.controle import require_token, session_get_token, session_get_headers
 from core.settings import URL_API
 from pessoa.forms import PessoaForm
-
+from pessoa.models import PessoaModel
 
 
 @require_token
@@ -33,25 +33,22 @@ def pessoa_render(request, uuid=None):
             else:
                 messages.error(request, 'registro não localizado')
         else:
-            form = PessoaForm()
+            dados_iniciais = {
+                "nome": "Empresa",
+                "fone": "00009999",
+                "email": "costa@hot.com"
+            }
+            form = PessoaForm(initial=dados_iniciais)
 
         if request.POST.get('btn_novo'):
             return HttpResponseRedirect(reverse('url_pessoa_add'))
 
         if request.POST.get('btn_salvar'):
             form = PessoaForm(request.POST)
-            post_data = dict(form.data)  # Converter QueryDict para dicionário
-            post_data.pop('cpf', None)
-            post_data.pop('identidade', None)
-            post_data.pop('orgao', None)
-            post_data.pop('pai', None)
-            post_data.pop('mae', None)
-            json_data = json.dumps(post_data)
-            # json_data = post_data.clear();
-            messages.warning(request, json_data.replace("[","").replace("]",""))
-            # uuid = form.salvar(request, uuid)
-            # messages.success(request, 'sucesso ao gravar dados')
-            # return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+            # messages.warning(request, form.json())
+            uuid = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados')
+            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
 
     except Exception as e:
         messages.error(request, e)
