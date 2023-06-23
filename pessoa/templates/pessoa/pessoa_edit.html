@@ -40,7 +40,7 @@
                         <label>Tipo de Pessoa</label>
                         <select name="tipoPessoa" id="tipoPessoa" class="form-control" onchange="selecionaTipoChange(this)">
                             {% for choice in form.tipoPessoa.field.choices %}
-                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                <option value="{{ choice.0 }}" {% if choice.0 == tipo_selected %} selected {% endif %}>{{ choice.1 }}</option>
                             {% endfor %}
                         </select>
                     </div>

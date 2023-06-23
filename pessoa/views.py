@@ -9,7 +9,7 @@ from django.urls import reverse
 from core.controle import require_token, session_get_token, session_get_headers
 from core.settings import URL_API
 from pessoa.forms import PessoaForm
-from pessoa.models import PessoaModel
+from pessoa.models import PessoaModel, TIPO_CHOICES
 
 
 @require_token
@@ -25,6 +25,7 @@ def pessoaEdit(request, uuid):
 def pessoa_render(request, uuid=None):
     headers = session_get_headers(request)
     template_name = 'pessoa/pessoa_edit.html'
+    tipo_selected = TIPO_CHOICES[0][0]
     try:
         if uuid:
             response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=headers)
@@ -45,7 +46,7 @@ def pessoa_render(request, uuid=None):
 
         if request.POST.get('btn_salvar'):
             form = PessoaForm(request.POST)
-            # messages.warning(request, form.json())
+            tipo_selected = form.data.get('tipoPessoa')
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
             return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
@@ -53,4 +54,5 @@ def pessoa_render(request, uuid=None):
     except Exception as e:
         messages.error(request, e)
 
-    return render(request, template_name, {"form": form})
+    context = {"form": form, 'tipo_selected': tipo_selected}
+    return render(request, template_name, context)

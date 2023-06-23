@@ -52,7 +52,11 @@ class PessoaForm(forms.ModelForm):
         post_data = dict(self.data)  # Converter QueryDict para dicionário
         post_data.pop('csrfmiddlewaretoken', None)
         post_data.pop('btn_salvar', None)
-        if self.data.get('tipoPessoa') != TIPO_CHOICES[1]:
+        # pessoa fisica
+        if self.data.get('tipoPessoa') == TIPO_CHOICES[1][0]:
+            cpf = str(self.data.get('cpf'))
+            post_data['cpf'] = cpf.replace('.', '').replace('-', '')
+        else:
             post_data.pop('cpf', None)
             post_data.pop('identidade', None)
             post_data.pop('orgao', None)
