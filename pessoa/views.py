@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from core.controle import require_token, session_get_token, session_get_headers
+from core.controle import require_token, session_get_token, session_get_headers, format_cpf
 from core.settings import URL_API
 from pessoa.forms import PessoaForm
 from pessoa.models import PessoaModel, TIPO_CHOICES
@@ -31,6 +31,8 @@ def pessoa_render(request, uuid=None):
             response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=headers)
             if response.status_code == 200:
                 form = PessoaForm(response.json())
+                form.data['cpf'] = format_cpf(form.data.get('cpf'))
+                tipo_selected = form.data.get('tipoPessoa')
             else:
                 messages.error(request, 'registro não localizado')
         else:

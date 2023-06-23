@@ -57,9 +57,17 @@ def session_delete(request, chave):
 
 def tratar_error(response):
     try:
-        data = json.loads(response.json())
+        texto = str(response.json())
+        data = json.loads(texto.replace("'", '"'))
         mensagem = data.get("mensagem", None)
         message = data.get("message", None)
         return message or mensagem or data
     except:
         return response.json()
+
+
+
+def format_cpf(cpf):
+    cpf = str(cpf)
+    return f'{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}'
+
