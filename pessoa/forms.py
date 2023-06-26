@@ -21,6 +21,16 @@ class PessoaForm(forms.ModelForm):
             'nome':'Nome',
             'email':'E-mail',
             'fone': 'Fone',
+            'emissao':'Emissão',
+            'nascimento': 'Dt.Nascimento',
+        }
+        widgets = {
+            'emissao': forms.DateInput(
+                attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}
+            ),
+            'nascimento': forms.DateInput(
+                attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}
+            )
         }
 
     def salvar(self, request, uuid=None):

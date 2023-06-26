@@ -31,7 +31,7 @@ class PessoaModel(models.Model):
     identidade = models.CharField(max_length=20)
     pai = models.CharField(max_length=100)
     mae = models.CharField(max_length=100)
-    # nascimento = models.DateField()
+    nascimento = models.DateField()
     emissao = models.DateField()
     orgao = models.CharField(max_length=10)
     # idEstrangeiro = models.CharField(max_length=10)
