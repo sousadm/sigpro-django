@@ -70,10 +70,44 @@
                     <div class="col-12 col-md-6">
                         {{ form.mae|bootstrap }}
                     </div>
+
+                    <div class="col-12 col-md-4">
+                        {{ form.idEstrangeiro|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.nacionalidade|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.naturalidade|bootstrap }}
+                    </div>
+
                 </div>
 
                 <div class="row" id="juridica">
-                    <h2>Pessoa JURIDICA</h2>
+                    <div class="col-12 col-md-4">
+                        {{ form.cnpj|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-8">
+                        {{ form.fantasia|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-3">
+                        {{ form.IE|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-3">
+                        {{ form.cnae|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-3">
+                        {{ form.fundacao|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-3">
+                        {{ form.incentivoCultural|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-6">
+                        {{ form.regime|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-6">
+                        {{ form.tipoIE|bootstrap }}
+                    </div>
                 </div>
 
             </div>
@@ -106,8 +140,30 @@
         var element_juridica = document.getElementById('juridica');
         element_juridica.style.display = sel.value == 'JURIDICA' ? 'flex' : 'none';
 
+        //document.getElementById('id_tipoPessoa') = sel.value;
+
     }
 
 </script>
+
+<script>
+    const fieldWithTooltip = document.querySelector('.field-with-tooltip');
+    const helpText = "{{ form.naturalidade.help_text }}";
+
+    fieldWithTooltip.addEventListener("mouseover", function() {
+        const tooltip = document.createElement("div");
+        tooltip.className = "tooltip";
+        tooltip.innerText = helpText;
+        document.body.appendChild(tooltip);
+    });
+
+    fieldWithTooltip.addEventListener("mouseout", function() {
+        const tooltip = document.querySelector('.tooltip');
+        if (tooltip) {
+            tooltip.remove();
+        }
+    });
+</script>
+
 
 {% endblock %}

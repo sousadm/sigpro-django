@@ -15,22 +15,10 @@ class PessoaForm(forms.ModelForm):
         model = PessoaModel
         fields = '__all__'
         exclude = ['created_dt','updated_dt']
-        labels = {
-            'tipoPessoa':'Tipo de Pessoa',
-            'uuid':'Código',
-            'nome':'Nome',
-            'email':'E-mail',
-            'fone': 'Fone',
-            'emissao':'Emissão',
-            'nascimento': 'Dt.Nascimento',
-        }
         widgets = {
-            'emissao': forms.DateInput(
-                attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}
-            ),
-            'nascimento': forms.DateInput(
-                attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}
-            )
+            'emissao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
+            'nascimento': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
+            'fundacao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'})
         }
 
     def salvar(self, request, uuid=None):
@@ -52,11 +40,26 @@ class PessoaForm(forms.ModelForm):
         self.fields['nome'].widget.attrs['autofocus'] = True
         self.fields['uuid'].widget.attrs['disabled'] = 'disabled'
         self.fields['uuid'].required = False
+        # atributos de pessoa jurídica
         self.fields['cpf'].required = False
         self.fields['identidade'].required = False
+        self.fields['emissao'].required = False
+        self.fields['nascimento'].required = False
         self.fields['pai'].required = False
         self.fields['mae'].required = False
         self.fields['orgao'].required = False
+        self.fields['idEstrangeiro'].required = False
+        self.fields['nacionalidade'].required = False
+        self.fields['naturalidade'].required = False
+        # atributos de pessoa jurídica
+        self.fields['cnpj'].required = False
+        self.fields['fantasia'].required = False
+        self.fields['IE'].required = False
+        self.fields['cnae'].required = False
+        self.fields['fundacao'].required = False
+        self.fields['incentivoCultural'].required = False
+        self.fields['regime'].required = False
+        self.fields['tipoIE'].required = False
 
     def json(self):
         post_data = dict(self.data)  # Converter QueryDict para dicionário
