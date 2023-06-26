@@ -32,7 +32,7 @@ class PessoaModel(models.Model):
     pai = models.CharField(max_length=100)
     mae = models.CharField(max_length=100)
     # nascimento = models.DateField()
-    # emissao = models.DateField()
+    emissao = models.DateField()
     orgao = models.CharField(max_length=10)
     # idEstrangeiro = models.CharField(max_length=10)
     # nacionalidade = models.CharField(max_length=30)

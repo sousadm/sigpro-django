@@ -40,7 +40,6 @@
                         {{ tipo_definido }}
                         <label>Tipo de Pessoa</label>
                         <select name="tipoPessoa" id="tipoPessoa" class="form-control"
-                                {% if tipo_definido %} disabled {% endif %}
                                 onchange="selecionaTipoChange(this)">
                             {% for choice in form.tipoPessoa.field.choices %}
                                 <option value="{{ choice.0 }}" {% if choice.0 == tipo_selected %} selected {% endif %}>{{ choice.1 }}</option>
@@ -50,13 +49,16 @@
                 </div>
 
                 <div class="row" id="fisica">
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-3">
                         {{ form.cpf|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-3">
                         {{ form.identidade|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-3">
+                        {{ form.emissao|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-3">
                         {{ form.orgao|bootstrap }}
                     </div>
                     <div class="col-12 col-md-6">

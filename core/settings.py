@@ -130,3 +130,5 @@ URL_API = 'http://localhost:8080/'
 # Configurações de sessão
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
+DATE_FORMAT = "d/m/Y"
+USE_L10N = False
