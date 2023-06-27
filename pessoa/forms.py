@@ -1,6 +1,7 @@
 import json
 
 import requests
+from django.urls import reverse
 
 from core.controle import session_get_token, session_get_headers, tratar_error
 from core.settings import URL_API
@@ -92,4 +93,10 @@ class PessoaForm(forms.ModelForm):
 
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
         return json.loads(json_data)
+
+    def define_cliente_url(self):
+        if self.data.get('uuid'):
+            return reverse("url_define_cliente", kwargs={"uuid": self.data.get('uuid')})
+        else:
+            return None
 

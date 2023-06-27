@@ -23,12 +23,15 @@ def pessoaEdit(request, uuid):
 
 @require_token
 def pessoa_render(request, uuid=None):
-    headers = session_get_headers(request)
     template_name = 'pessoa/pessoa_edit.html'
     tipo_selected = TIPO_CHOICES[0][0]
     try:
+
+        if request.GET.get('btn_cliente'):
+            messages.success(request, 'definição para cliente')
+
         if uuid:
-            response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=headers)
+            response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
                 form = PessoaForm(response.json())
                 if form.data.get('cpf'):
@@ -65,3 +68,14 @@ def pessoa_render(request, uuid=None):
         "tipo_definido": tipo_selected != 'INDEFINIDO',
     }
     return render(request, template_name, context)
+
+
+@require_token
+def pessoaDefineCliente(request, uuid):
+    try:
+        response = requests.patch(URL_API + 'pessoa/' + str(uuid) + '/definir-cliente', headers=session_get_headers(request))
+        if response.status_code == 200:
+            messages.success(request, 'sucesso ao definir como cliente')
+    except Exception as e:
+        messages.error(request, 'erro ao definir como cliente')
+    return HttpResponseRedirect(reverse('url_categoria'))

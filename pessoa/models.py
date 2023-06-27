@@ -72,6 +72,6 @@ class PessoaModel(models.Model):
     incentivoCultural = models.BooleanField(verbose_name='Incentivo Cult.', choices=TIPO_SIM_NAO)
     regime = models.CharField(max_length=32, choices=REGIME_TRIBUTARIO_CHOICES, default=REGIME_TRIBUTARIO_CHOICES[0][0], verbose_name='Reg.Tributário')
     tipoIE = models.CharField(max_length=48, choices=TIPO_CONTRIBUINTE_CHOICES, default=TIPO_CONTRIBUINTE_CHOICES[0][0], verbose_name='Contribuinte')
-    # def get_delete_url(self):
-    #     return reverse("url_pessoa_delete", kwargs={"pk": self.pk})
 
+    def define_cliente_url(self):
+        return reverse("url_define_cliente", kwargs={"pk": self.pk})

@@ -16,6 +16,16 @@
 
         <title> {% block title %} Sousa {% endblock %} </title>
 
+        <script>
+            function confirma(pergunta) {
+                var agree=confirm(pergunta);
+                if (agree)
+                    return true ;
+                else
+                    return false ;
+            }
+        </script>
+
   </head>
 
 <body>

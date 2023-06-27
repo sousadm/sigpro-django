@@ -120,6 +120,14 @@
             <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
                 <i class="fas fa-save"></i> Salvar
             </button>
+
+            <a href="{{ form.define_cliente_url }}">
+                <button type="button" class="btn btn-sm" title="excluir"
+                        onClick='return confirma("Deseja definir o registro como cliente?")'>
+                    <i class="fas fa-card"></i>
+                </button>
+            </a>
+
         </div>
 
     </form>
@@ -145,25 +153,5 @@
     }
 
 </script>
-
-<script>
-    const fieldWithTooltip = document.querySelector('.field-with-tooltip');
-    const helpText = "{{ form.naturalidade.help_text }}";
-
-    fieldWithTooltip.addEventListener("mouseover", function() {
-        const tooltip = document.createElement("div");
-        tooltip.className = "tooltip";
-        tooltip.innerText = helpText;
-        document.body.appendChild(tooltip);
-    });
-
-    fieldWithTooltip.addEventListener("mouseout", function() {
-        const tooltip = document.querySelector('.tooltip');
-        if (tooltip) {
-            tooltip.remove();
-        }
-    });
-</script>
-
 
 {% endblock %}
