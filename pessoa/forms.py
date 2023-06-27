@@ -66,7 +66,7 @@ class PessoaForm(forms.ModelForm):
         post_data.pop('csrfmiddlewaretoken', None)
         post_data.pop('btn_salvar', None)
         # pessoa fisica
-        if self.data.get('tipoPessoa') == TIPO_CHOICES[1][0]:
+        if self.data.get('tipoPessoa') == 'FISICA':
             cpf = str(self.data.get('cpf'))
             post_data['cpf'] = cpf.replace('.', '').replace('-', '')
         else:
@@ -75,6 +75,21 @@ class PessoaForm(forms.ModelForm):
             post_data.pop('orgao', None)
             post_data.pop('pai', None)
             post_data.pop('mae', None)
+
+        # pessoa jurídica
+        if self.data.get('tipoPessoa') == 'JURIDICA':
+            cnpj = str(self.data.get('cnpj'))
+            post_data['cnpj'] = cnpj.replace('.', '').replace('-', '').replace('/', '')
+        else:
+            post_data.pop('cnpj', None)
+            post_data.pop('fantasia', None)
+            post_data.pop('IE', None)
+            post_data.pop('cnae', None)
+            post_data.pop('fundacao', None)
+            post_data.pop('incentivoCultural', None)
+            post_data.pop('regime', None)
+            post_data.pop('tipoIE', None)
+
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
         return json.loads(json_data)
 

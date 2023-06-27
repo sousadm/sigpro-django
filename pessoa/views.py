@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from core.controle import require_token, session_get_token, session_get_headers, format_cpf
+from core.controle import require_token, session_get_token, session_get_headers, format_cpf, format_cnpj
 from core.settings import URL_API
 from pessoa.forms import PessoaForm
 from pessoa.models import PessoaModel, TIPO_CHOICES
@@ -33,6 +33,8 @@ def pessoa_render(request, uuid=None):
                 form = PessoaForm(response.json())
                 if form.data.get('cpf'):
                     form.data['cpf'] = format_cpf(form.data.get('cpf'))
+                if form.data.get('cnpj'):
+                    form.data['cnpj'] = format_cnpj(form.data.get('cnpj'))
                 tipo_selected = form.data.get('tipoPessoa')
             else:
                 messages.error(request, 'registro não localizado')
