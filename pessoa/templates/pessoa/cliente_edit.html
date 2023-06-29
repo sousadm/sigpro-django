@@ -15,15 +15,35 @@
             </div>
             <div class="card-body">
 
-<!--                <div class="row">-->
-<!--                    <div class="col-12 col-md-12">-->
-<!--                        {{ form.nome|bootstrap }}-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div class="row">
+                    <div class="col-12 col-md-2">
+                        {{ form.clienteId|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-10">
+                        {{ form.nome|bootstrap }}
+                    </div>
+                </div>
 
-<!--                {{ form|bootstrap }}-->
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        {{ form.fone|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-6">
+                        {{ form.emailFiscal|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-3">
+                        {{ form.retencaoIss|bootstrap }}
+                    </div>
+                </div>
 
-                {{ form }}
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        {{ form.limiteCredito|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-6">
+                        {{ form.limitePrazo|bootstrap }}
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -32,6 +52,14 @@
             <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
                 <i class="fas fa-save"></i> Salvar
             </button>
+
+<!--            <a href="{{ item.get_delete_url }}">-->
+<!--                <button type="button" class="btn btn-sm" title="excluir"-->
+<!--                        onClick='return confirma("Excluir o registro atual?")'>-->
+<!--                    <i class='fas fa-trash'></i>-->
+<!--                </button>-->
+<!--            </a>-->
+
         </div>
 
     </form>

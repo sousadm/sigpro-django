@@ -107,14 +107,27 @@ class ClienteForm(forms.ModelForm):
         model = PessoaModel
         fields = [
             'nome',
+            'fone',
             'clienteId',
             'emailFiscal',
             'retencaoIss',
             'limiteCredito',
             'limitePrazo',
         ]
+
+    def __init__(self, *args, **kwargs):
+        super(ClienteForm, self).__init__(*args, **kwargs)
+        self.fields['nome'].widget.attrs['autofocus'] = True
+        self.fields['clienteId'].widget.attrs['disabled'] = 'disabled'
+
     def pesquisaPorPessoa(self, request, uuid):
-        response = requests.get(URL_API + 'pessoa/' + str(uuid) + "/cliente", headers=session_get_headers(request))
-        if response.status_code == 200:
-            self.initial = response.json()
+        if uuid:
+            response = requests.get(URL_API + 'pessoa/' + str(uuid) + "/cliente", headers=session_get_headers(request))
+            if response.status_code == 200:
+                self.initial = response.json()
+            else:
+                response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
+                if response.status_code == 200:
+                    self.initial = response.json()
+
 
