@@ -7,6 +7,7 @@ from core.controle import session_get_token, session_get_headers, tratar_error
 from core.settings import URL_API
 from pessoa.models import PessoaModel, TIPO_CHOICES
 from django import forms
+from decimal import Decimal
 
 # Create your tests here.
 
@@ -99,4 +100,21 @@ class PessoaForm(forms.ModelForm):
             return reverse("url_define_cliente", kwargs={"uuid": self.data.get('uuid')})
         else:
             return None
+
+
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        model = PessoaModel
+        fields = [
+            'nome',
+            'clienteId',
+            'emailFiscal',
+            'retencaoIss',
+            'limiteCredito',
+            'limitePrazo',
+        ]
+    def pesquisaPorPessoa(self, request, uuid):
+        response = requests.get(URL_API + 'pessoa/' + str(uuid) + "/cliente", headers=session_get_headers(request))
+        if response.status_code == 200:
+            self.initial = response.json()
 

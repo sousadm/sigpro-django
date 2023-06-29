@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Cliente {% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Cadastro de Cliente</h3>
+            </div>
+            <div class="card-body">
+
+<!--                <div class="row">-->
+<!--                    <div class="col-12 col-md-12">-->
+<!--                        {{ form.nome|bootstrap }}-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                {{ form|bootstrap }}-->
+
+                {{ form }}
+
+            </div>
+        </div>
+
+        <div class="footer bg-red">
+            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
+                <i class="fas fa-save"></i> Salvar
+            </button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from acesso.views import login, home, logout
-from pessoa.views import pessoaNew, pessoaEdit, pessoaDefineCliente
+from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit
 
 urlpatterns = [
     path('', home, name='home'),
@@ -26,5 +26,5 @@ urlpatterns = [
     path('logout/', logout, name='logout'),
     path('pessoa/add', pessoaNew, name='url_pessoa_add'),
     path('pessoa/<int:uuid>', pessoaEdit, name='url_pessoa_edit'),
-    path('pessoa/<int:uuid>/definir-cliente', pessoaDefineCliente, name='url_define_cliente'),
+    path('pessoa/<int:uuid>/cliente', pessoaClienteEdit, name='url_pessoa_cliente'),
 ]
