@@ -77,7 +77,7 @@ class PessoaModel(models.Model):
     # definição para cliente
     clienteId = models.IntegerField(verbose_name='Cliente ID')
     emailFiscal = models.EmailField(max_length=254, verbose_name='E-mail')
-    retencaoIss = models.BooleanField(verbose_name='Retenção ISS', choices=TIPO_SIM_NAO)
+    retencaoIss = models.BooleanField(verbose_name='Retenção ISS', choices=TIPO_SIM_NAO, default=False)
     limiteCredito = models.FloatField(verbose_name='Limite de Crédito', default=0)
     limitePrazo = models.FloatField(verbose_name='Limite de Prazo', default=0)
 

@@ -103,10 +103,13 @@ class PessoaForm(forms.ModelForm):
 
 
 class ClienteForm(forms.ModelForm):
+    codigo = forms.CharField(widget=forms.HiddenInput())
     class Meta:
         model = PessoaModel
         fields = [
+            'uuid',
             'nome',
+            'clienteId',
             'fone',
             'clienteId',
             'emailFiscal',
@@ -119,6 +122,7 @@ class ClienteForm(forms.ModelForm):
         super(ClienteForm, self).__init__(*args, **kwargs)
         self.fields['nome'].widget.attrs['autofocus'] = True
         self.fields['clienteId'].widget.attrs['disabled'] = 'disabled'
+        # self.fields['clienteId'].required = False
 
     def pesquisaPorPessoa(self, request, uuid):
         if uuid:
@@ -130,4 +134,20 @@ class ClienteForm(forms.ModelForm):
                 if response.status_code == 200:
                     self.initial = response.json()
 
+    def json(self, request):
+        post_data = dict(request.POST)  # Converter QueryDict para dicionário
+        post_data.pop('csrfmiddlewaretoken', None)
+        post_data.pop('btn_salvar', None)
+        json_data = json.dumps(post_data).replace("[", "").replace("]", "")
+        return json.loads(json_data)
 
+    def salvar(self, request, uuid=None):
+        dados = self.json(request)
+        raise Exception(dados)
+        # headers = session_get_headers(request)
+        # if uuid:
+        #     response = requests.patch(URL_API + 'cliente/'+str(uuid), json=dados, headers=headers)
+        # else:
+        #     response = requests.post(URL_API+'cliente', json=dados, headers=headers)
+        # if not response.status_code in [200,201]:
+        #     raise Exception(tratar_error(response))

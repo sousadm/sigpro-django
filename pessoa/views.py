@@ -83,8 +83,20 @@ def pessoa_render(request, uuid=None):
 
 @require_token
 def pessoaClienteEdit(request, uuid):
-    form = ClienteForm()
-    form.pesquisaPorPessoa(request, uuid)
     template_name = 'pessoa/cliente_edit.html'
+    form = ClienteForm()
+    try:
+
+        if request.POST.get('btn_pessoa'):
+            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+
+        if request.POST.get('btn_salvar'):
+            form.salvar(request.POST, uuid)
+            messages.success(request, 'sucesso ao gravar dados')
+
+    except Exception as e:
+        messages.error(request, e)
+
+    form.pesquisaPorPessoa(request, uuid)
     return render(request, template_name, {'form':form})
 
