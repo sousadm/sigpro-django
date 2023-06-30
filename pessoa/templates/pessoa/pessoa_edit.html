@@ -14,6 +14,8 @@
 
         {% csrf_token %}
 
+        <input type="hidden" name="pessoaId" value={{ form.pessoaId.value }}>
+
         <div class="card">
             <div class="card-header">
                 <h3>Cadastro de Pessoa</h3>
@@ -22,7 +24,8 @@
 
                 <div class="row">
                     <div class="col-12 col-md-2">
-                        {{ form.uuid|bootstrap }}
+                        <label class="control-label">Código</label>
+                        <input type="number" disabled="disabled" class="form-control" value={{ form.pessoaId.value }}>
                     </div>
                     <div class="col-12 col-md-10">
                         {{ form.nome|bootstrap }}

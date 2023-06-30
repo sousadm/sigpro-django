@@ -70,17 +70,6 @@ def pessoa_render(request, uuid=None):
     }
     return render(request, template_name, context)
 
-
-# @require_token
-# def pessoaDefineCliente(request, uuid):
-#     try:
-#         response = requests.patch(URL_API + 'pessoa/' + str(uuid) + '/definir-cliente', headers=session_get_headers(request))
-#         if response.status_code == 200:
-#             uuid = response.json()['clienteId']
-#             return cliente_render(request, uuid)
-#     except Exception as e:
-#         messages.error(request, 'erro ao definir como cliente')
-
 @require_token
 def pessoaClienteEdit(request, uuid):
     template_name = 'pessoa/cliente_edit.html'
@@ -91,7 +80,8 @@ def pessoaClienteEdit(request, uuid):
             return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
 
         if request.POST.get('btn_salvar'):
-            form.salvar(request.POST, uuid)
+            form = ClienteForm(request.POST)
+            form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
 
     except Exception as e:

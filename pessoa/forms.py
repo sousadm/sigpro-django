@@ -16,7 +16,7 @@ class PessoaForm(forms.ModelForm):
     class Meta:
         model = PessoaModel
         fields = '__all__'
-        exclude = ['created_dt','updated_dt']
+        exclude = ['created_dt','updated_dt', 'clienteId', 'emailFiscal', 'retencaoIss', 'limiteCredito', 'limitePrazo']
         widgets = {
             'emissao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
             'nascimento': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
@@ -24,14 +24,16 @@ class PessoaForm(forms.ModelForm):
         }
 
     def salvar(self, request, uuid=None):
+        data = self.json()
+        print(data)
         if self.is_valid():
             headers = session_get_headers(request)
             if uuid:
-                response = requests.patch(URL_API + 'pessoa/'+str(uuid), json=self.json(), headers=headers)
+                response = requests.patch(URL_API + 'pessoa/'+str(uuid), json=data, headers=headers)
             else:
-                response = requests.post(URL_API+'pessoa', json=self.json(), headers=headers)
+                response = requests.post(URL_API+'pessoa', json=data, headers=headers)
             if response.status_code in [200,201]:
-                return response.json()['uuid']
+                return response.json()['pessoaId']
             else:
                 raise Exception(tratar_error(response))
         else:
@@ -40,8 +42,8 @@ class PessoaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
         self.fields['nome'].widget.attrs['autofocus'] = True
-        self.fields['uuid'].widget.attrs['disabled'] = 'disabled'
-        self.fields['uuid'].required = False
+        self.fields['pessoaId'].widget.attrs['disabled'] = 'disabled'
+        self.fields['pessoaId'].required = False
         # atributos de pessoa jurídica
         self.fields['cpf'].required = False
         self.fields['identidade'].required = False
@@ -95,11 +97,11 @@ class PessoaForm(forms.ModelForm):
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
         return json.loads(json_data)
 
-    def define_cliente_url(self):
-        if self.data.get('uuid'):
-            return reverse("url_define_cliente", kwargs={"uuid": self.data.get('uuid')})
-        else:
-            return None
+    # def define_cliente_url(self):
+    #     if self.data.get('uuid'):
+    #         return reverse("url_define_cliente", kwargs={"uuid": self.data.get('uuid')})
+    #     else:
+    #         return None
 
 
 class ClienteForm(forms.ModelForm):
@@ -107,10 +109,9 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = PessoaModel
         fields = [
-            'uuid',
             'nome',
-            'clienteId',
             'fone',
+            'pessoaId',
             'clienteId',
             'emailFiscal',
             'retencaoIss',
@@ -122,7 +123,6 @@ class ClienteForm(forms.ModelForm):
         super(ClienteForm, self).__init__(*args, **kwargs)
         self.fields['nome'].widget.attrs['autofocus'] = True
         self.fields['clienteId'].widget.attrs['disabled'] = 'disabled'
-        # self.fields['clienteId'].required = False
 
     def pesquisaPorPessoa(self, request, uuid):
         if uuid:
@@ -134,20 +134,20 @@ class ClienteForm(forms.ModelForm):
                 if response.status_code == 200:
                     self.initial = response.json()
 
-    def json(self, request):
-        post_data = dict(request.POST)  # Converter QueryDict para dicionário
+    def json(self):
+        post_data = dict(self.data)  # Converter QueryDict para dicionário
         post_data.pop('csrfmiddlewaretoken', None)
         post_data.pop('btn_salvar', None)
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
         return json.loads(json_data)
 
-    def salvar(self, request, uuid=None):
-        dados = self.json(request)
-        raise Exception(dados)
-        # headers = session_get_headers(request)
-        # if uuid:
-        #     response = requests.patch(URL_API + 'cliente/'+str(uuid), json=dados, headers=headers)
-        # else:
-        #     response = requests.post(URL_API+'cliente', json=dados, headers=headers)
-        # if not response.status_code in [200,201]:
-        #     raise Exception(tratar_error(response))
+    def salvar(self, request, uuid):
+        data = self.json()
+        clienteId = data['clienteId']
+        headers = session_get_headers(request)
+        if clienteId:
+            response = requests.patch(URL_API + 'cliente/'+str(clienteId), json=data, headers=headers)
+        else:
+            response = requests.post(URL_API+'cliente', json=data, headers=headers)
+        if not response.status_code in [200,201]:
+            raise Exception(tratar_error(response))

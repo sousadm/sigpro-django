@@ -46,10 +46,11 @@ TIPO_SIM_NAO = (
     (True, "não")
 )
 
+
 class PessoaModel(models.Model):
     created_dt = models.DateTimeField()
     updated_dt = models.DateTimeField()
-    uuid = models.CharField(max_length=254, verbose_name='Código')
+    pessoaId = models.IntegerField(verbose_name='Pessoa ID')
     tipoPessoa = models.CharField(max_length=20, choices=TIPO_CHOICES, default='INDEFINIDO', verbose_name='Tipo')
     nome = models.CharField(max_length=100, verbose_name='Nome') #, help_text='nome completo'
     fone = models.CharField(max_length=20, verbose_name='Fone') #, help_text='número do telefone para contato'
