@@ -16,12 +16,6 @@ cnpj_regex = RegexValidator(
     message="CNPJ deve estar no formato XX.XXX.XXX/XXXX-XX"
 )
 
-TIPO_CHOICES =(
-    ("INDEFINIDO", "Indefinida"),
-    ("FISICA", "Física"),
-    ("JURIDICA", "Jurídica"),
-)
-
 TIPO_CHOICES = (
     ("INDEFINIDO", "Indefinida"),
     ("FISICA", "Física"),
@@ -42,10 +36,14 @@ TIPO_CONTRIBUINTE_CHOICES = (
 )
 
 TIPO_SIM_NAO = (
-    (False, "sim"),
-    (True, "não")
+    (False, "Não"),
+    (True, "Sim")
 )
 
+TIPO_SITUACAO =(
+    (False, "Inativo"),
+    (True, "Ativo"),
+)
 
 class PessoaModel(models.Model):
     created_dt = models.DateTimeField()
@@ -55,6 +53,7 @@ class PessoaModel(models.Model):
     nome = models.CharField(max_length=100, verbose_name='Nome') #, help_text='nome completo'
     fone = models.CharField(max_length=20, verbose_name='Fone') #, help_text='número do telefone para contato'
     email = models.EmailField(max_length=254, verbose_name='E-mail') #, help_text='e-mail para contato'
+    situacaoPessoa = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
     # definição para pessoa física
     cpf = models.CharField(max_length=14, validators=[cpf_regex], verbose_name='CPF') #, help_text='número do cpf'
     identidade = models.CharField(max_length=20, verbose_name='Identidade') #, help_text='número do RG ou identidade de classe'
@@ -79,6 +78,7 @@ class PessoaModel(models.Model):
     clienteId = models.IntegerField(verbose_name='Cliente ID')
     emailFiscal = models.EmailField(max_length=254, verbose_name='E-mail')
     retencaoIss = models.BooleanField(verbose_name='Retenção ISS', choices=TIPO_SIM_NAO, default=False)
+    situacaoCliente = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
     limiteCredito = models.FloatField(verbose_name='Limite de Crédito', default=0)
     limitePrazo = models.FloatField(verbose_name='Limite de Prazo', default=0)
 

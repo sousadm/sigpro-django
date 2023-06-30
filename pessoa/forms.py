@@ -16,7 +16,7 @@ class PessoaForm(forms.ModelForm):
     class Meta:
         model = PessoaModel
         fields = '__all__'
-        exclude = ['created_dt','updated_dt', 'clienteId', 'emailFiscal', 'retencaoIss', 'limiteCredito', 'limitePrazo']
+        exclude = ['created_dt','updated_dt', 'clienteId', 'emailFiscal', 'retencaoIss', 'limiteCredito', 'limitePrazo','situacaoCliente']
         widgets = {
             'emissao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
             'nascimento': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
@@ -97,19 +97,13 @@ class PessoaForm(forms.ModelForm):
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
         return json.loads(json_data)
 
-    # def define_cliente_url(self):
-    #     if self.data.get('uuid'):
-    #         return reverse("url_define_cliente", kwargs={"uuid": self.data.get('uuid')})
-    #     else:
-    #         return None
-
-
 class ClienteForm(forms.ModelForm):
     codigo = forms.CharField(widget=forms.HiddenInput())
     class Meta:
         model = PessoaModel
         fields = [
             'nome',
+            'email',
             'fone',
             'pessoaId',
             'clienteId',
@@ -117,6 +111,7 @@ class ClienteForm(forms.ModelForm):
             'retencaoIss',
             'limiteCredito',
             'limitePrazo',
+            'situacaoCliente'
         ]
 
     def __init__(self, *args, **kwargs):

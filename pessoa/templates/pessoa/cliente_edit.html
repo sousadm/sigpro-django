@@ -11,6 +11,7 @@
 
         <input type="hidden" name="clienteId" value={{ form.clienteId.value }}>
         <input type="hidden" name="pessoaId" value={{ form.pessoaId.value }}>
+        <input type="hidden" name="email" value={{ form.email.value }}>
 
         <div class="card">
             <div class="card-header">
@@ -41,11 +42,14 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-4">
                         {{ form.limiteCredito|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-4">
                         {{ form.limitePrazo|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.situacaoCliente|bootstrap }}
                     </div>
                 </div>
 

@@ -33,14 +33,16 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-12 col-md-3">
+                    <div class="col-12 col-md-2">
                         {{ form.fone|bootstrap }}
                     </div>
                     <div class="col-12 col-md-6">
                         {{ form.email|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-3">
-                        {{ tipo_definido }}
+                    <div class="col-12 col-md-2">
+                        {{ form.situacaoPessoa|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-2">
                         <label>Tipo de Pessoa</label>
                         <select name="tipoPessoa" id="tipoPessoa" class="form-control"
                                 onchange="selecionaTipoChange(this)">
@@ -52,6 +54,7 @@
                 </div>
 
                 <div class="row" id="fisica">
+
                     <div class="col-12 col-md-2">
                         {{ form.cpf|bootstrap }}
                     </div>
@@ -65,22 +68,23 @@
                         {{ form.orgao|bootstrap }}
                     </div>
                     <div class="col-12 col-md-3">
+                        {{ form.idEstrangeiro|bootstrap }}
+                    </div>
+
+                    <div class="col-12 col-md-2">
                         {{ form.nascimento|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-5">
                         {{ form.pai|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-5">
                         {{ form.mae|bootstrap }}
                     </div>
 
-                    <div class="col-12 col-md-4">
-                        {{ form.idEstrangeiro|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-6">
                         {{ form.nacionalidade|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-6">
                         {{ form.naturalidade|bootstrap }}
                     </div>
 
@@ -124,7 +128,7 @@
                 <i class="fas fa-save"></i> Salvar
             </button>
 
-            <button type="submit" id="btn_cliente" value="btn_cliente" name="btn_cliente" class="btn btn-secondary">
+            <button type="submit" id="btn_cliente" value="btn_cliente" name="btn_cliente" class="btn btn-secondary" {%if not form.situacaoPessoa.value%} disabled {%endif%} >
                 <i class="fas fa-user"></i> Cliente
             </button>
 
