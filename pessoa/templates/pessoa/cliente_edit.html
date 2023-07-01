@@ -11,7 +11,9 @@
 
         <input type="hidden" name="clienteId" value={{ form.clienteId.value }}>
         <input type="hidden" name="pessoaId" value={{ form.pessoaId.value }}>
-        <input type="hidden" name="email" value={{ form.email.value }}>
+        <input type="hidden" name="situacaoCliente" value={{ form.situacaoCliente.value }}>
+
+        <fieldset {% if not form.situacaoCliente.value %} disabled {% endif %} >
 
         <div class="card">
             <div class="card-header">
@@ -33,44 +35,44 @@
                     <div class="col-12 col-md-3">
                         {{ form.fone|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-9">
                         {{ form.emailFiscal|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.retencaoIss|bootstrap }}
                     </div>
                 </div>
 
                 <div class="row">
+                    <div class="col-12 col-md-4">
+                        {{ form.retencaoIss|bootstrap }}
+                    </div>
                     <div class="col-12 col-md-4">
                         {{ form.limiteCredito|bootstrap }}
                     </div>
                     <div class="col-12 col-md-4">
                         {{ form.limitePrazo|bootstrap }}
                     </div>
-                    <div class="col-12 col-md-4">
-                        {{ form.situacaoCliente|bootstrap }}
-                    </div>
                 </div>
 
             </div>
         </div>
 
+        </fieldset>
+
         <div class="footer bg-red">
+
+            {% if form.situacaoCliente.value %}
             <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
                 <i class="fas fa-save"></i> Salvar
             </button>
+            {% endif %}
 
             <button type="submit" value="btn_pessoa" name="btn_pessoa" class="btn btn-secondary">
                 <i class="fas fa-user"></i> Voltar
             </button>
 
-<!--            <a href="{{ item.get_delete_url }}">-->
-<!--                <button type="button" class="btn btn-sm" title="excluir"-->
-<!--                        onClick='return confirma("Excluir o registro atual?")'>-->
-<!--                    <i class='fas fa-trash'></i>-->
-<!--                </button>-->
-<!--            </a>-->
+            <button type="submit" value="btn_ativar" name="btn_ativar" class="btn btn-danger"
+                onClick='return confirma("Confirma {%if form.situacaoCliente.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")' >
+                <i class="fas fa-check"></i> {%if form.situacaoCliente.value%} Inativar {%else%} Ativar {%endif%}
+            </button>
 
         </div>
 

@@ -145,6 +145,14 @@ class ClienteForm(forms.ModelForm):
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
         return json.loads(json_data)
 
+    def ativar(self, request):
+        clienteId = request.POST.get('clienteId')
+        headers = session_get_headers(request)
+        url = URL_API + 'cliente/' + str(clienteId) + "/ativar-inativar"
+        response = requests.patch(url, headers=headers)
+        if not response.status_code in [200]:
+            raise Exception(tratar_error(response))
+
     def salvar(self, request, uuid):
         data = self.json()
         clienteId = data['clienteId']

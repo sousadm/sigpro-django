@@ -76,7 +76,7 @@ class PessoaModel(models.Model):
     tipoIE = models.CharField(max_length=48, choices=TIPO_CONTRIBUINTE_CHOICES, default=TIPO_CONTRIBUINTE_CHOICES[0][0], verbose_name='Contribuinte')
     # definição para cliente
     clienteId = models.IntegerField(verbose_name='Cliente ID')
-    emailFiscal = models.EmailField(max_length=254, verbose_name='E-mail')
+    emailFiscal = models.EmailField(max_length=254, verbose_name='E-mail Fiscal')
     retencaoIss = models.BooleanField(verbose_name='Retenção ISS', choices=TIPO_SIM_NAO, default=False)
     situacaoCliente = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
     limiteCredito = models.FloatField(verbose_name='Limite de Crédito', default=0)
