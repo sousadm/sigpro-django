@@ -23,9 +23,18 @@ class PessoaForm(forms.ModelForm):
             'fundacao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'})
         }
 
+    def existe(self):
+        return True if self.data.get('pessoaId') and self.data.get('pessoaId') != 'None' else False
+
+    def ativar(self, request):
+        headers = session_get_headers(request)
+        url = URL_API + 'pessoa/' + str(self.data['pessoaId']) + "/ativar-inativar"
+        response = requests.patch(url, headers=headers)
+        if not response.status_code in [200]:
+            raise Exception(tratar_error(response))
+
     def salvar(self, request, uuid=None):
         data = self.json()
-        print(data)
         if self.is_valid():
             headers = session_get_headers(request)
             if uuid:

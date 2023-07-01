@@ -12,125 +12,140 @@
 <div class="container">
     <form method="post">
 
+        <input type="hidden" name="situacaoPessoa" value={{ form.situacaoPessoa.value }}>
+
         {% csrf_token %}
 
-        <input type="hidden" name="pessoaId" value={{ form.pessoaId.value }}>
+        <fieldset {% if not form.situacaoPessoa.value %} disabled {% endif %} >
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Cadastro de Pessoa</h3>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Cadastro de Pessoa</h3>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-12 col-md-2">
+                            <label class="control-label">Código</label>
+                            <input type="number" disabled="disabled" class="form-control" value={{ form.pessoaId.value }}>
+                        </div>
+                        <div class="col-12 col-md-10">
+                            {{ form.nome|bootstrap }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-2">
+                            {{ form.fone|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-8">
+                            {{ form.email|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <label>Tipo de Pessoa</label>
+                            <select name="tipoPessoa" id="tipoPessoa" class="form-control"
+                                    onchange="selecionaTipoChange(this)">
+                                {% for choice in form.tipoPessoa.field.choices %}
+                                    <option value="{{ choice.0 }}" {% if choice.0 == tipo_selected %} selected {% endif %}>{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" id="fisica">
+
+                        <div class="col-12 col-md-2">
+                            {{ form.cpf|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-2">
+                            {{ form.identidade|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-3">
+                            {{ form.emissao|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-2">
+                            {{ form.orgao|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-3">
+                            {{ form.idEstrangeiro|bootstrap }}
+                        </div>
+
+                        <div class="col-12 col-md-2">
+                            {{ form.nascimento|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-5">
+                            {{ form.pai|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-5">
+                            {{ form.mae|bootstrap }}
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            {{ form.nacionalidade|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-6">
+                            {{ form.naturalidade|bootstrap }}
+                        </div>
+
+                    </div>
+
+                    <div class="row" id="juridica">
+                        <div class="col-12 col-md-4">
+                            {{ form.cnpj|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-8">
+                            {{ form.fantasia|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-3">
+                            {{ form.IE|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-3">
+                            {{ form.cnae|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-3">
+                            {{ form.fundacao|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-3">
+                            {{ form.incentivoCultural|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-6">
+                            {{ form.regime|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-6">
+                            {{ form.tipoIE|bootstrap }}
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="card-body">
 
-                <div class="row">
-                    <div class="col-12 col-md-2">
-                        <label class="control-label">Código</label>
-                        <input type="number" disabled="disabled" class="form-control" value={{ form.pessoaId.value }}>
-                    </div>
-                    <div class="col-12 col-md-10">
-                        {{ form.nome|bootstrap }}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 col-md-2">
-                        {{ form.fone|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-6">
-                        {{ form.email|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-2">
-                        {{ form.situacaoPessoa|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-2">
-                        <label>Tipo de Pessoa</label>
-                        <select name="tipoPessoa" id="tipoPessoa" class="form-control"
-                                onchange="selecionaTipoChange(this)">
-                            {% for choice in form.tipoPessoa.field.choices %}
-                                <option value="{{ choice.0 }}" {% if choice.0 == tipo_selected %} selected {% endif %}>{{ choice.1 }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row" id="fisica">
-
-                    <div class="col-12 col-md-2">
-                        {{ form.cpf|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-2">
-                        {{ form.identidade|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.emissao|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-2">
-                        {{ form.orgao|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.idEstrangeiro|bootstrap }}
-                    </div>
-
-                    <div class="col-12 col-md-2">
-                        {{ form.nascimento|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-5">
-                        {{ form.pai|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-5">
-                        {{ form.mae|bootstrap }}
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        {{ form.nacionalidade|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-6">
-                        {{ form.naturalidade|bootstrap }}
-                    </div>
-
-                </div>
-
-                <div class="row" id="juridica">
-                    <div class="col-12 col-md-4">
-                        {{ form.cnpj|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-8">
-                        {{ form.fantasia|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.IE|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.cnae|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.fundacao|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.incentivoCultural|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-6">
-                        {{ form.regime|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-6">
-                        {{ form.tipoIE|bootstrap }}
-                    </div>
-                </div>
-
-            </div>
-        </div>
+        </fieldset>
 
         <div class="footer bg-red">
             <button type="submit" value="btn_novo" name="btn_novo" class="btn btn-secondary">
                 <i class="fa fa-file"></i> Novo
             </button>
-            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
-                <i class="fas fa-save"></i> Salvar
-            </button>
 
-            <button type="submit" id="btn_cliente" value="btn_cliente" name="btn_cliente" class="btn btn-secondary" {%if not form.situacaoPessoa.value%} disabled {%endif%} >
-                <i class="fas fa-user"></i> Cliente
+            {% if form.situacaoPessoa.value %}
+
+                <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+
+                {% if form.existe %}
+                <button type="submit" id="btn_cliente" value="btn_cliente" name="btn_cliente" class="btn btn-secondary"  >
+                    <i class="fas fa-user"></i> Cliente
+                </button>
+                {% endif %}
+
+            {% endif %}
+
+            {% if form.existe %}
+            <button type="submit" value="btn_ativar" name="btn_ativar" class="btn btn-danger"
+                onClick='return confirma("Confirma {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")' >
+                <i class="fas fa-check"></i> {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%}
             </button>
+            {% endif %}
 
         </div>
 

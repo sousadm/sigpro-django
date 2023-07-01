@@ -60,6 +60,11 @@ def pessoa_render(request, uuid=None):
             messages.success(request, 'sucesso ao gravar dados')
             return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
 
+        if request.POST.get('btn_ativar'):
+            form.ativar(request)
+            messages.success(request, 'Situação alterada com sucesso')
+            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+
     except Exception as e:
         messages.error(request, e)
 
