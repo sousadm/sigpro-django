@@ -69,10 +69,12 @@
                 <i class="fas fa-user"></i> Voltar
             </button>
 
+            {% if form.existe %}
             <button type="submit" value="btn_ativar" name="btn_ativar" class="btn btn-danger"
                 onClick='return confirma("Confirma {%if form.situacaoCliente.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")' >
                 <i class="fas fa-check"></i> {%if form.situacaoCliente.value%} Inativar {%else%} Ativar {%endif%}
             </button>
+            {% endif %}
 
         </div>
 

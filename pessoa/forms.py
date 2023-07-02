@@ -1,6 +1,7 @@
 import json
 
 import requests
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from core.controle import session_get_token, session_get_headers, tratar_error
@@ -123,10 +124,14 @@ class ClienteForm(forms.ModelForm):
             'situacaoCliente'
         ]
 
+    def existe(self):
+        return True if self.initial.get('clienteId') and self.initial.get('clienteId') != 'None' else False
+
     def __init__(self, *args, **kwargs):
         super(ClienteForm, self).__init__(*args, **kwargs)
         self.fields['nome'].widget.attrs['autofocus'] = True
-        self.fields['clienteId'].widget.attrs['disabled'] = 'disabled'
+        # self.fields['clienteId'].widget.attrs['disabled'] = 'disabled'
+        self.fields['emailFiscal'].required = False
 
     def pesquisaPorPessoa(self, request, uuid):
         if uuid:
@@ -143,7 +148,9 @@ class ClienteForm(forms.ModelForm):
         post_data.pop('csrfmiddlewaretoken', None)
         post_data.pop('btn_salvar', None)
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
-        return json.loads(json_data)
+        data = json.loads(json_data)
+        if data['clienteId'] == 'None': data['clienteId'] = None
+        return data
 
     def ativar(self, request):
         clienteId = request.POST.get('clienteId')
@@ -155,11 +162,14 @@ class ClienteForm(forms.ModelForm):
 
     def salvar(self, request, uuid):
         data = self.json()
-        clienteId = data['clienteId']
         headers = session_get_headers(request)
-        if clienteId:
-            response = requests.patch(URL_API + 'cliente/'+str(clienteId), json=data, headers=headers)
+        if data['clienteId'] and data['clienteId'] != 'None':
+            response = requests.patch(URL_API + 'cliente/'+str(data['clienteId']), json=data, headers=headers)
         else:
             response = requests.post(URL_API+'cliente', json=data, headers=headers)
+
         if not response.status_code in [200,201]:
             raise Exception(tratar_error(response))
+
+
+

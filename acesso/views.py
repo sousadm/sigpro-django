@@ -22,7 +22,7 @@ def login(request):
                 if response.status_code == 200:
                     session_add_token(request, response.json())
                     # return HttpResponseRedirect(reverse('url_pessoa_add'))
-                    return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': 123}))
+                    return HttpResponseRedirect(reverse('url_pessoa_cliente', kwargs={'uuid': 3}))
                 else:
                     messages.error(request, 'erro ao acessar o sistema')
         else:
