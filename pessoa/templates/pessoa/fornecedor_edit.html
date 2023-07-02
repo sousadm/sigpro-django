@@ -1,0 +1,71 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Cliente {% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="post">
+
+        {% csrf_token %}
+
+        <input type="hidden" name="fornecedorId" value={{ form.fornecedorId.value }}>
+        <input type="hidden" name="pessoaId" value={{ form.pessoaId.value }}>
+        <input type="hidden" name="situacaoFornecedor" value={{ form.situacaoFornecedor.value }}>
+
+        <fieldset {% if not form.situacaoFornecedor.value %} disabled {% endif %} >
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Cadastro de Fornecedor</h3>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-12 col-md-2">
+                        <label class="control-label">Código</label>
+                        <input type="number" disabled="disabled" class="form-control" value={{ form.fornecedorId.value }}>
+                    </div>
+                    <div class="col-12 col-md-10">
+                        {{ form.nome|bootstrap }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        {{ form.fone|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-9">
+                        {{ form.email|bootstrap }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        </fieldset>
+
+        <div class="footer bg-red">
+
+            {% if form.situacaoFornecedor.value %}
+            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
+                <i class="fas fa-save"></i> Salvar
+            </button>
+            {% endif %}
+
+            <button type="submit" value="btn_pessoa" name="btn_pessoa" class="btn btn-secondary">
+                <i class="fas fa-user"></i> Voltar
+            </button>
+
+            {% if form.existe %}
+            <button type="submit" value="btn_ativar" name="btn_ativar" class="btn btn-danger"
+                onClick='return confirma("Confirma {%if form.situacaoFornecedor.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")' >
+                <i class="fas fa-check"></i> {%if form.situacaoFornecedor.value%} Inativar {%else%} Ativar {%endif%}
+            </button>
+            {% endif %}
+
+        </div>
+
+    </form>
+</div>
+{% endblock %}

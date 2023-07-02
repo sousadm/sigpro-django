@@ -4,14 +4,12 @@ import requests
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from core.controle import session_get_token, session_get_headers, tratar_error
+from core.controle import session_get_headers, tratar_error
 from core.settings import URL_API
-from pessoa.models import PessoaModel, TIPO_CHOICES
+from pessoa.models import PessoaModel
 from django import forms
-from decimal import Decimal
 
 # Create your tests here.
-
 
 class PessoaForm(forms.ModelForm):
     class Meta:
@@ -25,14 +23,10 @@ class PessoaForm(forms.ModelForm):
         }
 
     def existe(self):
-        return True if self.data.get('pessoaId') and self.data.get('pessoaId') != 'None' else False
+        return existe_registro(self, self.data, 'pessoaId')
 
-    def ativar(self, request):
-        headers = session_get_headers(request)
-        url = URL_API + 'pessoa/' + str(self.data['pessoaId']) + "/ativar-inativar"
-        response = requests.patch(url, headers=headers)
-        if not response.status_code in [200]:
-            raise Exception(tratar_error(response))
+    def ativar(self, request, uuid):
+        ativar_pessoa_tipo(self, request, 'pessoa', uuid)
 
     def salvar(self, request, uuid=None):
         data = self.json()
@@ -112,36 +106,20 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = PessoaModel
         fields = [
-            'nome',
-            'email',
-            'fone',
-            'pessoaId',
-            'clienteId',
-            'emailFiscal',
-            'retencaoIss',
-            'limiteCredito',
-            'limitePrazo',
-            'situacaoCliente'
+            'nome', 'email', 'fone', 'pessoaId',
+            'clienteId', 'emailFiscal', 'retencaoIss', 'limiteCredito', 'limitePrazo', 'situacaoCliente'
         ]
-
-    def existe(self):
-        return True if self.initial.get('clienteId') and self.initial.get('clienteId') != 'None' else False
 
     def __init__(self, *args, **kwargs):
         super(ClienteForm, self).__init__(*args, **kwargs)
         self.fields['nome'].widget.attrs['autofocus'] = True
-        # self.fields['clienteId'].widget.attrs['disabled'] = 'disabled'
         self.fields['emailFiscal'].required = False
 
+    def existe(self):
+        return existe_registro(self, self.initial, 'clienteId')
+
     def pesquisaPorPessoa(self, request, uuid):
-        if uuid:
-            response = requests.get(URL_API + 'pessoa/' + str(uuid) + "/cliente", headers=session_get_headers(request))
-            if response.status_code == 200:
-                self.initial = response.json()
-            else:
-                response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
-                if response.status_code == 200:
-                    self.initial = response.json()
+        self.initial = pesquisa_pessoa(self, request, uuid, 'cliente')
 
     def json(self):
         post_data = dict(self.data)  # Converter QueryDict para dicionário
@@ -152,24 +130,43 @@ class ClienteForm(forms.ModelForm):
         if data['clienteId'] == 'None': data['clienteId'] = None
         return data
 
-    def ativar(self, request):
-        clienteId = request.POST.get('clienteId')
-        headers = session_get_headers(request)
-        url = URL_API + 'cliente/' + str(clienteId) + "/ativar-inativar"
-        response = requests.patch(url, headers=headers)
-        if not response.status_code in [200]:
-            raise Exception(tratar_error(response))
+    def ativar(self, request, uuid):
+        ativar_pessoa_tipo(self, request, 'cliente', uuid)
 
-    def salvar(self, request, uuid):
+    def salvar(self, request):
         data = self.json()
-        headers = session_get_headers(request)
-        if data['clienteId'] and data['clienteId'] != 'None':
-            response = requests.patch(URL_API + 'cliente/'+str(data['clienteId']), json=data, headers=headers)
+        salvar_pessoa_tipo(self, request, data, data['clienteId'], 'cliente')
+
+
+
+# FUNCÕES AUXILIARES
+def existe_registro(self, dados, campo):
+    return True if dados.get(campo) and dados.get(campo) != 'None' else False
+
+def pesquisa_pessoa(self, request, uuid, tipo):
+    if uuid:
+        response = requests.get(URL_API + 'pessoa/' + str(uuid) + "/" + tipo, headers=session_get_headers(request))
+        if response.status_code == 200:
+            return response.json()
         else:
-            response = requests.post(URL_API+'cliente', json=data, headers=headers)
+            response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
+            if response.status_code == 200:
+                return response.json()
 
-        if not response.status_code in [200,201]:
-            raise Exception(tratar_error(response))
+def ativar_pessoa_tipo(self, request, tipo, uuid):
+    headers = session_get_headers(request)
+    url = URL_API + tipo + '/' + str(uuid) + "/ativar-inativar"
+    response = requests.patch(url, headers=headers)
+    if not response.status_code in [200]:
+        raise Exception(tratar_error(response))
 
 
+def salvar_pessoa_tipo(self, request, data, uuid, tipo):
+    headers = session_get_headers(request)
+    if uuid and uuid != 'None':
+        response = requests.patch(URL_API + tipo + '/'+str(uuid), json=data, headers=headers)
+    else:
+        response = requests.post(URL_API + tipo, json=data, headers=headers)
 
+    if not response.status_code in [200,201]:
+        raise Exception(tratar_error(response))

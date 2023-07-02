@@ -61,8 +61,7 @@ def pessoa_render(request, uuid=None):
             return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
 
         if request.POST.get('btn_ativar'):
-            form.ativar(request)
-            messages.success(request, 'Situação alterada com sucesso')
+            form.ativar(request, uuid)
             return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
 
     except Exception as e:
@@ -86,13 +85,12 @@ def pessoaClienteEdit(request, uuid):
 
         if request.POST.get('btn_salvar'):
             form = ClienteForm(request.POST)
-            form.salvar(request, uuid)
+            form.salvar(request)
             messages.success(request, 'sucesso ao gravar dados')
             return HttpResponseRedirect(reverse('url_pessoa_cliente', kwargs={'uuid': uuid}))
 
         if request.POST.get('btn_ativar'):
-            form.ativar(request)
-            messages.success(request, 'Situação alterada com sucesso')
+            form.ativar(request, request.POST.get('clienteId'))
             return HttpResponseRedirect(reverse('url_pessoa_cliente', kwargs={'uuid': uuid}))
 
     except Exception as e:
