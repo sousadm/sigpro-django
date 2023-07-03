@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from acesso.views import login, home, logout
-from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit
+from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit
 
 urlpatterns = [
     path('', home, name='home'),
@@ -27,4 +27,6 @@ urlpatterns = [
     path('pessoa/add', pessoaNew, name='url_pessoa_add'),
     path('pessoa/<int:uuid>', pessoaEdit, name='url_pessoa_edit'),
     path('pessoa/<int:uuid>/cliente', pessoaClienteEdit, name='url_pessoa_cliente'),
+    path('pessoa/<int:uuid>/fornecedor', pessoaFornecedorEdit, name='url_pessoa_fornecedor'),
+    path('pessoa/<int:uuid>/transportador', pessoaTransportadorEdit, name='url_pessoa_transportador'),
 ]

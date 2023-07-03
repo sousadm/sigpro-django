@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from core.controle import require_token, session_get_token, session_get_headers, format_cpf, format_cnpj
 from core.settings import URL_API
-from pessoa.forms import PessoaForm, ClienteForm
+from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorForm
 from pessoa.models import PessoaModel, TIPO_CHOICES
 
 
@@ -31,6 +31,12 @@ def pessoa_render(request, uuid=None):
 
             if request.POST.get('btn_cliente'):
                 return HttpResponseRedirect(reverse('url_pessoa_cliente', kwargs={'uuid': uuid}))
+
+            if request.POST.get('btn_fornecedor'):
+                return HttpResponseRedirect(reverse('url_pessoa_fornecedor', kwargs={'uuid': uuid}))
+
+            if request.POST.get('btn_transportador'):
+                return HttpResponseRedirect(reverse('url_pessoa_transportador', kwargs={'uuid': uuid}))
 
             response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
@@ -92,6 +98,58 @@ def pessoaClienteEdit(request, uuid):
         if request.POST.get('btn_ativar'):
             form.ativar(request, request.POST.get('clienteId'))
             return HttpResponseRedirect(reverse('url_pessoa_cliente', kwargs={'uuid': uuid}))
+
+    except Exception as e:
+        messages.error(request, e)
+
+    form.pesquisaPorPessoa(request, uuid)
+    return render(request, template_name, {'form':form})
+
+
+@require_token
+def pessoaFornecedorEdit(request, uuid):
+    template_name = 'pessoa/fornecedor_edit.html'
+    form = FornecedorForm()
+    try:
+
+        if request.POST.get('btn_pessoa'):
+            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+
+        if request.POST.get('btn_salvar'):
+            form = FornecedorForm(request.POST)
+            form.salvar(request)
+            messages.success(request, 'sucesso ao gravar dados')
+            return HttpResponseRedirect(reverse('url_pessoa_fornecedor', kwargs={'uuid': uuid}))
+
+        if request.POST.get('btn_ativar'):
+            form.ativar(request, request.POST.get('fornecedorId'))
+            return HttpResponseRedirect(reverse('url_pessoa_fornecedor', kwargs={'uuid': uuid}))
+
+    except Exception as e:
+        messages.error(request, e)
+
+    form.pesquisaPorPessoa(request, uuid)
+    return render(request, template_name, {'form':form})
+
+
+
+def pessoaTransportadorEdit(request, uuid):
+    template_name = 'pessoa/transportador_edit.html'
+    form = TransportadorForm()
+    try:
+
+        if request.POST.get('btn_pessoa'):
+            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+
+        if request.POST.get('btn_salvar'):
+            form = TransportadorForm(request.POST)
+            form.salvar(request)
+            messages.success(request, 'sucesso ao gravar dados')
+            return HttpResponseRedirect(reverse('url_pessoa_transportador', kwargs={'uuid': uuid}))
+
+        if request.POST.get('btn_ativar'):
+            form.ativar(request, request.POST.get('transportadorId'))
+            return HttpResponseRedirect(reverse('url_pessoa_transportador', kwargs={'uuid': uuid}))
 
     except Exception as e:
         messages.error(request, e)

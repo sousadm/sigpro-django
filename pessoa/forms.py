@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error
 from core.settings import URL_API
-from pessoa.models import PessoaModel
+from pessoa.models import PessoaModel, PESSOA_FIELDS, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS
 from django import forms
 
 # Create your tests here.
@@ -15,7 +15,7 @@ class PessoaForm(forms.ModelForm):
     class Meta:
         model = PessoaModel
         fields = '__all__'
-        exclude = ['created_dt','updated_dt', 'clienteId', 'emailFiscal', 'retencaoIss', 'limiteCredito', 'limitePrazo','situacaoCliente']
+        exclude = ['created_dt','updated_dt'] + CLIENTE_FIELDS + FORNECEDOR_FIELDS + TRANSPORTADOR_FIELDS
         widgets = {
             'emissao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
             'nascimento': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
@@ -105,10 +105,7 @@ class ClienteForm(forms.ModelForm):
     codigo = forms.CharField(widget=forms.HiddenInput())
     class Meta:
         model = PessoaModel
-        fields = [
-            'nome', 'email', 'fone', 'pessoaId',
-            'clienteId', 'emailFiscal', 'retencaoIss', 'limiteCredito', 'limitePrazo', 'situacaoCliente'
-        ]
+        fields = PESSOA_FIELDS + CLIENTE_FIELDS
 
     def __init__(self, *args, **kwargs):
         super(ClienteForm, self).__init__(*args, **kwargs)
@@ -135,23 +132,90 @@ class ClienteForm(forms.ModelForm):
 
     def salvar(self, request):
         data = self.json()
-        salvar_pessoa_tipo(self, request, data, data['clienteId'], 'cliente')
+        salvar_pessoa_tipo(self, request, data, 'cliente')
 
+
+class FornecedorForm(forms.ModelForm):
+    codigo = forms.CharField(widget=forms.HiddenInput())
+    class Meta:
+        model = PessoaModel
+        fields = PESSOA_FIELDS + FORNECEDOR_FIELDS
+
+    def __init__(self, *args, **kwargs):
+        super(FornecedorForm, self).__init__(*args, **kwargs)
+        self.fields['nome'].widget.attrs['autofocus'] = True
+        self.fields['email'].required = False
+
+    def existe(self):
+        return existe_registro(self, self.initial, 'fornecedorId')
+
+    def pesquisaPorPessoa(self, request, uuid):
+        self.initial = pesquisa_pessoa(self, request, uuid, 'fornecedor')
+
+    def json(self):
+        post_data = dict(self.data)  # Converter QueryDict para dicionário
+        post_data.pop('csrfmiddlewaretoken', None)
+        post_data.pop('btn_salvar', None)
+        json_data = json.dumps(post_data).replace("[", "").replace("]", "")
+        data = json.loads(json_data)
+        if data['fornecedorId'] == 'None': data['fornecedorId'] = None
+        return data
+
+    def ativar(self, request, uuid):
+        ativar_pessoa_tipo(self, request, 'fornecedor', uuid)
+
+    def salvar(self, request):
+        data = self.json()
+        salvar_pessoa_tipo(self, request, data, 'fornecedor')
+
+
+# TRANSPORTADOR
+class TransportadorForm(forms.ModelForm):
+    codigo = forms.CharField(widget=forms.HiddenInput())
+    class Meta:
+        model = PessoaModel
+        fields = PESSOA_FIELDS + TRANSPORTADOR_FIELDS
+    def __init__(self, *args, **kwargs):
+        super(TransportadorForm, self).__init__(*args, **kwargs)
+        self.fields['nome'].widget.attrs['autofocus'] = True
+        self.fields['email'].required = False
+
+    def existe(self):
+        return existe_registro(self, self.initial, 'transportadorId')
+
+    def pesquisaPorPessoa(self, request, uuid):
+        self.initial = pesquisa_pessoa(self, request, uuid, 'transportador')
+
+    def json(self):
+        post_data = dict(self.data)  # Converter QueryDict para dicionário
+        post_data.pop('csrfmiddlewaretoken', None)
+        post_data.pop('btn_salvar', None)
+        json_data = json.dumps(post_data).replace("[", "").replace("]", "")
+        data = json.loads(json_data)
+        if data['transportadorId'] == 'None': data['transportadorId'] = None
+        return data
+
+    def ativar(self, request, uuid):
+        ativar_pessoa_tipo(self, request, 'transportador', uuid)
+
+    def salvar(self, request):
+        data = self.json()
+        salvar_pessoa_tipo(self, request, data, 'transportador')
 
 
 # FUNCÕES AUXILIARES
 def existe_registro(self, dados, campo):
+    print(dados)
     return True if dados.get(campo) and dados.get(campo) != 'None' else False
 
 def pesquisa_pessoa(self, request, uuid, tipo):
-    if uuid:
-        response = requests.get(URL_API + 'pessoa/' + str(uuid) + "/" + tipo, headers=session_get_headers(request))
+    response = requests.get(URL_API + 'pessoa/' + str(uuid) + "/" + tipo, headers=session_get_headers(request))
+    if response.status_code == 200:
+        return response.json()
+    else:
+        response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
         if response.status_code == 200:
             return response.json()
-        else:
-            response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
-            if response.status_code == 200:
-                return response.json()
 
 def ativar_pessoa_tipo(self, request, tipo, uuid):
     headers = session_get_headers(request)
@@ -161,7 +225,8 @@ def ativar_pessoa_tipo(self, request, tipo, uuid):
         raise Exception(tratar_error(response))
 
 
-def salvar_pessoa_tipo(self, request, data, uuid, tipo):
+def salvar_pessoa_tipo(self, request, data, tipo):
+    uuid = data[tipo + 'Id']
     headers = session_get_headers(request)
     if uuid and uuid != 'None':
         response = requests.patch(URL_API + tipo + '/'+str(uuid), json=data, headers=headers)
