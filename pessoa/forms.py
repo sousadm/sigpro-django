@@ -205,7 +205,6 @@ class TransportadorForm(forms.ModelForm):
 
 # FUNCÕES AUXILIARES
 def existe_registro(self, dados, campo):
-    print(dados)
     return True if dados.get(campo) and dados.get(campo) != 'None' else False
 
 def pesquisa_pessoa(self, request, uuid, tipo):

@@ -8,7 +8,7 @@ from django.urls import reverse
 
 PESSOA_FIELDS = ['nome', 'email', 'fone', 'pessoaId']
 CLIENTE_FIELDS = ['clienteId','situacaoCliente','emailFiscal','retencaoIss','limiteCredito','limitePrazo']
-TRANSPORTADOR_FIELDS = ['transportadorId','situacaoTransportador','codigorntrc','tipoProprietario']
+TRANSPORTADOR_FIELDS = ['transportadorId','situacaoTransportador','codigoRNTRC','tipoProprietario']
 FORNECEDOR_FIELDS = ['fornecedorId','situacaoFornecedor']
 
 cpf_regex = RegexValidator(
@@ -98,7 +98,7 @@ class PessoaModel(models.Model):
     # definição para Transportador
     transportadorId = models.IntegerField(verbose_name='Código')
     situacaoTransportador = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
-    codigorntrc = models.CharField(max_length=20, verbose_name='RNTRC')
+    codigoRNTRC = models.CharField(max_length=20, verbose_name='RNTRC')
     tipoProprietario = models.CharField(max_length=20, choices=TIPO_PROPRIETARIO, default='OUTROS', verbose_name='Tipo')
 
     def define_cliente_url(self):
