@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error
 from core.settings import URL_API
-from pessoa.models import PessoaModel, PESSOA_FIELDS, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS
+from pessoa.models import PessoaModel, PESSOA_FIELDS, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS, VENDEDOR_FIELDS
 from django import forms
 
 # Create your tests here.
@@ -15,7 +15,7 @@ class PessoaForm(forms.ModelForm):
     class Meta:
         model = PessoaModel
         fields = '__all__'
-        exclude = ['created_dt','updated_dt'] + CLIENTE_FIELDS + FORNECEDOR_FIELDS + TRANSPORTADOR_FIELDS
+        exclude = ['created_dt','updated_dt'] + CLIENTE_FIELDS + FORNECEDOR_FIELDS + TRANSPORTADOR_FIELDS + VENDEDOR_FIELDS
         widgets = {
             'emissao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
             'nascimento': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
@@ -201,6 +201,42 @@ class TransportadorForm(forms.ModelForm):
     def salvar(self, request):
         data = self.json()
         salvar_pessoa_tipo(self, request, data, 'transportador')
+
+
+
+# VENDEDOR
+class VendedorForm(forms.ModelForm):
+    codigo = forms.CharField(widget=forms.HiddenInput())
+    class Meta:
+        model = PessoaModel
+        fields = PESSOA_FIELDS + VENDEDOR_FIELDS
+    def __init__(self, *args, **kwargs):
+        super(VendedorForm, self).__init__(*args, **kwargs)
+        self.fields['nome'].widget.attrs['autofocus'] = True
+        self.fields['email'].required = False
+
+    def existe(self):
+        return existe_registro(self, self.initial, 'vendedorId')
+
+    def pesquisaPorPessoa(self, request, uuid):
+        self.initial = pesquisa_pessoa(self, request, uuid, 'vendedor')
+
+    def json(self):
+        post_data = dict(self.data)  # Converter QueryDict para dicionário
+        post_data.pop('csrfmiddlewaretoken', None)
+        post_data.pop('btn_salvar', None)
+        json_data = json.dumps(post_data).replace("[", "").replace("]", "")
+        data = json.loads(json_data)
+        if data['vendedorId'] == 'None': data['vendedorId'] = None
+        return data
+
+    def ativar(self, request, uuid):
+        ativar_pessoa_tipo(self, request, 'vendedor', uuid)
+
+    def salvar(self, request):
+        data = self.json()
+        salvar_pessoa_tipo(self, request, data, 'vendedor')
+
 
 
 # FUNCÕES AUXILIARES

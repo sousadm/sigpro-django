@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from core.controle import require_token, session_get_token, session_get_headers, format_cpf, format_cnpj
 from core.settings import URL_API
-from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorForm
+from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorForm, VendedorForm
 from pessoa.models import PessoaModel, TIPO_CHOICES
 
 
@@ -37,6 +37,9 @@ def pessoa_render(request, uuid=None):
 
             if request.POST.get('btn_transportador'):
                 return HttpResponseRedirect(reverse('url_pessoa_transportador', kwargs={'uuid': uuid}))
+
+            if request.POST.get('btn_vendedor'):
+                return HttpResponseRedirect(reverse('url_pessoa_vendedor', kwargs={'uuid': uuid}))
 
             response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
@@ -156,4 +159,30 @@ def pessoaTransportadorEdit(request, uuid):
 
     form.pesquisaPorPessoa(request, uuid)
     return render(request, template_name, {'form':form})
+
+
+def pessoaVendedorEdit(request, uuid):
+    template_name = 'pessoa/vendedor_edit.html'
+    form = VendedorForm()
+    try:
+
+        if request.POST.get('btn_pessoa'):
+            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+
+        if request.POST.get('btn_salvar'):
+            form = VendedorForm(request.POST)
+            form.salvar(request)
+            messages.success(request, 'sucesso ao gravar dados')
+            return HttpResponseRedirect(reverse('url_pessoa_vendedor', kwargs={'uuid': uuid}))
+
+        if request.POST.get('btn_ativar'):
+            form.ativar(request, request.POST.get('vendedorId'))
+            return HttpResponseRedirect(reverse('url_pessoa_vendedor', kwargs={'uuid': uuid}))
+
+    except Exception as e:
+        messages.error(request, e)
+
+    form.pesquisaPorPessoa(request, uuid)
+    return render(request, template_name, {'form':form})
+
 

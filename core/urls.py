@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path
 
 from acesso.views import login, home, logout
-from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit
+from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
+    pessoaVendedorEdit
 
 urlpatterns = [
     path('', home, name='home'),
@@ -29,4 +30,5 @@ urlpatterns = [
     path('pessoa/<int:uuid>/cliente', pessoaClienteEdit, name='url_pessoa_cliente'),
     path('pessoa/<int:uuid>/fornecedor', pessoaFornecedorEdit, name='url_pessoa_fornecedor'),
     path('pessoa/<int:uuid>/transportador', pessoaTransportadorEdit, name='url_pessoa_transportador'),
+    path('pessoa/<int:uuid>/vendedor', pessoaVendedorEdit, name='url_pessoa_vendedor'),
 ]

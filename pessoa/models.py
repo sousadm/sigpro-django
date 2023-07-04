@@ -10,6 +10,7 @@ PESSOA_FIELDS = ['nome', 'email', 'fone', 'pessoaId']
 CLIENTE_FIELDS = ['clienteId','situacaoCliente','emailFiscal','retencaoIss','limiteCredito','limitePrazo']
 TRANSPORTADOR_FIELDS = ['transportadorId','situacaoTransportador','codigoRNTRC','tipoProprietario']
 FORNECEDOR_FIELDS = ['fornecedorId','situacaoFornecedor']
+VENDEDOR_FIELDS = ['vendedorId','situacaoVendedor','comissao']
 
 cpf_regex = RegexValidator(
     regex=r'^\d{3}\.\d{3}\.\d{3}-\d{2}$',
@@ -100,6 +101,10 @@ class PessoaModel(models.Model):
     situacaoTransportador = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
     codigoRNTRC = models.CharField(max_length=20, verbose_name='RNTRC')
     tipoProprietario = models.CharField(max_length=20, choices=TIPO_PROPRIETARIO, default='OUTROS', verbose_name='Tipo')
+    # DEFINIÇÃO PARA VENDEDOR
+    vendedorId = models.IntegerField(verbose_name='Código')
+    situacaoVendedor = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
+    comissao = models.FloatField(verbose_name='Comissão %', default=0)
 
     def define_cliente_url(self):
         return reverse("url_define_cliente", kwargs={"pk": self.pk})
