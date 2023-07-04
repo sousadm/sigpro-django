@@ -6,11 +6,11 @@ from django.urls import reverse
 
 # Create your models here.
 
-PESSOA_FIELDS = ['nome', 'email', 'fone', 'pessoaId']
-CLIENTE_FIELDS = ['clienteId','situacaoCliente','emailFiscal','retencaoIss','limiteCredito','limitePrazo']
-TRANSPORTADOR_FIELDS = ['transportadorId','situacaoTransportador','codigoRNTRC','tipoProprietario']
-FORNECEDOR_FIELDS = ['fornecedorId','situacaoFornecedor']
-VENDEDOR_FIELDS = ['vendedorId','situacaoVendedor','comissao']
+PESSOA_FIELDS = ['nome', 'email', 'fone', 'pessoaId','transportadorId','fornecedorId','vendedorId','clienteId']
+CLIENTE_FIELDS = ['situacaoCliente','emailFiscal','retencaoIss','limiteCredito','limitePrazo']
+TRANSPORTADOR_FIELDS = ['situacaoTransportador','codigoRNTRC','tipoProprietario']
+FORNECEDOR_FIELDS = ['situacaoFornecedor']
+VENDEDOR_FIELDS = ['situacaoVendedor','comissao']
 
 cpf_regex = RegexValidator(
     regex=r'^\d{3}\.\d{3}\.\d{3}-\d{2}$',

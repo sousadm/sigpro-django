@@ -12,6 +12,10 @@
 <div class="container">
     <form method="post">
 
+        <input type="hidden" name="clienteId" value={{ form.clienteId.value }}>
+        <input type="hidden" name="vendedorId" value={{ form.vendedorId.value }}>
+        <input type="hidden" name="transportadorId" value={{ form.transportadorId.value }}>
+        <input type="hidden" name="fornecedorId" value={{ form.fornecedorId.value }}>
         <input type="hidden" name="situacaoPessoa" value={{ form.situacaoPessoa.value }}>
 
         {% csrf_token %}
@@ -132,16 +136,20 @@
                     <i class="fas fa-save"></i> Salvar
                 </button>
                 {% if form.existe %}
-                <button type="submit" id="btn_cliente" value="btn_cliente" name="btn_cliente" class="btn btn-secondary"  >
+                <button type="submit" value="btn_cliente" name="btn_cliente"
+                        title="{{form.clienteId.value}}" class="btn btn-secondary">
                     <i class="fas fa-user"></i> Cliente
                 </button>
-                <button type="submit" id="btn_fornecedor" value="btn_cliente" name="btn_fornecedor" class="btn btn-secondary"  >
+                <button type="submit" value="btn_cliente" name="btn_fornecedor"
+                        title="{{form.fornecedorId.value}}" class="btn btn-secondary"  >
                     <i class="fas fa-building"></i> Fornecedor
                 </button>
-                <button type="submit" id="btn_transportador" value="btn_transportador" name="btn_transportador" class="btn btn-secondary"  >
+                <button type="submit" value="btn_transportador" name="btn_transportador"
+                        title="{{form.transportadorId.value}}" class="btn btn-secondary"  >
                     <i class="fas fa-car"></i> Transportador
                 </button>
-                <button type="submit" id="btn_vendedor" value="btn_vendedor" name="btn_vendedor" class="btn btn-secondary"  >
+                <button type="submit" value="btn_vendedor" name="btn_vendedor"
+                        title="{{form.vendedorId.value}}" class="btn btn-secondary"  >
                     <i class="fas fa-vcard"></i> Vendedor
                 </button>
                 {% endif %}
