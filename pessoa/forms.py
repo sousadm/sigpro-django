@@ -6,8 +6,10 @@ from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error
 from core.settings import URL_API
-from pessoa.models import PessoaModel, PESSOA_FIELDS, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS, VENDEDOR_FIELDS
+from pessoa.models import PessoaModel, PESSOA_FIELDS, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS, \
+    VENDEDOR_FIELDS
 from django import forms
+
 
 # Create your tests here.
 
@@ -15,7 +17,8 @@ class PessoaForm(forms.ModelForm):
     class Meta:
         model = PessoaModel
         fields = '__all__'
-        exclude = ['created_dt','updated_dt'] + CLIENTE_FIELDS + FORNECEDOR_FIELDS + TRANSPORTADOR_FIELDS + VENDEDOR_FIELDS
+        exclude = ['created_dt',
+                   'updated_dt'] + CLIENTE_FIELDS + FORNECEDOR_FIELDS + TRANSPORTADOR_FIELDS + VENDEDOR_FIELDS
         widgets = {
             'emissao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
             'nascimento': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
@@ -33,10 +36,10 @@ class PessoaForm(forms.ModelForm):
         if self.is_valid():
             headers = session_get_headers(request)
             if uuid:
-                response = requests.patch(URL_API + 'pessoa/'+str(uuid), json=data, headers=headers)
+                response = requests.patch(URL_API + 'pessoa/' + str(uuid), json=data, headers=headers)
             else:
-                response = requests.post(URL_API+'pessoa', json=data, headers=headers)
-            if response.status_code in [200,201]:
+                response = requests.post(URL_API + 'pessoa', json=data, headers=headers)
+            if response.status_code in [200, 201]:
                 return response.json()['pessoaId']
             else:
                 raise Exception(tratar_error(response))
@@ -101,8 +104,10 @@ class PessoaForm(forms.ModelForm):
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
         return json.loads(json_data)
 
+
 class ClienteForm(forms.ModelForm):
     codigo = forms.CharField(widget=forms.HiddenInput())
+
     class Meta:
         model = PessoaModel
         fields = PESSOA_FIELDS + CLIENTE_FIELDS
@@ -137,6 +142,7 @@ class ClienteForm(forms.ModelForm):
 
 class FornecedorForm(forms.ModelForm):
     codigo = forms.CharField(widget=forms.HiddenInput())
+
     class Meta:
         model = PessoaModel
         fields = PESSOA_FIELDS + FORNECEDOR_FIELDS
@@ -172,9 +178,11 @@ class FornecedorForm(forms.ModelForm):
 # TRANSPORTADOR
 class TransportadorForm(forms.ModelForm):
     codigo = forms.CharField(widget=forms.HiddenInput())
+
     class Meta:
         model = PessoaModel
         fields = PESSOA_FIELDS + TRANSPORTADOR_FIELDS
+
     def __init__(self, *args, **kwargs):
         super(TransportadorForm, self).__init__(*args, **kwargs)
         self.fields['nome'].widget.attrs['autofocus'] = True
@@ -203,13 +211,14 @@ class TransportadorForm(forms.ModelForm):
         salvar_pessoa_tipo(self, request, data, 'transportador')
 
 
-
 # VENDEDOR
 class VendedorForm(forms.ModelForm):
     codigo = forms.CharField(widget=forms.HiddenInput())
+
     class Meta:
         model = PessoaModel
         fields = PESSOA_FIELDS + VENDEDOR_FIELDS
+
     def __init__(self, *args, **kwargs):
         super(VendedorForm, self).__init__(*args, **kwargs)
         self.fields['nome'].widget.attrs['autofocus'] = True
@@ -238,10 +247,10 @@ class VendedorForm(forms.ModelForm):
         salvar_pessoa_tipo(self, request, data, 'vendedor')
 
 
-
 # FUNCÕES AUXILIARES
 def existe_registro(self, dados, campo):
     return True if dados.get(campo) and dados.get(campo) != 'None' else False
+
 
 def pesquisa_pessoa(self, request, uuid, tipo):
     response = requests.get(URL_API + 'pessoa/' + str(uuid) + "/" + tipo, headers=session_get_headers(request))
@@ -251,6 +260,7 @@ def pesquisa_pessoa(self, request, uuid, tipo):
         response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
         if response.status_code == 200:
             return response.json()
+
 
 def ativar_pessoa_tipo(self, request, tipo, uuid):
     headers = session_get_headers(request)
@@ -264,9 +274,20 @@ def salvar_pessoa_tipo(self, request, data, tipo):
     uuid = data[tipo + 'Id']
     headers = session_get_headers(request)
     if uuid and uuid != 'None':
-        response = requests.patch(URL_API + tipo + '/'+str(uuid), json=data, headers=headers)
+        response = requests.patch(URL_API + tipo + '/' + str(uuid), json=data, headers=headers)
     else:
         response = requests.post(URL_API + tipo, json=data, headers=headers)
 
-    if not response.status_code in [200,201]:
+    if not response.status_code in [200, 201]:
         raise Exception(tratar_error(response))
+
+
+class PessoaListForm(forms.Form):
+    nome = forms.CharField(label='Pesquisa')
+
+    def pesquisar(self, request):
+        headers = session_get_headers(request)
+        response = requests.get(URL_API + 'pessoa', headers=headers)
+        data = response.json()
+        return data['content'] if 'content' in data else []
+

@@ -19,12 +19,13 @@ from django.urls import path
 
 from acesso.views import login, home, logout
 from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
-    pessoaVendedorEdit
+    pessoaVendedorEdit, pessoaList
 
 urlpatterns = [
     path('', home, name='home'),
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
+    path('pessoa/', pessoaList, name='url_pessoa_list'),
     path('pessoa/add', pessoaNew, name='url_pessoa_add'),
     path('pessoa/<int:uuid>', pessoaEdit, name='url_pessoa_edit'),
     path('pessoa/<int:uuid>/cliente', pessoaClienteEdit, name='url_pessoa_cliente'),

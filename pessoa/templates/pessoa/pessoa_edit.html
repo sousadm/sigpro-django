@@ -20,7 +20,7 @@
 
         {% csrf_token %}
 
-        <fieldset {% if not form.situacaoPessoa.value %} disabled {% endif %} >
+        <fieldset {% if not form.situacaoPessoa.value %} disabled {% endif %}>
 
             <div class="card">
                 <div class="card-header">
@@ -31,7 +31,8 @@
                     <div class="row">
                         <div class="col-12 col-md-2">
                             <label class="control-label">Código</label>
-                            <input type="number" disabled="disabled" class="form-control" value={{ form.pessoaId.value }}>
+                            <input type="number" disabled="disabled" class="form-control" value={{ form.pessoaId.value
+                                   }}>
                         </div>
                         <div class="col-12 col-md-10">
                             {{ form.nome|bootstrap }}
@@ -50,7 +51,9 @@
                             <select name="tipoPessoa" id="tipoPessoa" class="form-control"
                                     onchange="selecionaTipoChange(this)">
                                 {% for choice in form.tipoPessoa.field.choices %}
-                                    <option value="{{ choice.0 }}" {% if choice.0 == tipo_selected %} selected {% endif %}>{{ choice.1 }}</option>
+                                <option value="{{ choice.0 }}" {% if choice.0== tipo_selected %} selected {% endif %}>{{
+                                    choice.1 }}
+                                </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -132,32 +135,32 @@
             </button>
 
             {% if form.situacaoPessoa.value %}
-                <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
-                    <i class="fas fa-save"></i> Salvar
-                </button>
-                {% if form.existe %}
-                <button type="submit" value="btn_cliente" name="btn_cliente"
-                        title="{{form.clienteId.value}}" class="btn btn-secondary">
-                    <i class="fas fa-user"></i> Cliente
-                </button>
-                <button type="submit" value="btn_cliente" name="btn_fornecedor"
-                        title="{{form.fornecedorId.value}}" class="btn btn-secondary"  >
-                    <i class="fas fa-building"></i> Fornecedor
-                </button>
-                <button type="submit" value="btn_transportador" name="btn_transportador"
-                        title="{{form.transportadorId.value}}" class="btn btn-secondary"  >
-                    <i class="fas fa-car"></i> Transportador
-                </button>
-                <button type="submit" value="btn_vendedor" name="btn_vendedor"
-                        title="{{form.vendedorId.value}}" class="btn btn-secondary"  >
-                    <i class="fas fa-vcard"></i> Vendedor
-                </button>
-                {% endif %}
+            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
+                <i class="fas fa-save"></i> Salvar
+            </button>
+            {% if form.existe %}
+            <button type="submit" value="btn_cliente" name="btn_cliente"
+                    title="{{form.clienteId.value}}" class="btn btn-secondary">
+                <i class="fas fa-user"></i> Cliente
+            </button>
+            <button type="submit" value="btn_cliente" name="btn_fornecedor"
+                    title="{{form.fornecedorId.value}}" class="btn btn-secondary">
+                <i class="fas fa-building"></i> Fornecedor
+            </button>
+            <button type="submit" value="btn_transportador" name="btn_transportador"
+                    title="{{form.transportadorId.value}}" class="btn btn-secondary">
+                <i class="fas fa-car"></i> Transportador
+            </button>
+            <button type="submit" value="btn_vendedor" name="btn_vendedor"
+                    title="{{form.vendedorId.value}}" class="btn btn-secondary">
+                <i class="fas fa-vcard"></i> Vendedor
+            </button>
+            {% endif %}
             {% endif %}
 
             {% if form.existe %}
             <button type="submit" value="btn_ativar" name="btn_ativar" class="btn btn-danger"
-                onClick='return confirma("Confirma {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")' >
+                    onClick='return confirma("Confirma {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")'>
                 <i class="fas fa-check"></i> {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%}
             </button>
             {% endif %}
@@ -185,6 +188,7 @@
         //document.getElementById('id_tipoPessoa') = sel.value;
 
     }
+
 
 </script>
 

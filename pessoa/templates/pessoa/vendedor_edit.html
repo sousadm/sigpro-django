@@ -13,42 +13,43 @@
         <input type="hidden" name="pessoaId" value={{ form.pessoaId.value }}>
         <input type="hidden" name="situacaoVendedor" value={{ form.situacaoVendedor.value }}>
 
-        <fieldset {% if not form.situacaoVendedor.value %} disabled {% endif %} >
+        <fieldset {% if not form.situacaoVendedor.value %} disabled {% endif %}>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Cadastro de Vendedor</h3>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Cadastro de Vendedor</h3>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-12 col-md-2">
+                            <label class="control-label">Código</label>
+                            <input type="number" disabled="disabled" class="form-control" value={{ form.vendedorId.value
+                                   }}>
+                        </div>
+                        <div class="col-12 col-md-10">
+                            {{ form.nome|bootstrap }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-3">
+                            {{ form.fone|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-9">
+                            {{ form.email|bootstrap }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-3">
+                            {{ form.comissao|bootstrap }}
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
-            <div class="card-body">
-
-                <div class="row">
-                    <div class="col-12 col-md-2">
-                        <label class="control-label">Código</label>
-                        <input type="number" disabled="disabled" class="form-control" value={{ form.vendedorId.value }}>
-                    </div>
-                    <div class="col-12 col-md-10">
-                        {{ form.nome|bootstrap }}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 col-md-3">
-                        {{ form.fone|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-9">
-                        {{ form.email|bootstrap }}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 col-md-3">
-                        {{ form.comissao|bootstrap }}
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
 
         </fieldset>
 
@@ -66,7 +67,7 @@
 
             {% if form.existe %}
             <button type="submit" value="btn_ativar" name="btn_ativar" class="btn btn-danger"
-                onClick='return confirma("Confirma {%if form.situacaoVendedor.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")' >
+                    onClick='return confirma("Confirma {%if form.situacaoVendedor.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")'>
                 <i class="fas fa-check"></i> {%if form.situacaoVendedor.value%} Inativar {%else%} Ativar {%endif%}
             </button>
             {% endif %}

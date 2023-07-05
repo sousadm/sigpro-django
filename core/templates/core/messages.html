@@ -7,17 +7,19 @@
         z-index: 9999;
         opacity: 1;
     }
+
 </style>
 
 <div class="floating-messages">
     {% for message in messages %}
-        <div class="alert {{ message.tags }}" role="alert" id="message-{{ forloop.counter }}">
-            {{ message }}
-        </div>
-        <script>
+    <div class="alert {{ message.tags }}" role="alert" id="message-{{ forloop.counter }}">
+        {{ message }}
+    </div>
+    <script>
             setTimeout(function() {
                 document.querySelector("#message-{{ forloop.counter }}").style.display = "none";
             }, 3000);
-        </script>
+
+    </script>
     {% endfor %}
 </div>

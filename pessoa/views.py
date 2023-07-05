@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from core.controle import require_token, session_get_token, session_get_headers, format_cpf, format_cnpj
 from core.settings import URL_API
-from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorForm, VendedorForm
+from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorForm, VendedorForm, PessoaListForm
 from pessoa.models import PessoaModel, TIPO_CHOICES
 
 
@@ -83,6 +83,7 @@ def pessoa_render(request, uuid=None):
     }
     return render(request, template_name, context)
 
+
 @require_token
 def pessoaClienteEdit(request, uuid):
     template_name = 'pessoa/cliente_edit.html'
@@ -106,7 +107,7 @@ def pessoaClienteEdit(request, uuid):
         messages.error(request, e)
 
     form.pesquisaPorPessoa(request, uuid)
-    return render(request, template_name, {'form':form})
+    return render(request, template_name, {'form': form})
 
 
 @require_token
@@ -132,8 +133,7 @@ def pessoaFornecedorEdit(request, uuid):
         messages.error(request, e)
 
     form.pesquisaPorPessoa(request, uuid)
-    return render(request, template_name, {'form':form})
-
+    return render(request, template_name, {'form': form})
 
 
 def pessoaTransportadorEdit(request, uuid):
@@ -158,7 +158,7 @@ def pessoaTransportadorEdit(request, uuid):
         messages.error(request, e)
 
     form.pesquisaPorPessoa(request, uuid)
-    return render(request, template_name, {'form':form})
+    return render(request, template_name, {'form': form})
 
 
 def pessoaVendedorEdit(request, uuid):
@@ -183,6 +183,20 @@ def pessoaVendedorEdit(request, uuid):
         messages.error(request, e)
 
     form.pesquisaPorPessoa(request, uuid)
-    return render(request, template_name, {'form':form})
+    return render(request, template_name, {'form': form})
 
 
+@require_token
+def pessoaList(request):
+    context = {}
+    lista = []
+    template_name = 'pessoa/pessoa_list.html'
+    form = PessoaListForm()
+    try:
+        lista = form.pesquisar(request)
+
+    except Exception as e:
+        messages.error(request, e)
+    context['form'] = form
+    context['lista'] = lista
+    return render(request, template_name, context)

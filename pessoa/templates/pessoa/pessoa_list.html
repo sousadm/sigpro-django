@@ -5,10 +5,68 @@
 
 {% block content %}
 <div class="container">
+    <form method="post">
 
-    <h4>Cadastro de Pessoa</h4>
+        {% csrf_token %}
 
+        <div class="card">
+            <div class="card-header">
+                <h3>Lista de Pessoas</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        {{ form.nome|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-2 align-text-bottom">
+                        <button type="submit" value="btn_listar" name="btn_listar" class="btn btn-success">
+                            <i class="fas fa-save"></i> Listar
+                        </button>
+                    </div>
+                </div>
 
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th width="150">Celular</th>
+                            <th width="90"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in lista %}
+                        <tr>
+                            <td><span {% if not item.is_active %} class="text-danger"
+                                      {%endif%}>{{ item.nome|default_if_none:"" }}</span></td>
+                            <td><span {% if not item.is_active %} class="text-danger"
+                                      {%endif%}>{{ item.email|default_if_none:"" }}</span></td>
+                            <td><span {% if not item.is_active %} class="text-danger"
+                                      {%endif%}>{{ item.fone|default_if_none:"" }}</span></td>
+                            <td>
+                                <a href="{{ item.get_absolute_url }}">
+                                    <button type="button" class="btn btn-sm" title="editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4"><span>sem registros</span></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
 
+                    {% include "core/paginacao.html" %}
+
+                </div>
+
+            </div>
+        </div>
+
+    </form>
 </div>
 {% endblock %}

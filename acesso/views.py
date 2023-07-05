@@ -18,22 +18,23 @@ def login(request):
         if request.method == "POST":
             form = LoginForm(request.POST)
             if form.is_valid():
-                response = requests.post(URL_API+'login', json=form.cleaned_data)
+                response = requests.post(URL_API + 'login', json=form.cleaned_data)
                 if response.status_code == 200:
                     session_add_token(request, response.json())
-                    # return HttpResponseRedirect(reverse('url_pessoa_add'))
-                    return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': 2}))
+                    return HttpResponseRedirect(reverse('url_pessoa_list'))
+                    # return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': 2}))
                 else:
                     messages.error(request, 'erro ao acessar o sistema')
         else:
-            form = LoginForm(initial={"login":"gerente"})
+            form = LoginForm(initial={"login": "gerente"})
 
     except Exception as e:
         messages.error(request, e)
 
     return render(request, template_name, {"form": form})
 
-#decorator
+
+# decorator
 @require_token
 def home(request):
     username = session_get(request, 'username')

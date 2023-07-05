@@ -4,8 +4,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 
-#DECORATOR
-#verifica se o token está na sessão
+# DECORATOR
+# verifica se o token está na sessão
 def require_token(view_func):
     def wrapper(request, *args, **kwargs):
         if session_get_token(request) is None:
@@ -66,7 +66,6 @@ def tratar_error(response):
         return response.json()
 
 
-
 def format_cpf(cpf):
     cpf = str(cpf)
     return f'{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}'
@@ -75,4 +74,3 @@ def format_cpf(cpf):
 def format_cnpj(cnpj):
     cnpj = str(cnpj)
     return f'{cnpj[:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:12]}-{cnpj[12:14]}'
-
