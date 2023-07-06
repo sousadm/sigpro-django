@@ -31,8 +31,7 @@
                     <div class="row">
                         <div class="col-12 col-md-2">
                             <label class="control-label">Código</label>
-                            <input type="number" disabled="disabled" class="form-control" value={{ form.pessoaId.value
-                                   }}>
+                            <input type="number" disabled="disabled" class="form-control" value={{ form.pessoaId.value }}>
                         </div>
                         <div class="col-12 col-md-10">
                             {{ form.nome|bootstrap }}
@@ -46,13 +45,14 @@
                         <div class="col-12 col-md-7">
                             {{ form.email|bootstrap }}
                         </div>
+
                         <div class="col-12 col-md-2">
                             <label>Tipo de Pessoa</label>
                             <select name="tipoPessoa" id="tipoPessoa" class="form-control"
                                     onchange="selecionaTipoChange(this)">
                                 {% for choice in form.tipoPessoa.field.choices %}
-                                <option value="{{ choice.0 }}" {% if choice.0== tipo_selected %} selected {% endif %}>{{
-                                    choice.1 }}
+                                <option value="{{ choice.0 }}" {% if choice.0 == tipo_selected %} selected {% endif %}>
+                                    {{ choice.1 }}
                                 </option>
                                 {% endfor %}
                             </select>
@@ -130,12 +130,17 @@
 
         <div class="footer bg-blue">
 
-            <button type="submit" value="btn_novo" name="btn_novo" class="btn btn-secondary">
+            <button type="submit" value="btn_novo" name="btn_novo" class="btn btn-default">
                 <i class="fa fa-file"></i> Novo
             </button>
+            <a href="{% url 'url_pessoa_list' %}">
+                <button type="button" class="btn btn-default" title="lista">
+                    <i class="fas fa-list"></i> Lista
+                </button>
+            </a>
 
             {% if form.situacaoPessoa.value %}
-            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
+            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
                 <i class="fas fa-save"></i> Salvar
             </button>
             {% if form.existe %}

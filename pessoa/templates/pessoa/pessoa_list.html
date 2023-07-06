@@ -45,7 +45,7 @@
                             <td><span {% if not item.is_active %} class="text-danger"
                                       {%endif%}>{{ item.fone|default_if_none:"" }}</span></td>
                             <td>
-                                <a href="{{ item.get_absolute_url }}">
+                                <a href="{% url 'url_pessoa_edit' uuid=item.pessoaId %}">
                                     <button type="button" class="btn btn-sm" title="editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
