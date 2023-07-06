@@ -37,18 +37,13 @@
                         </thead>
                         <tbody>
                         {% for item in lista %}
-                        <tr>
-                            <td><span {% if not item.is_active %} class="text-danger"
-                                      {%endif%}>{{ item.nome|default_if_none:"" }}</span></td>
-                            <td><span {% if not item.is_active %} class="text-danger"
-                                      {%endif%}>{{ item.email|default_if_none:"" }}</span></td>
-                            <td><span {% if not item.is_active %} class="text-danger"
-                                      {%endif%}>{{ item.fone|default_if_none:"" }}</span></td>
+                        <tr {% if not item.situacaoPessoa %} class="text-danger" {%endif%}>
+                            <td>{{ item.nome|default_if_none:"" }}</td>
+                            <td>{{ item.email|default_if_none:"" }}</td>
+                            <td>{{ item.fone|default_if_none:"" }}</td>
                             <td>
                                 <a href="{% url 'url_pessoa_edit' uuid=item.pessoaId %}">
-                                    <button type="button" class="btn btn-sm" title="editar">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
+                                    <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
                                 </a>
                             </td>
                         </tr>
