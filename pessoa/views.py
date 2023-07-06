@@ -188,15 +188,25 @@ def pessoaVendedorEdit(request, uuid):
 
 @require_token
 def pessoaList(request):
-    context = {}
+    data = {}
     lista = []
     template_name = 'pessoa/pessoa_list.html'
     form = PessoaListForm()
     try:
-        lista = form.pesquisar(request)
 
+        if request.POST.get('btn_limpar'):
+            form = PessoaListForm()
+
+        if request.POST.get('btn_listar'):
+            form = PessoaListForm(request.POST)
+            data['nome'] = request.POST['nome']
+
+        lista = form.pesquisar(request, data)
     except Exception as e:
         messages.error(request, e)
-    context['form'] = form
-    context['lista'] = lista
+
+    context = {
+        'form': form,
+        'lista': lista
+    }
     return render(request, template_name, context)
