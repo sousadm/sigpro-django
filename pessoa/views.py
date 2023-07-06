@@ -197,6 +197,9 @@ def pessoaList(request):
         if request.POST.get('btn_limpar'):
             form = PessoaListForm()
 
+        if request.POST.get('btn_novo'):
+            return HttpResponseRedirect(reverse('url_pessoa_add'))
+
         if request.POST.get('btn_listar'):
             form = PessoaListForm(request.POST)
             data['nome'] = request.POST['nome']
