@@ -60,9 +60,10 @@ class PessoaForm(forms.Form):
     # Endereçamento
     uf = forms.ChoiceField(choices=(), required=False, initial='CE', label='Estado')
 
-    def __init__(self, *args, request, **kwargs):
+    def __init__(self, *args, request=None, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
-        self.fields['uf'].choices = get_lista_unidade_federacao(request)
+        if request:
+            self.fields['uf'].choices = get_lista_unidade_federacao(request)
 
     def existe(self):
         return existe_registro(self, self.data, 'pessoaId')

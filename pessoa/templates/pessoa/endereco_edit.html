@@ -1,20 +1,15 @@
 {% load bootstrap %}
 {% load static %}
 
-
-
 <div class="row">
-
-    {{form.uf.choice}}
-
     <div class="col-12 col-md-2">
         <label class="control-label">CEP</label>
         <input type="number" class="form-control">
     </div>
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-md-2">
         {{ form.uf|bootstrap }}
     </div>
-    <div class="col-12 col-md-7">
+    <div class="col-12 col-md-8">
         <label class="control-label">Município</label>
         <input type="number" class="form-control">
     </div>
