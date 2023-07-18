@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error
 from core.settings import URL_API
+from pessoa.Endereco import get_lista_unidade_federacao
 from pessoa.models import PessoaModel, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS, \
     VENDEDOR_FIELDS, TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TIPO_SIM_NAO, REGIME_TRIBUTARIO_CHOICES, \
     TIPO_CONTRIBUINTE_CHOICES
@@ -59,8 +60,9 @@ class PessoaForm(forms.Form):
     # Endereçamento
     uf = forms.ChoiceField(choices=(), required=False, initial='CE', label='UF')
 
-    def __init__(self, *args, request=None, **kwargs):
+    def __init__(self, *args, request, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
+        self.fields['uf'].choices = get_lista_unidade_federacao(request)
 
     def existe(self):
         return existe_registro(self, self.data, 'pessoaId')

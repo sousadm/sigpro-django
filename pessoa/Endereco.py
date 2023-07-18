@@ -13,7 +13,10 @@ class UnidadeFederacao:
 def get_lista_unidade_federacao(request):
     headers = session_get_headers(request)
     response = requests.get(URL_API + 'municipio/estados', headers=headers)
-    return response.json()
+    data = []
+    for n in response.json():
+        data.append((n['sigla'], n['descricao']))
+    return data
 
 class Municipio:
     def __int__(self, ibge, uf, descricao):

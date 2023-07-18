@@ -45,7 +45,7 @@ def pessoa_render(request, uuid=None):
 
             response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
-                form = PessoaForm(response.json())
+                form = PessoaForm(data=response.json(), request=request)
                 if form.data.get('cpf'):
                     form.data['cpf'] = format_cpf(form.data.get('cpf'))
                 if form.data.get('cnpj'):
@@ -59,13 +59,13 @@ def pessoa_render(request, uuid=None):
                 "fone": "00009999",
                 "email": "costa@hot.com"
             }
-            form = PessoaForm(initial=dados_iniciais)
+            form = PessoaForm(initial=dados_iniciais, request=request)
 
         if request.POST.get('btn_novo'):
             return HttpResponseRedirect(reverse('url_pessoa_add'))
 
         if request.POST.get('btn_salvar'):
-            form = PessoaForm(request.POST)
+            form = PessoaForm(request.POST, request)
             tipo_selected = form.data.get('tipoPessoa')
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
