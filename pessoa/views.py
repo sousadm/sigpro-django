@@ -26,7 +26,6 @@ def pessoaEdit(request, uuid):
 def pessoa_render(request, uuid=None):
     template_name = 'pessoa/pessoa_edit.html'
     tipo_selected = TIPO_CHOICES[0][0]
-    ufs = get_lista_unidade_federacao(request)
     try:
 
         if uuid:
@@ -82,7 +81,6 @@ def pessoa_render(request, uuid=None):
         "form": form,
         "tipo_selected": tipo_selected,
         "tipo_definido": tipo_selected != 'INDEFINIDO',
-        "ufs":ufs
     }
     return render(request, template_name, context)
 

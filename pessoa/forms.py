@@ -58,7 +58,7 @@ class PessoaForm(forms.Form):
                                initial=TIPO_CONTRIBUINTE_CHOICES[0][0],
                                label='Contribuinte')
     # Endereçamento
-    uf = forms.ChoiceField(choices=(), required=False, initial='CE', label='UF')
+    uf = forms.ChoiceField(choices=(), required=False, initial='CE', label='Estado')
 
     def __init__(self, *args, request, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
