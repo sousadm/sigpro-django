@@ -58,7 +58,11 @@ class PessoaForm(forms.Form):
                                initial=TIPO_CONTRIBUINTE_CHOICES[0][0],
                                label='Contribuinte')
     # Endereçamento
-    uf = forms.ChoiceField(choices=(), required=False, initial='CE', label='Estado')
+    uf = forms.ChoiceField(choices=(), initial='CE', label='Estado')
+    cep = forms.CharField(max_length=9, min_length=8, label='CEP', required=False, initial='60000000')
+    bairro = forms.CharField(max_length=60, min_length=3, label='Bairro', required=False, initial='centro')
+    logradouro = forms.CharField(max_length=60, min_length=3, label='Logradouro', required=False, initial='rua do beco')
+    numero = forms.IntegerField(label='Número', initial=100, required=False)
 
     def __init__(self, *args, request=None, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
@@ -93,7 +97,7 @@ class PessoaForm(forms.Form):
         # pessoa fisica
         if self.data.get('tipoPessoa') == 'FISICA':
             cpf = str(self.data.get('cpf'))
-            post_data['cpf'] = cpf.replace('.', '').replace('-', '')
+            post_data['cpf'] = ''.join(filter(str.isdigit, cpf))
         else:
             post_data.pop('cpf', None)
             post_data.pop('identidade', None)
@@ -104,7 +108,7 @@ class PessoaForm(forms.Form):
         # pessoa jurídica
         if self.data.get('tipoPessoa') == 'JURIDICA':
             cnpj = str(self.data.get('cnpj'))
-            post_data['cnpj'] = cnpj.replace('.', '').replace('-', '').replace('/', '')
+            post_data['cnpj'] = ''.join(filter(str.isdigit, cnpj))
         else:
             post_data.pop('cnpj', None)
             post_data.pop('fantasia', None)
