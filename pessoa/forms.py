@@ -15,7 +15,7 @@ from django import forms
 
 # Create your tests here.
 
-class PessoaForm(forms.ModelForm):
+class PessoaForm(forms.Form):
     created_dt = forms.DateTimeField(required=False)
     updated_dt = forms.DateTimeField(required=False)
     pessoaId = forms.IntegerField(label='Pessoa ID')
@@ -30,8 +30,14 @@ class PessoaForm(forms.ModelForm):
                                  label='Identidade')
     pai = forms.CharField(max_length=100, label='Pai')
     mae = forms.CharField(max_length=100, label='Nome da Mãe')
-    nascimento = forms.DateField(label='Nascimento')
-    emissao = forms.DateField(label='Emissão')
+    nascimento = forms.DateField(
+        label='Nascimento',
+        widget=forms.DateInput(
+            attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
+    emissao = forms.DateField(
+        label='Emissão',
+        widget=forms.DateInput(
+            attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
     orgao = forms.CharField(max_length=10, label='Órgão')
     idEstrangeiro = forms.CharField(max_length=10,
                                     label='Id.Estrangeiro')
@@ -43,7 +49,10 @@ class PessoaForm(forms.ModelForm):
     fantasia = forms.CharField(max_length=100, label='Nome de Fantasia')
     IE = forms.CharField(max_length=20, label='Insc.Estadual')
     cnae = forms.CharField(max_length=20, label='CNAE')
-    fundacao = forms.DateField(label='Data Fundação')
+    fundacao = forms.DateField(
+        label='Data Fundação',
+        widget=forms.DateInput(
+            attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
     incentivoCultural = forms.ChoiceField(label='Incentivo Cult.', choices=TIPO_SIM_NAO)
     regime = forms.ChoiceField(choices=REGIME_TRIBUTARIO_CHOICES,
                                initial=REGIME_TRIBUTARIO_CHOICES[0][0],
@@ -51,17 +60,6 @@ class PessoaForm(forms.ModelForm):
     tipoIE = forms.ChoiceField(choices=TIPO_CONTRIBUINTE_CHOICES,
                                initial=TIPO_CONTRIBUINTE_CHOICES[0][0],
                                label='Contribuinte')
-
-    class Meta:
-        model = PessoaModel
-        fields = '__all__'
-        exclude = ['created_dt',
-                   'updated_dt'] + CLIENTE_FIELDS + FORNECEDOR_FIELDS + TRANSPORTADOR_FIELDS + VENDEDOR_FIELDS
-        widgets = {
-            'emissao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
-            'nascimento': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'}),
-            'fundacao': forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control'})
-        }
 
     def existe(self):
         return existe_registro(self, self.data, 'pessoaId')
