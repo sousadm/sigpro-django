@@ -56,6 +56,11 @@ class PessoaForm(forms.Form):
     tipoIE = forms.ChoiceField(choices=TIPO_CONTRIBUINTE_CHOICES,
                                initial=TIPO_CONTRIBUINTE_CHOICES[0][0],
                                label='Contribuinte')
+    # Endereçamento
+    uf = forms.ChoiceField(choices=(), required=False, initial='CE', label='UF')
+
+    def __init__(self, *args, **kwargs):
+        super(PessoaForm, self).__init__(*args, **kwargs)
 
     def existe(self):
         return existe_registro(self, self.data, 'pessoaId')
@@ -77,9 +82,6 @@ class PessoaForm(forms.Form):
                 raise Exception(tratar_error(response))
         else:
             raise ValueError(self.errors)
-
-    def __init__(self, *args, **kwargs):
-        super(PessoaForm, self).__init__(*args, **kwargs)
 
     def json(self):
         post_data = dict(self.data)  # Converter QueryDict para dicionário
