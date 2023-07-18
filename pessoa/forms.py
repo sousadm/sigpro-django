@@ -8,7 +8,8 @@ from django.urls import reverse
 from core.controle import session_get_headers, tratar_error
 from core.settings import URL_API
 from pessoa.models import PessoaModel, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS, \
-    VENDEDOR_FIELDS, TIPO_SITUACAO, TIPO_CHOICES
+    VENDEDOR_FIELDS, TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TIPO_SIM_NAO, REGIME_TRIBUTARIO_CHOICES, \
+    TIPO_CONTRIBUINTE_CHOICES
 from django import forms
 
 
@@ -17,12 +18,40 @@ from django import forms
 class PessoaForm(forms.ModelForm):
     created_dt = forms.DateTimeField(required=False)
     updated_dt = forms.DateTimeField(required=False)
-    pessoaId = forms.IntegerField( label='Pessoa ID')
-    nome = forms.CharField(max_length=100, label='Nome')  # , help_text='nome completo'
-    fone = forms.CharField(max_length=20, label='Fone')  # , help_text='número do telefone para contato'
-    email = forms.EmailField(max_length=254, label='E-mail')  # , help_text='e-mail para contato'
+    pessoaId = forms.IntegerField(label='Pessoa ID')
+    nome = forms.CharField(max_length=100, label='Nome')
+    fone = forms.CharField(max_length=20, label='Fone')
+    email = forms.EmailField(max_length=254, label='E-mail')
     situacaoPessoa = forms.ChoiceField(label='Situação', choices=TIPO_SITUACAO, initial=True)
     tipoPessoa = forms.ChoiceField(choices=TIPO_CHOICES, initial='INDEFINIDO', label='Tipo')
+    # definição para pessoa física
+    cpf = forms.CharField(max_length=14, validators=[cpf_regex], label='CPF')  # , help_text='número do cpf'
+    identidade = forms.CharField(max_length=20,
+                                 label='Identidade')
+    pai = forms.CharField(max_length=100, label='Pai')
+    mae = forms.CharField(max_length=100, label='Nome da Mãe')
+    nascimento = forms.DateField(label='Nascimento')
+    emissao = forms.DateField(label='Emissão')
+    orgao = forms.CharField(max_length=10, label='Órgão')
+    idEstrangeiro = forms.CharField(max_length=10,
+                                    label='Id.Estrangeiro')
+    nacionalidade = forms.CharField(max_length=30, label='Nacionalidade')
+    naturalidade = forms.CharField(max_length=30,
+                                   label='Naturalidade')
+    # definição para pessoa jurídica
+    cnpj = forms.CharField(max_length=18, validators=[cnpj_regex], label='CNPJ')
+    fantasia = forms.CharField(max_length=100, label='Nome de Fantasia')
+    IE = forms.CharField(max_length=20, label='Insc.Estadual')
+    cnae = forms.CharField(max_length=20, label='CNAE')
+    fundacao = forms.DateField(label='Data Fundação')
+    incentivoCultural = forms.ChoiceField(label='Incentivo Cult.', choices=TIPO_SIM_NAO)
+    regime = forms.ChoiceField(choices=REGIME_TRIBUTARIO_CHOICES,
+                               initial=REGIME_TRIBUTARIO_CHOICES[0][0],
+                               label='Reg.Tributário')
+    tipoIE = forms.ChoiceField(choices=TIPO_CONTRIBUINTE_CHOICES,
+                               initial=TIPO_CONTRIBUINTE_CHOICES[0][0],
+                               label='Contribuinte')
+
     class Meta:
         model = PessoaModel
         fields = '__all__'
@@ -294,9 +323,9 @@ def salvar_pessoa_tipo(self, request, data, tipo):
 class PessoaListForm(forms.Form):
     nome = forms.CharField(label='Pesquisa', required=False,
                            widget=forms.TextInput(attrs={'autofocus': 'autofocus'}))
+
     def pesquisar(self, request, data):
         headers = session_get_headers(request)
-        response = requests.get(URL_API + 'pessoa?' + urlencode(data) , headers=headers, data=data)
+        response = requests.get(URL_API + 'pessoa?' + urlencode(data), headers=headers, data=data)
         data = response.json()
         return data['content'] if 'content' in data else []
-

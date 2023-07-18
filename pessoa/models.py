@@ -58,31 +58,6 @@ TIPO_PROPRIETARIO = (
 
 
 class PessoaModel(models.Model):
-    # definição para pessoa física
-    cpf = models.CharField(max_length=14, validators=[cpf_regex], verbose_name='CPF')  # , help_text='número do cpf'
-    identidade = models.CharField(max_length=20,
-                                  verbose_name='Identidade')  # , help_text='número do RG ou identidade de classe'
-    pai = models.CharField(max_length=100, verbose_name='Pai')  # , help_text='nome completo do pai'
-    mae = models.CharField(max_length=100, verbose_name='Nome da Mãe')  # , help_text='nome completo da mãe'
-    nascimento = models.DateField(verbose_name='Nascimento')  # , help_text='data de nascimento'
-    emissao = models.DateField(verbose_name='Emissão')  # , help_text='data de emissão'
-    orgao = models.CharField(max_length=10, verbose_name='Órgão')  # , help_text='órgão emissor'
-    idEstrangeiro = models.CharField(max_length=10,
-                                     verbose_name='Id.Estrangeiro')  # , help_text='identidade quando estrangeiro'
-    nacionalidade = models.CharField(max_length=30, verbose_name='Nacionalidade')  # , help_text='país de origem'
-    naturalidade = models.CharField(max_length=30,
-                                    verbose_name='Naturalidade')  # , help_text='cidade ou estado de origem'
-    # definição para pessoa jurídica
-    cnpj = models.CharField(max_length=18, validators=[cnpj_regex], verbose_name='CNPJ')
-    fantasia = models.CharField(max_length=100, verbose_name='Nome de Fantasia')
-    IE = models.CharField(max_length=20, verbose_name='Insc.Estadual')
-    cnae = models.CharField(max_length=20, verbose_name='CNAE')
-    fundacao = models.DateField(verbose_name='Data Fundação')
-    incentivoCultural = models.BooleanField(verbose_name='Incentivo Cult.', choices=TIPO_SIM_NAO)
-    regime = models.CharField(max_length=32, choices=REGIME_TRIBUTARIO_CHOICES, default=REGIME_TRIBUTARIO_CHOICES[0][0],
-                              verbose_name='Reg.Tributário')
-    tipoIE = models.CharField(max_length=48, choices=TIPO_CONTRIBUINTE_CHOICES, default=TIPO_CONTRIBUINTE_CHOICES[0][0],
-                              verbose_name='Contribuinte')
     # definição para cliente
     clienteId = models.IntegerField(verbose_name='Código')
     situacaoCliente = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
