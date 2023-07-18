@@ -18,42 +18,38 @@ from django import forms
 class PessoaForm(forms.Form):
     created_dt = forms.DateTimeField(required=False)
     updated_dt = forms.DateTimeField(required=False)
-    pessoaId = forms.IntegerField(label='Pessoa ID')
-    nome = forms.CharField(max_length=100, label='Nome')
+    pessoaId = forms.IntegerField(label='Pessoa ID', required=False)
+    nome = forms.CharField(max_length=100, label='Nome', widget=forms.DateInput(
+        attrs={'autofocus': 'true', }))
     fone = forms.CharField(max_length=20, label='Fone')
     email = forms.EmailField(max_length=254, label='E-mail')
     situacaoPessoa = forms.ChoiceField(label='Situação', choices=TIPO_SITUACAO, initial=True)
     tipoPessoa = forms.ChoiceField(choices=TIPO_CHOICES, initial='INDEFINIDO', label='Tipo')
     # definição para pessoa física
-    cpf = forms.CharField(max_length=14, validators=[cpf_regex], label='CPF')  # , help_text='número do cpf'
-    identidade = forms.CharField(max_length=20,
-                                 label='Identidade')
-    pai = forms.CharField(max_length=100, label='Pai')
-    mae = forms.CharField(max_length=100, label='Nome da Mãe')
-    nascimento = forms.DateField(
-        label='Nascimento',
-        widget=forms.DateInput(
-            attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
-    emissao = forms.DateField(
-        label='Emissão',
-        widget=forms.DateInput(
-            attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
-    orgao = forms.CharField(max_length=10, label='Órgão')
-    idEstrangeiro = forms.CharField(max_length=10,
+    cpf = forms.CharField(max_length=14, required=False, validators=[cpf_regex], label='CPF')
+    identidade = forms.CharField(max_length=20, required=False, label='Identidade')
+    pai = forms.CharField(max_length=100, required=False, label='Pai')
+    mae = forms.CharField(max_length=100, required=False, label='Nome da Mãe')
+    nascimento = forms.DateField(label='Nascimento', required=False,
+                                 widget=forms.DateInput(
+                                     attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
+    emissao = forms.DateField(label='Emissão', required=False,
+                              widget=forms.DateInput(
+                                  attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
+    orgao = forms.CharField(max_length=10, required=False, label='Órgão')
+    idEstrangeiro = forms.CharField(max_length=10, required=False,
                                     label='Id.Estrangeiro')
-    nacionalidade = forms.CharField(max_length=30, label='Nacionalidade')
-    naturalidade = forms.CharField(max_length=30,
-                                   label='Naturalidade')
+    nacionalidade = forms.CharField(max_length=30, required=False, label='Nacionalidade')
+    naturalidade = forms.CharField(max_length=30, required=False, label='Naturalidade')
     # definição para pessoa jurídica
-    cnpj = forms.CharField(max_length=18, validators=[cnpj_regex], label='CNPJ')
-    fantasia = forms.CharField(max_length=100, label='Nome de Fantasia')
-    IE = forms.CharField(max_length=20, label='Insc.Estadual')
-    cnae = forms.CharField(max_length=20, label='CNAE')
-    fundacao = forms.DateField(
-        label='Data Fundação',
-        widget=forms.DateInput(
-            attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
-    incentivoCultural = forms.ChoiceField(label='Incentivo Cult.', choices=TIPO_SIM_NAO)
+    cnpj = forms.CharField(max_length=18, required=False, validators=[cnpj_regex], label='CNPJ')
+    fantasia = forms.CharField(max_length=100, required=False, label='Nome de Fantasia')
+    IE = forms.CharField(max_length=20, required=False, label='Insc.Estadual')
+    cnae = forms.CharField(max_length=20, required=False, label='CNAE')
+    fundacao = forms.DateField(label='Data Fundação', required=False,
+                               widget=forms.DateInput(
+                                   attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
+    incentivoCultural = forms.ChoiceField(label='Incentivo Cult.', required=False, choices=TIPO_SIM_NAO)
     regime = forms.ChoiceField(choices=REGIME_TRIBUTARIO_CHOICES,
                                initial=REGIME_TRIBUTARIO_CHOICES[0][0],
                                label='Reg.Tributário')
@@ -84,29 +80,6 @@ class PessoaForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
-        self.fields['nome'].widget.attrs['autofocus'] = True
-        self.fields['pessoaId'].widget.attrs['disabled'] = 'disabled'
-        self.fields['pessoaId'].required = False
-        # atributos de pessoa jurídica
-        self.fields['cpf'].required = False
-        self.fields['identidade'].required = False
-        self.fields['emissao'].required = False
-        self.fields['nascimento'].required = False
-        self.fields['pai'].required = False
-        self.fields['mae'].required = False
-        self.fields['orgao'].required = False
-        self.fields['idEstrangeiro'].required = False
-        self.fields['nacionalidade'].required = False
-        self.fields['naturalidade'].required = False
-        # atributos de pessoa jurídica
-        self.fields['cnpj'].required = False
-        self.fields['fantasia'].required = False
-        self.fields['IE'].required = False
-        self.fields['cnae'].required = False
-        self.fields['fundacao'].required = False
-        self.fields['incentivoCultural'].required = False
-        self.fields['regime'].required = False
-        self.fields['tipoIE'].required = False
 
     def json(self):
         post_data = dict(self.data)  # Converter QueryDict para dicionário
