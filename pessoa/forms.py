@@ -59,7 +59,7 @@ class PessoaForm(forms.Form):
     # Endereçamento
     uf = forms.ChoiceField(choices=(), required=False, initial='CE', label='UF')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, request=None, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
 
     def existe(self):
