@@ -27,21 +27,25 @@
                             <input type="number" disabled="disabled" class="form-control" value={{ form.clienteId.value }}>
                         </div>
                         <div class="col-12 col-md-10">
-                            {{ form.nome|bootstrap }}
+                            <label class="control-label">Nome</label>
+                            <input type="text" disabled="disabled" class="form-control" value={{ form.nome.value }}>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-12 col-md-3">
-                            {{ form.fone|bootstrap }}
+                        <div class="col-12 col-md-2">
+
                         </div>
-                        <div class="col-12 col-md-9">
+                        <div class="col-12 col-md-10">
                             {{ form.emailFiscal|bootstrap }}
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-12 col-md-4">
+                        <div class="col-12 col-md-2">
+
+                        </div>
+                        <div class="col-12 col-md-2">
                             {{ form.retencaoIss|bootstrap }}
                         </div>
                         <div class="col-12 col-md-4">

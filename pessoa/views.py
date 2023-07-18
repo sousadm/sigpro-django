@@ -8,6 +8,7 @@ from django.urls import reverse
 
 from core.controle import require_token, session_get_token, session_get_headers, format_cpf, format_cnpj
 from core.settings import URL_API
+from pessoa.Endereco import UnidadeFederacao, get_lista_unidade_federacao
 from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorForm, VendedorForm, PessoaListForm
 from pessoa.models import PessoaModel, TIPO_CHOICES
 
@@ -25,6 +26,7 @@ def pessoaEdit(request, uuid):
 def pessoa_render(request, uuid=None):
     template_name = 'pessoa/pessoa_edit.html'
     tipo_selected = TIPO_CHOICES[0][0]
+    ufs = get_lista_unidade_federacao(request)
     try:
 
         if uuid:
@@ -80,6 +82,7 @@ def pessoa_render(request, uuid=None):
         "form": form,
         "tipo_selected": tipo_selected,
         "tipo_definido": tipo_selected != 'INDEFINIDO',
+        "ufs":ufs
     }
     return render(request, template_name, context)
 
@@ -210,6 +213,10 @@ def pessoaList(request):
 
     context = {
         'form': form,
-        'lista': lista
+        'lista': lista,
     }
     return render(request, template_name, context)
+
+
+
+

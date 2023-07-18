@@ -7,14 +7,22 @@ from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error
 from core.settings import URL_API
-from pessoa.models import PessoaModel, PESSOA_FIELDS, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS, \
-    VENDEDOR_FIELDS
+from pessoa.models import PessoaModel, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS, \
+    VENDEDOR_FIELDS, TIPO_SITUACAO, TIPO_CHOICES
 from django import forms
 
 
 # Create your tests here.
 
 class PessoaForm(forms.ModelForm):
+    created_dt = forms.DateTimeField(required=False)
+    updated_dt = forms.DateTimeField(required=False)
+    pessoaId = forms.IntegerField( label='Pessoa ID')
+    nome = forms.CharField(max_length=100, label='Nome')  # , help_text='nome completo'
+    fone = forms.CharField(max_length=20, label='Fone')  # , help_text='número do telefone para contato'
+    email = forms.EmailField(max_length=254, label='E-mail')  # , help_text='e-mail para contato'
+    situacaoPessoa = forms.ChoiceField(label='Situação', choices=TIPO_SITUACAO, initial=True)
+    tipoPessoa = forms.ChoiceField(choices=TIPO_CHOICES, initial='INDEFINIDO', label='Tipo')
     class Meta:
         model = PessoaModel
         fields = '__all__'
@@ -111,7 +119,7 @@ class ClienteForm(forms.ModelForm):
 
     class Meta:
         model = PessoaModel
-        fields = PESSOA_FIELDS + CLIENTE_FIELDS
+        fields = CLIENTE_FIELDS
 
     def __init__(self, *args, **kwargs):
         super(ClienteForm, self).__init__(*args, **kwargs)
@@ -146,7 +154,7 @@ class FornecedorForm(forms.ModelForm):
 
     class Meta:
         model = PessoaModel
-        fields = PESSOA_FIELDS + FORNECEDOR_FIELDS
+        fields = FORNECEDOR_FIELDS
 
     def __init__(self, *args, **kwargs):
         super(FornecedorForm, self).__init__(*args, **kwargs)
@@ -182,7 +190,7 @@ class TransportadorForm(forms.ModelForm):
 
     class Meta:
         model = PessoaModel
-        fields = PESSOA_FIELDS + TRANSPORTADOR_FIELDS
+        fields = TRANSPORTADOR_FIELDS
 
     def __init__(self, *args, **kwargs):
         super(TransportadorForm, self).__init__(*args, **kwargs)
@@ -218,7 +226,7 @@ class VendedorForm(forms.ModelForm):
 
     class Meta:
         model = PessoaModel
-        fields = PESSOA_FIELDS + VENDEDOR_FIELDS
+        fields = VENDEDOR_FIELDS
 
     def __init__(self, *args, **kwargs):
         super(VendedorForm, self).__init__(*args, **kwargs)

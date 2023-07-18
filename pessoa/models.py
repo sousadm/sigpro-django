@@ -6,7 +6,7 @@ from django.urls import reverse
 
 # Create your models here.
 
-PESSOA_FIELDS = ['nome', 'email', 'fone', 'pessoaId']
+#PESSOA_FIELDS = ['nome', 'email', 'fone', 'pessoaId']
 CLIENTE_FIELDS = ['clienteId', 'situacaoCliente', 'emailFiscal', 'retencaoIss', 'limiteCredito', 'limitePrazo']
 TRANSPORTADOR_FIELDS = ['transportadorId', 'situacaoTransportador', 'codigoRNTRC', 'tipoProprietario']
 FORNECEDOR_FIELDS = ['fornecedorId', 'situacaoFornecedor']
@@ -58,14 +58,6 @@ TIPO_PROPRIETARIO = (
 
 
 class PessoaModel(models.Model):
-    created_dt = models.DateTimeField()
-    updated_dt = models.DateTimeField()
-    pessoaId = models.IntegerField(verbose_name='Pessoa ID')
-    tipoPessoa = models.CharField(max_length=20, choices=TIPO_CHOICES, default='INDEFINIDO', verbose_name='Tipo')
-    nome = models.CharField(max_length=100, verbose_name='Nome')  # , help_text='nome completo'
-    fone = models.CharField(max_length=20, verbose_name='Fone')  # , help_text='número do telefone para contato'
-    email = models.EmailField(max_length=254, verbose_name='E-mail')  # , help_text='e-mail para contato'
-    situacaoPessoa = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
     # definição para pessoa física
     cpf = models.CharField(max_length=14, validators=[cpf_regex], verbose_name='CPF')  # , help_text='número do cpf'
     identidade = models.CharField(max_length=20,
@@ -113,3 +105,5 @@ class PessoaModel(models.Model):
 
     def define_cliente_url(self):
         return reverse("url_define_cliente", kwargs={"pk": self.pk})
+
+
