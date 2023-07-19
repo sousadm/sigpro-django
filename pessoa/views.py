@@ -212,8 +212,6 @@ def pessoaList(request):
     except Exception as e:
         messages.error(request, e)
 
-    print(lista)
-
     context = {
         'form': form,
         'lista': lista,

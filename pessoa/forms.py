@@ -121,7 +121,9 @@ class PessoaForm(forms.Form):
             post_data.pop('tipoIE', None)
 
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
-        return json.loads(json_data)
+        data = json.loads(json_data)
+        if data['enderecoId'] == 'None': data['enderecoId'] = None
+        return data
 
 
 class ClienteForm(forms.ModelForm):
