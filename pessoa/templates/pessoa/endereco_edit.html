@@ -7,7 +7,7 @@
     </div>
     <div class="col-12 col-md-2">
         <label class="control-label">Estado</label>
-        <select id="estado-select" class="form-control">
+        <select id="estado" name="estado" value="{{ form.estado.value }}" class="form-control">
             <option value="">Selecione a UF</option>
             {% for uf in ufs %}
                 <option value="{{ uf.0 }}">{{ uf.1 }}</option>
@@ -16,7 +16,7 @@
     </div>
     <div class="col-12 col-md-8">
         <label class="control-label">Município</label>
-        <select id="municipio-select" class="form-control">
+        <select id="municipioId" name="municipioId" value="{{ form.municipio.value }}" class="form-control">
             <option value="">Selecione o município</option>
         </select>
     </div>
@@ -44,7 +44,7 @@
 
 
 <script>
-    $('#estado-select').on('change', function()
+    $('#estado').on('change', function()
     {
         uf = this.value;
         $.ajax({
@@ -52,7 +52,7 @@
             type: 'GET',
             data: {'uf': uf},
             success: function(data) {
-                var municipioSelect = $('#municipio-select');
+                var municipioSelect = $('#municipioId');
                 municipioSelect.empty();
                 $.each(data, function(key, value) {
                     municipioSelect.append($('<option>').text(value).attr('value', key));

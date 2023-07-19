@@ -64,11 +64,12 @@ def pessoa_render(request, uuid=None):
             return HttpResponseRedirect(reverse('url_pessoa_add'))
 
         if request.POST.get('btn_salvar'):
-            form = PessoaForm(data=request.POST, request=request)
+            form = PessoaForm(request.POST, request=request)
             tipo_selected = form.data.get('tipoPessoa')
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
             return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
+            #return None
 
         if request.POST.get('btn_ativar'):
             form.ativar(request, uuid)

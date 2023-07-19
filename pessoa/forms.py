@@ -58,8 +58,9 @@ class PessoaForm(forms.Form):
                                initial=TIPO_CONTRIBUINTE_CHOICES[0][0],
                                label='Contribuinte')
     # Endereçamento
-    municipio = forms.ChoiceField(choices=(), initial='2304400', label='Município')
-    estado = forms.ChoiceField(choices=(), initial='CE', label='Estado')
+    enderecoId = forms.IntegerField(required=False)
+    municipioId = forms.ChoiceField(choices=(), initial=2304400, label='Município')
+    estado = forms.ChoiceField(choices=(), initial='CE', label='Estado', required=False)
     cep = forms.CharField(max_length=9, min_length=8, label='CEP', required=False, initial='60000000')
     bairro = forms.CharField(max_length=60, min_length=3, label='Bairro', required=False, initial='centro')
     logradouro = forms.CharField(max_length=60, min_length=3, label='Logradouro', required=False, initial='rua do beco')
@@ -67,9 +68,6 @@ class PessoaForm(forms.Form):
 
     def __init__(self, *args, request=None, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
-        if request:
-            self.fields['estado'].choices = get_lista_unidade_federacao(request)
-
     def existe(self):
         return existe_registro(self, self.data, 'pessoaId')
 
@@ -78,18 +76,18 @@ class PessoaForm(forms.Form):
 
     def salvar(self, request, uuid=None):
         data = self.json()
-        if self.is_valid():
-            headers = session_get_headers(request)
-            if uuid:
-                response = requests.patch(URL_API + 'pessoa/' + str(uuid), json=data, headers=headers)
-            else:
-                response = requests.post(URL_API + 'pessoa', json=data, headers=headers)
-            if response.status_code in [200, 201]:
-                return response.json()['pessoaId']
-            else:
-                raise Exception(tratar_error(response))
+        #if self.is_valid():
+        headers = session_get_headers(request)
+        if uuid:
+            response = requests.patch(URL_API + 'pessoa/' + str(uuid), json=data, headers=headers)
         else:
-            raise ValueError(self.errors)
+            response = requests.post(URL_API + 'pessoa', json=data, headers=headers)
+        if response.status_code in [200, 201]:
+            return response.json()['pessoaId']
+        else:
+            raise Exception(tratar_error(response))
+        #else:
+        #    raise ValueError(self.errors)
 
     def json(self):
         post_data = dict(self.data)  # Converter QueryDict para dicionário
