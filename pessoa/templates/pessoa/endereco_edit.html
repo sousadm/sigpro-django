@@ -7,7 +7,7 @@
     </div>
     <div class="col-12 col-md-2">
         <label class="control-label">Estado</label>
-        <select id="estado-select" name="uf" class="form-control">
+        <select id="estado-select" class="form-control">
             <option value="">Selecione a UF</option>
             {% for uf in ufs %}
                 <option value="{{ uf.0 }}">{{ uf.1 }}</option>

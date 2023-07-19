@@ -59,7 +59,7 @@ class PessoaForm(forms.Form):
                                label='Contribuinte')
     # Endereçamento
     municipio = forms.ChoiceField(choices=(), initial='2304400', label='Município')
-    uf = forms.ChoiceField(choices=(), initial='CE', label='Estado')
+    estado = forms.ChoiceField(choices=(), initial='CE', label='Estado')
     cep = forms.CharField(max_length=9, min_length=8, label='CEP', required=False, initial='60000000')
     bairro = forms.CharField(max_length=60, min_length=3, label='Bairro', required=False, initial='centro')
     logradouro = forms.CharField(max_length=60, min_length=3, label='Logradouro', required=False, initial='rua do beco')
@@ -68,7 +68,7 @@ class PessoaForm(forms.Form):
     def __init__(self, *args, request=None, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
         if request:
-            self.fields['uf'].choices = get_lista_unidade_federacao(request)
+            self.fields['estado'].choices = get_lista_unidade_federacao(request)
 
     def existe(self):
         return existe_registro(self, self.data, 'pessoaId')
