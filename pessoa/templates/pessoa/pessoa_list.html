@@ -68,39 +68,7 @@
             </div>
         </div>
 
-        <select id="estado-select">
-            <option value="">Selecione a UF</option>
-            {% for uf in ufs %}
-                <option value="{{ uf.0 }}">{{ uf.1 }}</option>
-            {% endfor %}
-        </select>
-
-        <select id="municipio-select">
-            <option value="">Selecione o município</option>
-        </select>
-
     </form>
-
 </div>
-
-<script>
-    $('#estado-select').on('change', function()
-    {
-        uf = this.value;
-        $.ajax({
-            url: '/get_municipios/',
-            type: 'GET',
-            data: {'uf': uf},
-            success: function(data) {
-                var municipioSelect = $('#municipio-select');
-                municipioSelect.empty();
-                $.each(data, function(key, value) {
-                    municipioSelect.append($('<option>').text(value).attr('value', key));
-                });
-            }
-        });
-
-    });
-</script>
 
 {% endblock %}
