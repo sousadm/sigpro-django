@@ -6,11 +6,19 @@
         {{ form.cep|bootstrap }}
     </div>
     <div class="col-12 col-md-2">
-        {{ form.uf|bootstrap }}
+        <label class="control-label">Estado</label>
+        <select id="estado-select" name="uf" class="form-control">
+            <option value="">Selecione a UF</option>
+            {% for uf in ufs %}
+                <option value="{{ uf.0 }}">{{ uf.1 }}</option>
+            {% endfor %}
+        </select>
     </div>
     <div class="col-12 col-md-8">
         <label class="control-label">Município</label>
-        <input type="number" class="form-control">
+        <select id="municipio-select" class="form-control">
+            <option value="">Selecione o município</option>
+        </select>
     </div>
 
     <div class="col-12 col-md-6">
@@ -33,3 +41,24 @@
     </div>
 
 </div>
+
+
+<script>
+    $('#estado-select').on('change', function()
+    {
+        uf = this.value;
+        $.ajax({
+            url: '/get_municipios/',
+            type: 'GET',
+            data: {'uf': uf},
+            success: function(data) {
+                var municipioSelect = $('#municipio-select');
+                municipioSelect.empty();
+                $.each(data, function(key, value) {
+                    municipioSelect.append($('<option>').text(value).attr('value', key));
+                });
+            }
+        });
+
+    });
+</script>

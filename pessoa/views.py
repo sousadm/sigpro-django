@@ -8,7 +8,7 @@ from django.urls import reverse
 
 from core.controle import require_token, session_get_token, session_get_headers, format_cpf, format_cnpj
 from core.settings import URL_API
-from pessoa.Endereco import UnidadeFederacao, get_lista_unidade_federacao
+from pessoa.Endereco import UnidadeFederacao, get_lista_unidade_federacao, get_municipios
 from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorForm, VendedorForm, PessoaListForm
 from pessoa.models import PessoaModel, TIPO_CHOICES
 
@@ -77,10 +77,12 @@ def pessoa_render(request, uuid=None):
     except Exception as e:
         messages.error(request, e)
 
+    ufs = get_lista_unidade_federacao(request)
     context = {
         "form": form,
         "tipo_selected": tipo_selected,
         "tipo_definido": tipo_selected != 'INDEFINIDO',
+        'ufs': ufs,
     }
     return render(request, template_name, context)
 
@@ -209,9 +211,12 @@ def pessoaList(request):
     except Exception as e:
         messages.error(request, e)
 
+    ufs = get_lista_unidade_federacao(request)
+
     context = {
         'form': form,
         'lista': lista,
+        'ufs': ufs
     }
     return render(request, template_name, context)
 

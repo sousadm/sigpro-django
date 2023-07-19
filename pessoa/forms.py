@@ -58,6 +58,7 @@ class PessoaForm(forms.Form):
                                initial=TIPO_CONTRIBUINTE_CHOICES[0][0],
                                label='Contribuinte')
     # Endereçamento
+    municipio = forms.ChoiceField(choices=(), initial='2304400', label='Município')
     uf = forms.ChoiceField(choices=(), initial='CE', label='Estado')
     cep = forms.CharField(max_length=9, min_length=8, label='CEP', required=False, initial='60000000')
     bairro = forms.CharField(max_length=60, min_length=3, label='Bairro', required=False, initial='centro')
