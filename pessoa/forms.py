@@ -58,6 +58,7 @@ class PessoaForm(forms.Form):
                                initial=TIPO_CONTRIBUINTE_CHOICES[0][0],
                                label='Contribuinte')
     # Endereçamento
+    uf = forms.CharField(required=False)
     enderecoId = forms.IntegerField(required=False)
     municipioId = forms.ChoiceField(choices=(), initial=2304400, label='Município')
     estado = forms.ChoiceField(choices=(), initial='CE', label='Estado', required=False)

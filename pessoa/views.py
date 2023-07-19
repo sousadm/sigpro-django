@@ -85,6 +85,7 @@ def pessoa_render(request, uuid=None):
         "tipo_definido": tipo_selected != 'INDEFINIDO',
         'ufs': ufs,
     }
+    print(form.data)
     return render(request, template_name, context)
 
 

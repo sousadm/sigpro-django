@@ -13,7 +13,9 @@
         <select id="estado" name="estado" value="{{ form.estado.value }}" class="form-control">
             <option value="">Selecione a UF</option>
             {% for uf in ufs %}
-                <option value="{{ uf.0 }}">{{ uf.1 }}</option>
+                <option value="{{ uf.0 }}" {% if uf.0 == form.uf.value %} selected {% endif %} >
+                    {{ uf.1 }}
+                </option>
             {% endfor %}
         </select>
     </div>
