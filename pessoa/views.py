@@ -212,12 +212,11 @@ def pessoaList(request):
     except Exception as e:
         messages.error(request, e)
 
-    ufs = get_lista_unidade_federacao(request)
+    print(lista)
 
     context = {
         'form': form,
         'lista': lista,
-        'ufs': ufs
     }
     return render(request, template_name, context)
 

@@ -32,16 +32,13 @@
     </div>
 
     <div class="col-12 col-md-4">
-        <label class="control-label">Complemento</label>
-        <input type="number" class="form-control">
+        {{ form.complemento|bootstrap }}
     </div>
     <div class="col-12 col-md-8">
-        <label class="control-label">Ponto de Referência</label>
-        <input type="number" class="form-control">
+        {{ form.referencia|bootstrap }}
     </div>
 
 </div>
-
 
 <script>
     $('#estado').on('change', function()

@@ -64,6 +64,8 @@ class PessoaForm(forms.Form):
     cep = forms.CharField(max_length=9, min_length=8, label='CEP', required=False, initial='60000000')
     bairro = forms.CharField(max_length=60, min_length=3, label='Bairro', required=False, initial='centro')
     logradouro = forms.CharField(max_length=60, min_length=3, label='Logradouro', required=False, initial='rua do beco')
+    referencia = forms.CharField(max_length=100, label='Referência', required=False)
+    complemento = forms.CharField(max_length=60, label='Complemento', required=False)
     numero = forms.IntegerField(label='Número', initial=100, required=False)
 
     def __init__(self, *args, request=None, **kwargs):
