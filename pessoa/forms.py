@@ -62,7 +62,7 @@ class PessoaForm(forms.Form):
     enderecoId = forms.IntegerField(required=False)
     municipioId = forms.ChoiceField(choices=(), initial=2304400, label='Município')
     estado = forms.ChoiceField(choices=(), initial='CE', label='Estado', required=False)
-    cep = forms.CharField(max_length=9, min_length=8, label='CEP', required=False, initial='60000000')
+    cep = forms.CharField(max_length=9, min_length=8, label='CEP', required=True, initial='60000000')
     bairro = forms.CharField(max_length=60, min_length=3, label='Bairro', required=False, initial='centro')
     logradouro = forms.CharField(max_length=60, min_length=3, label='Logradouro', required=False, initial='rua do beco')
     referencia = forms.CharField(max_length=100, label='Referência', required=False)

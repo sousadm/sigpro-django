@@ -2,7 +2,7 @@ import json
 
 import requests
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -26,6 +26,7 @@ def pessoaEdit(request, uuid):
 def pessoa_render(request, uuid=None):
     template_name = 'pessoa/pessoa_edit.html'
     tipo_selected = TIPO_CHOICES[0][0]
+    municipios = []
     try:
 
         if uuid:
@@ -50,6 +51,13 @@ def pessoa_render(request, uuid=None):
                 if form.data.get('cnpj'):
                     form.data['cnpj'] = format_cnpj(form.data.get('cnpj'))
                 tipo_selected = form.data.get('tipoPessoa')
+
+                municipios = []
+                response = requests.get(URL_API + 'municipio/estado/' + str(form.data.get('uf')), headers=session_get_headers(request))
+                if response.status_code == 200:
+                    for n in response.json():
+                        municipios.append((n['id'], n['descricao']))
+
             else:
                 messages.error(request, 'registro não localizado')
         else:
@@ -84,8 +92,8 @@ def pessoa_render(request, uuid=None):
         "tipo_selected": tipo_selected,
         "tipo_definido": tipo_selected != 'INDEFINIDO',
         'ufs': ufs,
+        'municipios': municipios
     }
-    print(form.data)
     return render(request, template_name, context)
 
 

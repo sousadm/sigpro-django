@@ -2,6 +2,7 @@
 {% load static %}
 
 <input type="hidden" name="enderecoId" value={{ form.enderecoId.value }}>
+<input type="hidden" name="municipios" value={{ municipios }}>
 
 <div class="row">
 
@@ -21,8 +22,13 @@
     </div>
     <div class="col-12 col-md-8">
         <label class="control-label">Município</label>
-        <select id="municipioId" name="municipioId" value="{{ form.municipio.value }}" class="form-control">
+        <select id="municipioId" name="municipioId" class="form-control">
             <option value="">Selecione o município</option>
+            {% for item in municipios %}
+                <option value="{{ item.0 }}" {% if item.0 == form.municipioId.value %} selected {% endif %} >
+                    {{ item.1 }}
+                </option>
+            {% endfor %}
         </select>
     </div>
 
