@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 import requests
 from django import forms
 
@@ -13,7 +15,7 @@ TIPO_CATEGORIA = (
     ('SERVICO','Serviços'),
 )
 
-class PessoaForm(forms.Form):
+class CategoriaForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
     descricao = forms.CharField(max_length=100, label='Descrição', widget=forms.DateInput(attrs={'autofocus': 'true', }))
     tipoPessoa = forms.ChoiceField(choices=TIPO_CATEGORIA, initial='INDEFINIDO', label='Tipo')
@@ -29,3 +31,13 @@ class PessoaForm(forms.Form):
             return response.json()['id']
         else:
             raise Exception(tratar_error(response))
+
+
+class CategoriaListForm(forms.Form):
+    nome = forms.CharField(label='Pesquisa', required=False,
+                           widget=forms.TextInput(attrs={'autofocus': 'autofocus'}))
+    def pesquisar(self, request, data):
+        headers = session_get_headers(request)
+        response = requests.get(URL_API + 'categoria?' + urlencode(data), headers=headers, data=data)
+        data = response.json()
+        return data['content'] if 'content' in data else []

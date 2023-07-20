@@ -1,6 +1,10 @@
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from core.controle import require_token
+from produto.forms import CategoriaForm, CategoriaListForm
 
 
 # Create your views here.
@@ -8,21 +12,21 @@ from core.controle import require_token
 
 
 @require_token
-def pessoaList(request):
+def categoriaList(request):
     data = {}
     lista = []
     template_name = 'produto/categoria_list.html'
-    form = PessoaListForm()
+    form = CategoriaListForm()
     try:
 
         if request.POST.get('btn_limpar'):
-            form = PessoaListForm()
+            form = CategoriaListForm()
 
         if request.POST.get('btn_novo'):
-            return HttpResponseRedirect(reverse('url_pessoa_add'))
+            return HttpResponseRedirect(reverse('url_categoria_add'))
 
         if request.POST.get('btn_listar'):
-            form = PessoaListForm(request.POST)
+            form = CategoriaListForm(request.POST)
             data['nome'] = request.POST['nome']
 
         lista = form.pesquisar(request, data)
@@ -34,8 +38,3 @@ def pessoaList(request):
         'lista': lista,
     }
     return render(request, template_name, context)
-
-
-
-
-

@@ -21,6 +21,7 @@ from acesso.views import login, home, logout
 from pessoa.Endereco import get_municipios
 from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
     pessoaVendedorEdit, pessoaList
+from produto.views import categoriaList
 
 urlpatterns = [
     path('', home, name='home'),
@@ -34,4 +35,5 @@ urlpatterns = [
     path('pessoa/<int:uuid>/transportador', pessoaTransportadorEdit, name='url_pessoa_transportador'),
     path('pessoa/<int:uuid>/vendedor', pessoaVendedorEdit, name='url_pessoa_vendedor'),
     path('get_municipios/', get_municipios, name='get_municipios'),
+    path('categoria/', categoriaList, name='url_categoria_list'),
 ]

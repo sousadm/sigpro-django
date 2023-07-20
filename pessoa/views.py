@@ -227,6 +227,3 @@ def pessoaList(request):
     }
     return render(request, template_name, context)
 
-
-
-

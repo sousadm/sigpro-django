@@ -305,7 +305,6 @@ def salvar_pessoa_tipo(self, request, data, tipo):
 class PessoaListForm(forms.Form):
     nome = forms.CharField(label='Pesquisa', required=False,
                            widget=forms.TextInput(attrs={'autofocus': 'autofocus'}))
-
     def pesquisar(self, request, data):
         headers = session_get_headers(request)
         response = requests.get(URL_API + 'pessoa?' + urlencode(data), headers=headers, data=data)

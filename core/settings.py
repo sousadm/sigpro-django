@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'core',
     'acesso',
     'pessoa',
+    'produto',
     'bootstrapform',
 ]
 
