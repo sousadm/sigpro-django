@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Categoria {% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="post">
+
+        {% csrf_token %}
+
+        {{ lista }}
+
+    </form>
+</div>
+
+{% endblock %}

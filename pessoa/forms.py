@@ -89,8 +89,6 @@ class PessoaForm(forms.Form):
             return response.json()['pessoaId']
         else:
             raise Exception(tratar_error(response))
-        #else:
-        #    raise ValueError(self.errors)
 
     def json(self):
         post_data = dict(self.data)  # Converter QueryDict para dicionário
