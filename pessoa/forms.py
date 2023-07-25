@@ -71,6 +71,8 @@ class PessoaForm(forms.Form):
 
     def __init__(self, *args, request=None, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
+        #POSSIBILIDADES
+
     def existe(self):
         return existe_registro(self, self.data, 'pessoaId')
 

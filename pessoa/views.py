@@ -61,15 +61,7 @@ def pessoa_render(request, uuid=None):
             else:
                 messages.error(request, 'registro não localizado')
         else:
-            dados_iniciais = {
-                "nome": "Empresa",
-                "fone": "00009999",
-                "email": "costa@hot.com"
-            }
-            form = PessoaForm(initial=dados_iniciais, request=request)
-
-        if request.POST.get('btn_novo'):
-            return HttpResponseRedirect(reverse('url_pessoa_add'))
+            form = PessoaForm(request=request)
 
         if request.POST.get('btn_salvar'):
             form = PessoaForm(request.POST, request=request)
@@ -77,7 +69,6 @@ def pessoa_render(request, uuid=None):
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
             return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
-            #return None
 
         if request.POST.get('btn_ativar'):
             form.ativar(request, uuid)
@@ -209,9 +200,6 @@ def pessoaList(request):
 
         if request.POST.get('btn_limpar'):
             form = PessoaListForm()
-
-        if request.POST.get('btn_novo'):
-            return HttpResponseRedirect(reverse('url_pessoa_add'))
 
         if request.POST.get('btn_listar'):
             form = PessoaListForm(request.POST)

@@ -137,9 +137,9 @@
             </button>
             {% endif %}
 
-            <button type="submit" value="btn_novo" name="btn_novo" class="btn">
-                <i class="fa fa-file"></i> Novo
-            </button>
+            <a href="{% url 'url_pessoa_add' %}">
+                <button type="button" class="btn"> <i class="fa fa-plus"></i> Novo </button>
+            </a>
 
             <a href="{% url 'url_pessoa_list' %}">
                 <button type="button" class="btn"> <i class="fas fa-list"></i> Lista </button>
