@@ -55,8 +55,8 @@ class CategoriaListForm(forms.Form):
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
     def pesquisar(self, request):
         params = {
-            'page': str(self.data.get('page', 1)),
-            'size': self.data.get('size', 5),
+            'page': int(self.data.get('page', 1)),
+            'size': int(self.data.get('size', 5)),
             'sort': self.data.get('sort', 'descricao')+",asc",
             'descricao': self.data.get('descricao')
         }
