@@ -3,11 +3,10 @@ from urllib.parse import urlencode
 
 import requests
 from django import forms
+from django.core.paginator import Paginator
 
 from core.controle import session_get_headers, tratar_error
-from core.model import Paginacao
 from core.settings import URL_API
-from produto.models import Categoria
 
 TIPO_CATEGORIA = (
     ('REVENDA','Produtos para revenda'),
@@ -50,17 +49,35 @@ class CategoriaForm(forms.Form):
 
 class CategoriaListForm(forms.Form):
     lista = []
+    sort = forms.CharField()
+    page = forms.IntegerField(initial=0)
+    size = forms.IntegerField(initial=5)
     descricao = forms.CharField(label='Pesquisa', required=False,
                                 widget=forms.TextInput(
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
     def pesquisar(self, request):
+        itens_por_pagina = 3
+        data = dict(request.GET or request.POST)
         params = {
-            'page': int(self.data.get('page', 1)),
-            'size': int(self.data.get('size', 5)),
-            'sort': self.data.get('sort', 'descricao')+",asc",
-            'descricao': self.data.get('descricao')
+            'page': data.get('page', 2),
+            'size': data.get('size', itens_por_pagina),
+            'sort': data.get('sort', 'descricao')+",asc",
+            'descricao': data.get('descricao')
         }
         headers = session_get_headers(request)
         response = requests.get(URL_API + 'categoria', headers=headers, params=params)
-        self.lista = dict(response.json()).get('content', [])
+        if response.status_code == 200:
+            self.initial = dict(response.json())
+            print(self.initial)
+            page = {
+                'object_list': self.initial.get('content'),
+                'has_other_pages': self.initial.get('totalPages', 0) > 0,
+                'has_previous': not self.initial.get('first'),
+                'has_next': not self.initial.get('last'),
+                'next_page_number': self.initial.get('number') + 1,
+                'previous_page_number': self.initial.get('number') - 1
+            }
+            return page
+
+
 

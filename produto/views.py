@@ -1,6 +1,7 @@
 from typing import Dict, Any
 
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -31,6 +32,7 @@ def categoria_render(request, uuid=None):
 
 @require_token
 def categoriaList(request):
+    lista = Paginator
     template_name = 'produto/categoria_list.html'
     form = CategoriaListForm()
     try:
@@ -44,12 +46,13 @@ def categoriaList(request):
         if request.POST.get('btn_listar'):
             form = CategoriaListForm(request.POST)
 
-        pagination = form.pesquisar(request)
+        lista = form.pesquisar(request)
 
     except Exception as e:
         messages.error(request, e)
 
     context = {
         'form': form,
+        'lista':lista
     }
     return render(request, template_name, context)
