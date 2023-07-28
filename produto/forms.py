@@ -59,11 +59,12 @@ class CategoriaListForm(forms.Form):
         itens_por_pagina = 3
         data = dict(request.GET or request.POST)
         params = {
-            'page': data.get('page', 2),
+            'descricao': data.get('descricao'),
+            'page': data.get('page', 0),
             'size': data.get('size', itens_por_pagina),
             'sort': data.get('sort', 'descricao')+",asc",
-            'descricao': data.get('descricao')
         }
+        print('params', params)
         headers = session_get_headers(request)
         response = requests.get(URL_API + 'categoria', headers=headers, params=params)
         if response.status_code == 200:
@@ -74,9 +75,17 @@ class CategoriaListForm(forms.Form):
                 'has_previous': not self.initial.get('first'),
                 'has_next': not self.initial.get('last'),
                 'next_page_number': self.initial.get('number') + 1,
-                'previous_page_number': self.initial.get('number') - 1
+                'next_page_url': page_url(params, (self.initial.get('number') + 1)),
+                'previous_page_number': self.initial.get('number') - 1,
+                'previous_page_url': page_url(params, (self.initial.get('number') - 1)),
             }
             return page
+
+
+def page_url(params, page):
+    print(page)
+    params['page'] = page
+    return urlencode(params)
 
 
 

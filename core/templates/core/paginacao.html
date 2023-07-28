@@ -2,7 +2,7 @@
 <ul class="pagination pagination-sm flex-wrap">
 
     {% if lista.has_previous %}
-        <li class="page-item"><a class="page-link" href="?page={{ lista.previous_page_number }}">Anterior</a></li>
+        <li class="page-item"><a class="page-link" href="?{{ lista.previous_page_url }}">Anterior</a></li>
     {% else %}
         <li class="disabled page-item"><a class="page-link" href="#">Anterior</a></li>
     {% endif %}
@@ -18,7 +18,7 @@
     {% endfor %}
 
     {% if lista.has_next %}
-        <li class="page-item"><a class="page-link" href="?page={{ lista.next_page_number }}">Próxima</a></li>
+        <li class="page-item"><a class="page-link" href="?{{ lista.next_page_url }}">Próxima</a></li>
     {% else %}
         <li class="disabled page-item"><a class="page-link" href="#">Próxima</a></li>
     {% endif %}
