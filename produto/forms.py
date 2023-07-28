@@ -68,7 +68,6 @@ class CategoriaListForm(forms.Form):
         response = requests.get(URL_API + 'categoria', headers=headers, params=params)
         if response.status_code == 200:
             self.initial = dict(response.json())
-            print(self.initial)
             page = {
                 'object_list': self.initial.get('content'),
                 'has_other_pages': self.initial.get('totalPages', 0) > 0,
