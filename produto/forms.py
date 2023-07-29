@@ -57,43 +57,33 @@ class CategoriaListForm(forms.Form):
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
     def pesquisar(self, request):
         itens_por_pagina = 3
-        order_field = 'descricao'
-        data = dict(request.GET or request.POST)
-
-        params = get_params(data, itens_por_pagina, order_field)
-        if data.get('descricao'): params['descricao'] = data.get('descricao')
-
+        data = request.GET or request.POST
+        params = get_param(data, itens_por_pagina)
+        if self.initial.get('descricao'): params['descricao'] = self.initial.get('descricao')
         headers = session_get_headers(request)
         response = requests.get(URL_API + 'categoria', headers=headers, params=params)
         if response.status_code == 200:
-            #print(response.json())
             self.initial = dict(response.json())
-            page = get_page(params, response.json())
+            page = {
+                'object_list': self.initial.get('content'),
+                'has_other_pages': self.initial.get('totalPages', 0) > 0,
+                'has_previous': not self.initial.get('first'),
+                'has_next': not self.initial.get('last'),
+                'next_page_number': self.initial.get('number') + 1,
+                'next_page_url': page_url(params, (self.initial.get('number') + 1)),
+                'previous_page_number': self.initial.get('number') - 1,
+                'previous_page_url': page_url(params, (self.initial.get('number') - 1)),
+            }
             return page
+
 
 def page_url(params, page):
     params['page'] = page
     return urlencode(params)
 
-def get_params(data, size, order=None):
+def get_param(data, size):
     params = {}
     params['page'] = data.get('page', 0)
     params['size'] = data.get('size', size)
-    if order: params['sort'] = order + ",asc"
+    params['sort'] = 'descricao,asc'
     return params
-
-def get_page(params, data):
-    page = {}
-    if data.get('content'): page['object_list'] = data.get('content')
-    if data.get('totalPages'): page['has_other_pages'] = data.get('totalPages', 0) > 0
-    if data.get('first'): page['has_previous'] = not data.get('first')
-    if data.get('last'): page['has_next'] = not data.get('last')
-    if data.get('number'):
-        page['next_page_number'] = data.get('number') + 1
-        page['next_page_url'] = page_url(params, (data.get('number') + 1))
-        page['previous_page_number'] = data.get('number') - 1
-        page['previous_page_url'] = page_url(params, (data.get('number') - 1))
-    print('data', data)
-    #print('page', page)
-    return page
-
