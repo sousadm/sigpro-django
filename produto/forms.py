@@ -48,17 +48,13 @@ class CategoriaForm(forms.Form):
         return data
 
 class CategoriaListForm(forms.Form):
-    lista = []
-    sort = forms.CharField()
-    page = forms.IntegerField(initial=0)
-    size = forms.IntegerField(initial=5)
     descricao = forms.CharField(label='Pesquisa', required=False,
                                 widget=forms.TextInput(
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
     def pesquisar(self, request):
         itens_por_pagina = 3
-        data = request.GET or request.POST
-        params = get_param(data, itens_por_pagina)
+        self.initial = request.POST or request.GET
+        params = get_param(self.initial, itens_por_pagina)
         if self.initial.get('descricao'): params['descricao'] = self.initial.get('descricao')
         headers = session_get_headers(request)
         response = requests.get(URL_API + 'categoria', headers=headers, params=params)
