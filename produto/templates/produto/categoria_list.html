@@ -43,7 +43,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for item in lista.object_list %}
+                        {% for item in page.object_list %}
                         <tr>
                             <td>{{ item.id }}</td>
                             <td>{{ item.descricao|default_if_none:"" }}</td>

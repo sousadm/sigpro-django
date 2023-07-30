@@ -32,7 +32,7 @@ def categoria_render(request, uuid=None):
 
 @require_token
 def categoriaList(request):
-    lista = Paginator
+    page = Paginator
     template_name = 'produto/categoria_list.html'
     form = CategoriaListForm()
     try:
@@ -43,13 +43,13 @@ def categoriaList(request):
         if request.POST.get('btn_listar'):
             form = CategoriaListForm(request.POST)
 
-        lista = form.pesquisar(request)
+        page = form.pesquisar(request)
 
     except Exception as e:
         messages.error(request, e)
 
     context = {
         'form': form,
-        'lista':lista
+        'page':page
     }
     return render(request, template_name, context)

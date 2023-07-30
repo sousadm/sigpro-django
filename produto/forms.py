@@ -61,18 +61,29 @@ class CategoriaListForm(forms.Form):
         if response.status_code == 200:
             self.fields['descricao'].initial = self.initial.get('descricao')
             self.initial = dict(response.json())
-            page = {
-                'object_list': self.initial.get('content'),
-                'has_other_pages': self.initial.get('totalPages', 0) > 0,
-                'has_previous': not self.initial.get('first'),
-                'has_next': not self.initial.get('last'),
-                'next_page_number': self.initial.get('number') + 1,
-                'next_page_url': page_url(params, (self.initial.get('number') + 1)),
-                'previous_page_number': self.initial.get('number') - 1,
-                'previous_page_url': page_url(params, (self.initial.get('number') - 1)),
-            }
+            page = get_page(self.initial, params)
             return page
 
+
+def get_page(data, params):
+    number = data.get('number')
+    totalPages = data.get('totalPages', 0)
+    return  {
+        'object_list': data.get('content'),
+        'number': number - 1,
+        'has_other_pages': totalPages > 0,
+        'has_previous': not data.get('first'),
+        'has_next': not data.get('last'),
+        'next_page_url': page_url(params, (data.get('number') + 1)),
+        'next_page_number': data.get('number') + 1,
+        'next_page_url': page_url(params, (data.get('number') + 1)),
+        'previous_page_number': data.get('number') - 1,
+        'previous_page_url': page_url(params, (data.get('number') - 1)),
+        'page_range': range(0, totalPages - 1),
+    }
+
+def get_url(params):
+    return urlencode(params)
 
 def page_url(params, page):
     params['page'] = page
