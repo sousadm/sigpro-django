@@ -37,9 +37,6 @@ def categoriaList(request):
     form = CategoriaListForm()
     try:
 
-        if request.POST.get('btn_limpar'):
-            form = CategoriaListForm()
-
         if request.POST.get('btn_novo'):
             return HttpResponseRedirect(reverse('url_categoria_add'))
 
