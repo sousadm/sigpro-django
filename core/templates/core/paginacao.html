@@ -7,6 +7,7 @@
         <li class="disabled page-item"><a class="page-link" href="#">Anterior</a></li>
     {% endif %}
 
+    <!--
     {% for l in  page.page_range %}
         {% if l <= page.number|add:5 and l >= page.number|add:-5 %}
             {% if page.number == l %}
@@ -16,6 +17,7 @@
             {% endif %}
         {% endif %}
     {% endfor %}
+    -->
 
     {% if page.has_next %}
         <li class="page-item"><a class="page-link" href="?{{ page.next_page_url }}">Próxima</a></li>

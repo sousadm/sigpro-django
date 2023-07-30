@@ -6,6 +6,7 @@ from django import forms
 from django.core.paginator import Paginator
 
 from core.controle import session_get_headers, tratar_error
+from core.paginacao import get_page, get_param
 from core.settings import URL_API
 
 TIPO_CATEGORIA = (
@@ -52,7 +53,7 @@ class CategoriaListForm(forms.Form):
                                 widget=forms.TextInput(
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
     def pesquisar(self, request):
-        itens_por_pagina = 3
+        itens_por_pagina = 5
         self.initial = request.POST or request.GET
         params = get_param(self.initial, itens_por_pagina)
         if self.initial.get('descricao'): params['descricao'] = self.initial.get('descricao')
@@ -61,37 +62,6 @@ class CategoriaListForm(forms.Form):
         if response.status_code == 200:
             self.fields['descricao'].initial = self.initial.get('descricao')
             self.initial = dict(response.json())
-            page = get_page(self.initial, params)
-            return page
+            return get_page(self.initial, params)
 
 
-def get_page(data, params):
-    number = data.get('number')
-    totalPages = data.get('totalPages', 0)
-    return  {
-        'object_list': data.get('content'),
-        'number': number - 1,
-        'has_other_pages': totalPages > 0,
-        'has_previous': not data.get('first'),
-        'has_next': not data.get('last'),
-        'next_page_url': page_url(params, (data.get('number') + 1)),
-        'next_page_number': data.get('number') + 1,
-        'next_page_url': page_url(params, (data.get('number') + 1)),
-        'previous_page_number': data.get('number') - 1,
-        'previous_page_url': page_url(params, (data.get('number') - 1)),
-        'page_range': range(0, totalPages - 1),
-    }
-
-def get_url(params):
-    return urlencode(params)
-
-def page_url(params, page):
-    params['page'] = page
-    return urlencode(params)
-
-def get_param(data, size):
-    params = {}
-    params['page'] = data.get('page', 0)
-    params['size'] = data.get('size', size)
-    params['sort'] = 'descricao,asc'
-    return params
