@@ -59,6 +59,7 @@ class CategoriaListForm(forms.Form):
         headers = session_get_headers(request)
         response = requests.get(URL_API + 'categoria', headers=headers, params=params)
         if response.status_code == 200:
+            self.fields['descricao'].initial = self.initial.get('descricao')
             self.initial = dict(response.json())
             page = {
                 'object_list': self.initial.get('content'),
