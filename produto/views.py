@@ -32,7 +32,6 @@ def categoria_render(request, uuid=None):
 
 @require_token
 def categoriaList(request):
-    #page = Paginator
     template_name = 'produto/categoria_list.html'
     try:
         form = CategoriaListForm() \
