@@ -1,12 +1,7 @@
 from django.contrib import messages
-from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
-
 from core.controle import require_token
-from produto.forms import CategoriaForm, CategoriaListForm
-
+from produto.categoria_forms import CategoriaForm, CategoriaListForm
 
 @require_token
 def categoriaNew(request):

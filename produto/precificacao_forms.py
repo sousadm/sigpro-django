@@ -1,30 +1,26 @@
 import json
-from urllib.parse import urlencode
-
 import requests
 from django import forms
-from django.core.paginator import Paginator
-
 from core.controle import session_get_headers, tratar_error
 from core.paginacao import get_page, get_param
 from core.settings import URL_API
 
-TIPO_CATEGORIA = (
-    ('REVENDA','Produtos para revenda'),
-    ('CONSUMO','Produtos para consumo'),
-    ('INSUMOS','Insumos de produção'),
-    ('IMOBILIZADO','Ativos imobilizado'),
-    ('SERVICO','Serviços'),
-)
+URL_RECURSO = "precificacao"
 
 
-class CategoriaForm(forms.Form):
+class PrecificacaoForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
-    descricao = forms.CharField(max_length=100, label='Descrição', widget=forms.DateInput(attrs={'autofocus': 'true', }))
-    tipoProduto = forms.ChoiceField(choices=TIPO_CATEGORIA, initial='INDEFINIDO', label='Tipo', required=True)
+    descricao = forms.CharField(max_length=100, label='Descrição',
+                                widget=forms.DateInput(attrs={'autofocus': 'true', }))
+    frete = forms.DecimalField(label="Frete %", min_value=0, decimal_places=2, initial=0)
+    imposto = forms.DecimalField(label="Imposto %", min_value=0, decimal_places=2, initial=0)
+    agregado = forms.DecimalField(label="Agregado %", min_value=0, decimal_places=2, initial=0)
+    credito = forms.DecimalField(label="Crédito %", min_value=0, decimal_places=2, initial=0)
+    lucro = forms.DecimalField(label="Lucro %", min_value=0, decimal_places=2, initial=0)
+
     def __init__(self, *args, request=None, uuid=None, **kwargs):
-        super(CategoriaForm, self).__init__(*args, **kwargs)
-        response = requests.get(URL_API + 'categoria/' + str(uuid), headers=session_get_headers(request))
+        super(PrecificacaoForm, self).__init__(*args, **kwargs)
+        response = requests.get(URL_API + 'precificacao/' + str(uuid), headers=session_get_headers(request))
         if response.status_code == 200:
             self.initial = response.json()
 
@@ -32,9 +28,9 @@ class CategoriaForm(forms.Form):
         data = self.json()
         headers = session_get_headers(request)
         if uuid:
-            response = requests.patch(URL_API + 'categoria/' + str(uuid), json=data, headers=headers)
+            response = requests.patch(URL_API + 'precificacao/' + str(uuid), json=data, headers=headers)
         else:
-            response = requests.post(URL_API + 'categoria', json=data, headers=headers)
+            response = requests.post(URL_API + 'precificacao', json=data, headers=headers)
         if response.status_code in [200, 201]:
             return response.json()['id']
         else:
@@ -48,20 +44,20 @@ class CategoriaForm(forms.Form):
         data = json.loads(json_data)
         return data
 
-class CategoriaListForm(forms.Form):
+
+class PrecificacaoListForm(forms.Form):
     descricao = forms.CharField(label='Pesquisa', required=False,
                                 widget=forms.TextInput(
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
+
     def pesquisar(self, request):
         itens_por_pagina = 5
         self.initial = request.POST or request.GET
         params = get_param(self.initial, itens_por_pagina)
         if self.initial.get('descricao'): params['descricao'] = self.initial.get('descricao')
         headers = session_get_headers(request)
-        response = requests.get(URL_API + 'categoria', headers=headers, params=params)
+        response = requests.get(URL_API + URL_RECURSO, headers=headers, params=params)
         if response.status_code == 200:
             self.fields['descricao'].initial = self.initial.get('descricao')
             self.initial = dict(response.json())
             return get_page(self.initial, params)
-
-

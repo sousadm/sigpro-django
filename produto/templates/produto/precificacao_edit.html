@@ -1,0 +1,67 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Cliente {% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Precificação de Produto</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-md-2">
+                        <label class="control-label">Código</label>
+                        <input type="number" disabled="disabled" class="form-control" value={{form.id.value}}>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form.descricao|bootstrap }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        {{ form.frete|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.imposto|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.agregado|bootstrap }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        {{ form.credito|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.lucro|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer bg-red">
+            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+                <i class="fas fa-save"></i> Salvar
+            </button>
+            <a href="{% url 'url_precificacao_add' %}">
+                <button type="button" class="btn"> <i class="fas fa-plus"></i> Novo </button>
+            </a>
+            <a href="{% url 'url_precificacao_list' %}">
+                <button type="button" class="btn"> <i class="fas fa-list"></i> Lista </button>
+            </a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
