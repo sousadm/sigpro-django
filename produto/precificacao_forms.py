@@ -7,7 +7,6 @@ from core.settings import URL_API
 
 URL_RECURSO = "precificacao"
 
-
 class PrecificacaoForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
     descricao = forms.CharField(max_length=100, label='Descrição',

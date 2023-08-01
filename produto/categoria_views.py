@@ -49,8 +49,7 @@ def categoriaList(request):
 def categoriaChoices(request):
     categorias = []
     response = requests.get(URL_API + 'categoria', headers=session_get_headers(request))
-    print(response)
-    # if response.status_code == 200:
-    #     for n in response.json():
-    #         categorias.append((n['id'], n['descricao']))
+    if response.status_code == 200:
+        for n in response.json()['content']:
+            categorias.append((n['id'], n['descricao']))
     return categorias
