@@ -1,21 +1,12 @@
 import json
-from urllib.parse import urlencode
 
 import requests
 from django import forms
-from django.core.paginator import Paginator
 
 from core.controle import session_get_headers, tratar_error
 from core.paginacao import get_page, get_param
 from core.settings import URL_API
-
-TIPO_CATEGORIA = (
-    ('REVENDA','Produtos para revenda'),
-    ('CONSUMO','Produtos para consumo'),
-    ('INSUMOS','Insumos de produção'),
-    ('IMOBILIZADO','Ativos imobilizado'),
-    ('SERVICO','Serviços'),
-)
+from produto.models import TIPO_CATEGORIA
 
 URL_RECURSO = "categoria"
 
