@@ -12,11 +12,14 @@ class PrecificacaoForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
     descricao = forms.CharField(max_length=100, label='Descrição',
                                 widget=forms.DateInput(attrs={'autofocus': 'true', }))
+    agregado = forms.DecimalField(label="Agregado %", min_value=0, decimal_places=2, initial=0)
     frete = forms.DecimalField(label="Frete %", min_value=0, decimal_places=2, initial=0)
     imposto = forms.DecimalField(label="Imposto %", min_value=0, decimal_places=2, initial=0)
-    agregado = forms.DecimalField(label="Agregado %", min_value=0, decimal_places=2, initial=0)
     credito = forms.DecimalField(label="Crédito %", min_value=0, decimal_places=2, initial=0)
-    lucro = forms.DecimalField(label="Lucro %", min_value=0, decimal_places=2, initial=0)
+
+    margemLucro = forms.DecimalField(label="Margem de Lucro %", min_value=0, decimal_places=2, initial=0)
+    despesaFixa = forms.DecimalField(label="Despesa Fixa %", min_value=0, decimal_places=2, initial=0)
+    despesaVariavel = forms.DecimalField(label="Despesa Variável %", min_value=0, decimal_places=2, initial=0)
 
     def __init__(self, *args, request=None, uuid=None, **kwargs):
         super(PrecificacaoForm, self).__init__(*args, **kwargs)

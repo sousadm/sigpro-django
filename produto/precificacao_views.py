@@ -16,12 +16,13 @@ def precificacaoEdit(request, uuid):
 @require_token
 def precificacao_render(request, uuid=None):
     template_name = 'produto/precificacao_edit.html'
-
-    if request.POST.get('btn_salvar'):
-        form = PrecificacaoForm(request.POST, request=request)
-        uuid = form.salvar(request, uuid)
-        messages.success(request, 'sucesso ao gravar dados')
-
+    try:
+        if request.POST.get('btn_salvar'):
+            form = PrecificacaoForm(request.POST, request=request)
+            uuid = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados')
+    except Exception as e:
+        messages.error(request, e)
     form = PrecificacaoForm(request=request, uuid=uuid)
     return render(request, template_name, {'form': form})
 
