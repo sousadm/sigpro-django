@@ -1,6 +1,8 @@
+import requests
 from django.contrib import messages
 from django.shortcuts import render
-from core.controle import require_token
+from core.controle import require_token, session_get_headers
+from core.settings import URL_API
 from produto.categoria_forms import CategoriaForm, CategoriaListForm
 
 @require_token
@@ -41,3 +43,13 @@ def categoriaList(request):
         'page': page
     }
     return render(request, template_name, context)
+
+
+@require_token
+def categoriaChoices(request):
+    categorias = []
+    response = requests.get(URL_API + 'categoria', headers=session_get_headers(request))
+    if response.status_code == 200:
+        for n in response.json()['content']:
+            categorias.append((n['id'], n['descricao']))
+    return categorias

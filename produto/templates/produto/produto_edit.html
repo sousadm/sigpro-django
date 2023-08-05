@@ -1,0 +1,101 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Produto {% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Cadastro de Produto</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-md-2">
+                        <label class="control-label">Código</label>
+                        <input type="number" disabled="disabled" class="form-control" value={{form.id.value}}>
+                    </div>
+                    <div class="col-12 col-md-10">
+                        {{ form.descricao|bootstrap }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        {{ form.ncm|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.cest|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="control-label">{{form.unidade.field.label}}</label>
+                        <select id="unidade" class="form-control" required>
+                            <option value=""></option>
+                            {% for item in form.unidade.field.choices %}
+                                <option value="{{ item.0 }}" {% if item.0 == form.unidade.value %} selected {% endif %} >
+                                    {{ item.1|lower }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <label class="control-label">{{form.categoriaId.field.label}}</label>
+                        <select id="categoria" class="form-control" required>
+                            <option value=""></option>
+                            {% for item in form.categoriaId.field.choices %}
+                                <option value="{{ item.0 }}" {% if item.0 == form.categoriaId.value %} selected {% endif %} >
+                                    {{ item.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="control-label">{{form.precificacaoId.field.label}}</label>
+                        <select id="precificacaoId" class="form-control" required>
+                            <option value=""></option>
+                            {% for item in form.precificacaoId.field.choices %}
+                                <option value="{{ item.0 }}" {% if item.0 == form.precificacaoId.value %} selected {% endif %} >
+                                    {{ item.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        {{ form.precoCompra|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.precoVenda|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.estoque|bootstrap }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer bg-red">
+            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+                <i class="fas fa-save"></i> Salvar
+            </button>
+            <a href="{% url 'url_categoria_add' %}">
+                <button type="button" class="btn"> <i class="fas fa-plus"></i> Novo </button>
+            </a>
+            <a href="{% url 'url_categoria_list' %}">
+                <button type="button" class="btn"> <i class="fas fa-list"></i> Lista </button>
+            </a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

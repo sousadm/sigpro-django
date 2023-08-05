@@ -1,12 +1,11 @@
 import requests
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from acesso.forms import LoginForm
-from core.controle import session_add_token, session_get, session_get_token, session_required, require_token
+from core.controle import session_add_token, session_get, require_token
 from core.settings import URL_API
 
 
@@ -21,8 +20,7 @@ def login(request):
                 response = requests.post(URL_API + 'login', json=form.cleaned_data)
                 if response.status_code == 200:
                     session_add_token(request, response.json())
-                    return HttpResponseRedirect(reverse('url_categoria_list'))
-                    # return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': 2}))
+                    return HttpResponseRedirect(reverse('url_produto_add'))
                 else:
                     messages.error(request, 'erro ao acessar o sistema')
         else:

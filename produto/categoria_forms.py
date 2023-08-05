@@ -1,23 +1,14 @@
 import json
-from urllib.parse import urlencode
 
 import requests
 from django import forms
-from django.core.paginator import Paginator
 
 from core.controle import session_get_headers, tratar_error
 from core.paginacao import get_page, get_param
 from core.settings import URL_API
+from produto.models import TIPO_CATEGORIA
 
-TIPO_CATEGORIA = (
-    ('REVENDA','Produtos para revenda'),
-    ('CONSUMO','Produtos para consumo'),
-    ('INSUMOS','Insumos de produção'),
-    ('IMOBILIZADO','Ativos imobilizado'),
-    ('SERVICO','Serviços'),
-)
-
-URL_RECURSO = "categoria"
+URL_RECURSO = URL_API + 'categoria/'
 
 class CategoriaForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
@@ -25,7 +16,7 @@ class CategoriaForm(forms.Form):
     tipoProduto = forms.ChoiceField(choices=TIPO_CATEGORIA, initial='INDEFINIDO', label='Tipo', required=True)
     def __init__(self, *args, request=None, uuid=None, **kwargs):
         super(CategoriaForm, self).__init__(*args, **kwargs)
-        response = requests.get(URL_API + 'categoria/' + str(uuid), headers=session_get_headers(request))
+        response = requests.get(URL_RECURSO + str(uuid), headers=session_get_headers(request))
         if response.status_code == 200:
             self.initial = response.json()
 
@@ -33,9 +24,9 @@ class CategoriaForm(forms.Form):
         data = self.json()
         headers = session_get_headers(request)
         if uuid:
-            response = requests.patch(URL_API + URL_RECURSO.join('/') + str(uuid), json=data, headers=headers)
+            response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
         else:
-            response = requests.post(URL_API + 'categoria', json=data, headers=headers)
+            response = requests.post(URL_RECURSO, json=data, headers=headers)
         if response.status_code in [200, 201]:
             return response.json()['id']
         else:
@@ -59,7 +50,7 @@ class CategoriaListForm(forms.Form):
         params = get_param(self.initial, itens_por_pagina)
         if self.initial.get('descricao'): params['descricao'] = self.initial.get('descricao')
         headers = session_get_headers(request)
-        response = requests.get(URL_API + URL_RECURSO, headers=headers, params=params)
+        response = requests.get(URL_RECURSO, headers=headers, params=params)
         if response.status_code == 200:
             self.fields['descricao'].initial = self.initial.get('descricao')
             self.initial = dict(response.json())

@@ -21,8 +21,9 @@ from acesso.views import login, home, logout
 from pessoa.Endereco import get_municipios
 from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
     pessoaVendedorEdit, pessoaList
-from produto.categoria_views import categoriaList, categoriaEdit, categoriaNew
+from produto.categoria_views import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
 from produto.precificacao_views import precificacaoList, precificacaoEdit, precificacaoNew
+from produto.produto_views import produtoEdit, produtoList, produtoNew
 
 urlpatterns = [
     path('', home, name='home'),
@@ -36,12 +37,18 @@ urlpatterns = [
     path('pessoa/<int:uuid>/transportador', pessoaTransportadorEdit, name='url_pessoa_transportador'),
     path('pessoa/<int:uuid>/vendedor', pessoaVendedorEdit, name='url_pessoa_vendedor'),
     path('get_municipios/', get_municipios, name='get_municipios'),
+
     path('categoria/', categoriaList, name='url_categoria_list'),
     path('categoria/<int:uuid>', categoriaEdit, name='url_categoria_edit'),
     path('categoria/add', categoriaNew, name='url_categoria_add'),
+    path('get_categorias/', categoriaChoices, name='get_categorias'),
 
     path('precificacao/', precificacaoList, name='url_precificacao_list'),
     path('precificacao/<int:uuid>', precificacaoEdit, name='url_precificacao_edit'),
     path('precificacao/add', precificacaoNew, name='url_precificacao_add'),
+
+    path('produto/', produtoList, name='url_produto_list'),
+    path('produto/<int:uuid>', produtoEdit, name='url_produto_edit'),
+    path('produto/add', produtoNew, name='url_produto_add'),
 
 ]
