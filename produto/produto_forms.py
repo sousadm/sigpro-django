@@ -13,22 +13,26 @@ URL_RECURSO = URL_API + 'produto/'
 
 class ProdutoForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
-    descricao = forms.CharField(max_length=100, label='Descrição', widget=forms.DateInput(attrs={'autofocus': 'true', }), initial='PRODUTO TESTE')
+    descricao = forms.CharField(max_length=100, label='Descrição', widget=forms.DateInput(attrs={'autofocus': 'true', }), initial='')
     unidade = forms.ChoiceField(choices=TIPO_UNIDADE_MEDIDA, label='Unidade', initial='UNID')
-    precoCompra = forms.DecimalField(initial=0, decimal_places=2, label='Preço de Compra')
-    precoVenda = forms.DecimalField(decimal_places=2, label='Preço de Venda', disabled=True, initial=23.20)
+    precoCompra = forms.DecimalField(decimal_places=2, label='Preço de Compra', initial=0)
+    precoVenda = forms.DecimalField(decimal_places=2, label='Preço de Venda', initial=0)
+    precoSugerido = forms.DecimalField(decimal_places=2, label='Preço Sugerido', initial=0, disabled=True)
     estoque = forms.FloatField(initial=0, label='Estoque', disabled=True)
-    categoriaId = forms.ChoiceField(label='Categoria', initial=4)
-    precificacaoId = forms.ChoiceField(label='Precificação', initial=1)
-    ncm = forms.CharField(max_length=10, label='NCM', initial='111000111')
-    cest = forms.CharField(max_length=10, label='CEST', initial='101010')
+    categoriaId = forms.ChoiceField(label='Categoria', initial=None)
+    precificacaoId = forms.ChoiceField(label='Precificação', initial=None)
+    ncm = forms.CharField(max_length=10, label='NCM', initial=None)
+    cest = forms.CharField(max_length=10, label='CEST', initial=None)
     def __init__(self, *args, request, uuid=None, **kwargs):
         super(ProdutoForm, self).__init__(*args, **kwargs)
         self.fields['categoriaId'].choices = categoriaChoices(request)
         self.fields['precificacaoId'].choices = precificacaoChoices(request)
-        response = requests.get(URL_API + 'produto/' + str(uuid), headers=session_get_headers(request))
-        if response.status_code == 200:
-            self.initial = response.json()
+        if uuid:
+            response = requests.get(URL_API + 'produto/' + str(uuid), headers=session_get_headers(request))
+            if response.status_code == 200:
+                self.initial = response.json()
+            else:
+                raise Exception(tratar_error(response))
 
     def salvar(self, request, uuid=None):
         data = self.json()

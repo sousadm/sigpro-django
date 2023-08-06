@@ -19,6 +19,7 @@ class PrecificacaoForm(forms.Form):
     margemLucro = forms.DecimalField(label="Margem de Lucro %", min_value=0, decimal_places=2, initial=0)
     despesaFixa = forms.DecimalField(label="Despesa Fixa %", min_value=0, decimal_places=2, initial=0)
     despesaVariavel = forms.DecimalField(label="Despesa Variável %", min_value=0, decimal_places=2, initial=0)
+    markup = forms.DecimalField(label="Fator Multiplicador", min_value=0, decimal_places=4, initial=0, disabled=True)
 
     def __init__(self, *args, request=None, uuid=None, **kwargs):
         super(PrecificacaoForm, self).__init__(*args, **kwargs)

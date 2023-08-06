@@ -17,12 +17,13 @@ def categoriaEdit(request, uuid):
 @require_token
 def categoria_render(request, uuid=None):
     template_name = 'produto/categoria_edit.html'
-
-    if request.POST.get('btn_salvar'):
-        form = CategoriaForm(request.POST, request=request)
-        uuid = form.salvar(request, uuid)
-        messages.success(request, 'sucesso ao gravar dados')
-
+    try:
+        if request.POST.get('btn_salvar'):
+            form = CategoriaForm(request.POST, request=request)
+            uuid = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados')
+    except Exception as e:
+        messages.error(request, e)
     form = CategoriaForm(request=request, uuid=uuid)
     return render(request, template_name, {'form': form})
 

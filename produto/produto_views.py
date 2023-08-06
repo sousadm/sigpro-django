@@ -13,15 +13,16 @@ def produtoEdit(request, uuid):
 
 @require_token
 def produto_render(request, uuid=None):
+    form = ProdutoForm(request=request)
     template_name = 'produto/produto_edit.html'
     try:
         if request.POST.get('btn_salvar'):
             form = ProdutoForm(request.POST, request=request)
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar o registro')
+        form = ProdutoForm(request=request, uuid=uuid)
     except Exception as e:
         messages.error(request, e)
-    form = ProdutoForm(request=request, uuid=uuid)
     return render(request, template_name, {'form': form})
 
 @require_token
