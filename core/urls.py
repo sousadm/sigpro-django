@@ -23,7 +23,7 @@ from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornece
     pessoaVendedorEdit, pessoaList
 from produto.categoria_views import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
 from produto.centro_distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew
-from produto.precificacao_views import precificacaoList, precificacaoEdit, precificacaoNew
+from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
 from produto.produto_views import produtoEdit, produtoList, produtoNew, produtoEstoque
 
 urlpatterns = [

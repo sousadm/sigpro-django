@@ -8,7 +8,7 @@ from core.paginacao import get_param, get_page
 from core.settings import URL_API
 from produto.categoria_views import categoriaChoices
 from produto.models import TIPO_UNIDADE_MEDIDA
-from produto.precificacao_views import precificacaoChoices
+from produto.precificacao import precificacaoChoices
 
 URL_RECURSO = URL_API + 'produto/'
 

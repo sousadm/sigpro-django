@@ -38,6 +38,8 @@
                         <tr>
                             <th>ID</th>
                             <th>Descrição</th>
+                            <th>Margem</th>
+                            <th>Fator</th>
                             <th width="90"></th>
                         </tr>
                         </thead>
@@ -46,6 +48,8 @@
                         <tr>
                             <td>{{ item.id }}</td>
                             <td>{{ item.descricao|default_if_none:"" }}</td>
+                            <td>{{ item.margemLucro|floatformat:2 }}</td>
+                            <td>{{ item.markup|floatformat:4 }}</td>
                             <td>
                                 <a href="{% url 'url_precificacao_edit' uuid=item.id %}">
                                     <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
