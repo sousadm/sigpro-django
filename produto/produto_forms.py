@@ -6,7 +6,7 @@ from django import forms
 from core.controle import session_get_headers, tratar_error
 from core.paginacao import get_param, get_page
 from core.settings import URL_API
-from produto.categoria_views import categoriaChoices
+from produto.categoria import categoriaChoices
 from produto.models import TIPO_UNIDADE_MEDIDA
 from produto.precificacao import precificacaoChoices
 

@@ -2,8 +2,10 @@ import json
 
 import requests
 from django import forms
+from django.contrib import messages
+from django.shortcuts import render
 
-from core.controle import session_get_headers, tratar_error
+from core.controle import session_get_headers, tratar_error, require_token, dados_para_json
 from core.paginacao import get_page, get_param
 from core.settings import URL_API
 from produto.models import TIPO_CATEGORIA
@@ -21,7 +23,7 @@ class CategoriaForm(forms.Form):
             self.initial = response.json()
 
     def salvar(self, request, uuid=None):
-        data = self.json()
+        data = dados_para_json(self.data)
         headers = session_get_headers(request)
         if uuid:
             response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
@@ -32,13 +34,6 @@ class CategoriaForm(forms.Form):
         else:
             raise Exception(tratar_error(response))
 
-    def json(self):
-        post_data = dict(self.data)
-        post_data.pop('csrfmiddlewaretoken', None)
-        post_data.pop('btn_salvar', None)
-        json_data = json.dumps(post_data).replace("[", "").replace("]", "")
-        data = json.loads(json_data)
-        return data
 
 class CategoriaListForm(forms.Form):
     descricao = forms.CharField(label='Pesquisa', required=False,
@@ -57,3 +52,52 @@ class CategoriaListForm(forms.Form):
             return get_page(self.initial, params)
 
 
+@require_token
+def categoriaNew(request):
+    return categoria_render(request, None)
+
+
+def categoriaEdit(request, uuid):
+    return categoria_render(request, uuid)
+
+
+@require_token
+def categoria_render(request, uuid=None):
+    template_name = 'produto/categoria_edit.html'
+    try:
+        if request.POST.get('btn_salvar'):
+            form = CategoriaForm(request.POST, request=request)
+            uuid = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados')
+    except Exception as e:
+        messages.error(request, e)
+    form = CategoriaForm(request=request, uuid=uuid)
+    return render(request, template_name, {'form': form})
+
+
+@require_token
+def categoriaList(request):
+    template_name = 'produto/categoria_list.html'
+    try:
+        form = CategoriaListForm() \
+            if request.POST.get('btn_listar') \
+            else CategoriaListForm(request.POST)
+        page = form.pesquisar(request)
+
+    except Exception as e:
+        messages.error(request, e)
+    context = {
+        'form': form,
+        'page': page
+    }
+    return render(request, template_name, context)
+
+
+@require_token
+def categoriaChoices(request):
+    categorias = []
+    response = requests.get(URL_API + 'categoria', headers=session_get_headers(request))
+    if response.status_code == 200:
+        for n in response.json()['content']:
+            categorias.append((n['id'], n['descricao']))
+    return categorias

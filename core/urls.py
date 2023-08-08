@@ -21,7 +21,7 @@ from acesso.views import login, home, logout
 from pessoa.Endereco import get_municipios
 from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
     pessoaVendedorEdit, pessoaList
-from produto.categoria_views import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
+from produto.categoria import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
 from produto.centro_distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew
 from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
 from produto.produto_views import produtoEdit, produtoList, produtoNew, produtoEstoque
