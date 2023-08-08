@@ -4,6 +4,7 @@ import requests
 from django import forms
 
 from core.controle import session_get_headers, tratar_error
+from core.paginacao import get_param, get_page
 from core.settings import URL_API
 from produto.categoria_views import categoriaChoices
 from produto.models import TIPO_UNIDADE_MEDIDA
@@ -59,5 +60,14 @@ class ProdutoListForm(forms.Form):
                                 widget=forms.TextInput(
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
     def pesquisar(self, request):
-        return None
+        itens_por_pagina = 5
+        self.initial = request.POST or request.GET
+        params = get_param(self.initial, itens_por_pagina)
+        if self.initial.get('descricao'): params['descricao'] = self.initial.get('descricao')
+        headers = session_get_headers(request)
+        response = requests.get(URL_RECURSO, headers=headers, params=params)
+        if response.status_code == 200:
+            self.fields['descricao'].initial = self.initial.get('descricao')
+            self.initial = dict(response.json())
+            return get_page(self.initial, params)
 
