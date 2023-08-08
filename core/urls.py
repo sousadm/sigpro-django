@@ -22,7 +22,8 @@ from pessoa.Endereco import get_municipios
 from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
     pessoaVendedorEdit, pessoaList
 from produto.categoria import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
-from produto.centro_distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew
+from produto.centroDeDistribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew, \
+    centroDistribuicaoChoices
 from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
 from produto.produto import produtoEdit, produtoList, produtoNew, produtoEstoque
 
@@ -56,5 +57,6 @@ urlpatterns = [
     path('distribuicao/', centroDistribuicaoList, name='url_distribuicao_list'),
     path('distribuicao/<int:uuid>', centroDistribuicaoEdit, name='url_distribuicao_edit'),
     path('distribuicao/add', centroDistribuicaoNew, name='url_distribuicao_add'),
+    path('get_distribuicoes/', centroDistribuicaoChoices, name='get_distribuicoes'),
 
 ]
