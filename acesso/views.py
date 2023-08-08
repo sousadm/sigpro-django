@@ -20,7 +20,7 @@ def login(request):
                 response = requests.post(URL_API + 'login', json=form.cleaned_data)
                 if response.status_code == 200:
                     session_add_token(request, response.json())
-                    return HttpResponseRedirect(reverse('url_categoria_add'))
+                    return HttpResponseRedirect(reverse('url_produto_add'))
                     # return HttpResponseRedirect(reverse('url_produto_estoque', kwargs={'uuid': 1}))
                 else:
                     messages.error(request, 'erro ao acessar o sistema')

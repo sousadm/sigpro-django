@@ -24,7 +24,7 @@ from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornece
 from produto.categoria import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
 from produto.centro_distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew
 from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
-from produto.produto_views import produtoEdit, produtoList, produtoNew, produtoEstoque
+from produto.produto import produtoEdit, produtoList, produtoNew, produtoEstoque
 
 urlpatterns = [
     path('', home, name='home'),

@@ -2,11 +2,14 @@ import json
 
 import requests
 from django import forms
+from django.contrib import messages
+from django.shortcuts import render
 
-from core.controle import session_get_headers, tratar_error
+from core.controle import session_get_headers, tratar_error, dados_para_json, require_token
 from core.paginacao import get_param, get_page
 from core.settings import URL_API
 from produto.categoria import categoriaChoices
+from produto.estoque_forms import EstoqueForm
 from produto.models import TIPO_UNIDADE_MEDIDA
 from produto.precificacao import precificacaoChoices
 
@@ -36,7 +39,7 @@ class ProdutoForm(forms.Form):
                 raise Exception(tratar_error(response))
 
     def salvar(self, request, uuid=None):
-        data = self.json()
+        data = dados_para_json(self.data)
         headers = session_get_headers(request)
         if uuid:
             response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
@@ -46,14 +49,6 @@ class ProdutoForm(forms.Form):
             return response.json()['id']
         else:
             raise Exception(tratar_error(response))
-
-    def json(self):
-        post_data = dict(self.data)
-        post_data.pop('csrfmiddlewaretoken', None)
-        post_data.pop('btn_salvar', None)
-        json_data = json.dumps(post_data).replace("[", "").replace("]", "")
-        data = json.loads(json_data)
-        return data
 
 class ProdutoListForm(forms.Form):
     descricao = forms.CharField(label='Pesquisa', required=False,
@@ -70,4 +65,58 @@ class ProdutoListForm(forms.Form):
             self.fields['descricao'].initial = self.initial.get('descricao')
             self.initial = dict(response.json())
             return get_page(self.initial, params)
+
+@require_token
+def produtoNew(request):
+    return produto_render(request, None)
+
+@require_token
+def produtoEdit(request, uuid):
+    return produto_render(request, uuid)
+
+@require_token
+def produto_render(request, uuid=None):
+    form = ProdutoForm(request=request)
+    template_name = 'produto/produto_edit.html'
+    try:
+        if request.POST.get('btn_salvar'):
+            form = ProdutoForm(request.POST, request=request)
+            uuid = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar o registro')
+        form = ProdutoForm(request=request, uuid=uuid)
+    except Exception as e:
+        messages.error(request, e)
+    return render(request, template_name, {'form': form})
+
+@require_token
+def produtoList(request):
+    template_name = 'produto/produto_list.html'
+    try:
+        form = ProdutoListForm() \
+            if request.POST.get('btn_listar') \
+            else ProdutoListForm(request.POST)
+        page = form.pesquisar(request)
+
+    except Exception as e:
+        messages.error(request, e)
+    context = {
+        'form': form,
+        'page': page
+    }
+    return render(request, template_name, context)
+
+
+@require_token
+def produtoEstoque(request, uuid):
+    template_name = 'produto/produto_estoque.html'
+    try:
+        if request.POST.get('btn_salvar'):
+            form = EstoqueForm(request.POST, request=request)
+            uuid = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados')
+    except Exception as e:
+        messages.error(request, e)
+    form = EstoqueForm(request=request, uuid=uuid)
+    return render(request, template_name, {'form': form})
+
 
