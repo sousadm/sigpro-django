@@ -23,7 +23,7 @@ from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornece
     pessoaVendedorEdit, pessoaList
 from produto.categoria_views import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
 from produto.precificacao_views import precificacaoList, precificacaoEdit, precificacaoNew
-from produto.produto_views import produtoEdit, produtoList, produtoNew
+from produto.produto_views import produtoEdit, produtoList, produtoNew, produtoEstoque
 
 urlpatterns = [
     path('', home, name='home'),
@@ -49,6 +49,7 @@ urlpatterns = [
 
     path('produto/', produtoList, name='url_produto_list'),
     path('produto/<int:uuid>', produtoEdit, name='url_produto_edit'),
+    path('produto/<int:uuid>/estoque', produtoEstoque, name='url_produto_estoque'),
     path('produto/add', produtoNew, name='url_produto_add'),
 
 ]

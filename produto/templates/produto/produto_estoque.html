@@ -1,0 +1,37 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Estoque {% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Estoque de Produto</h3>
+            </div>
+            <div class="card-body">
+
+                {{ form }}
+
+            </div>
+        </div>
+
+        <div class="footer bg-red">
+            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+                <i class="fas fa-save"></i> Salvar
+            </button>
+            <a href="{% url 'url_produto_add' %}">
+                <button type="button" class="btn"> <i class="fas fa-plus"></i> Novo </button>
+            </a>
+            <a href="{% url 'url_produto_list' %}">
+                <button type="button" class="btn"> <i class="fas fa-list"></i> Lista </button>
+            </a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

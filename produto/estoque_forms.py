@@ -18,6 +18,15 @@ class EstoqueForm(forms.Form):
     quantidade = forms.DecimalField(label="Quantidade", min_value=0, decimal_places=2, initial=1)
     tipo = forms.ChoiceField(choices=TIPO_ESTOQUE_MOVIMENTO, label='Tipo de Movimentação', initial='ENTRADA')
 
+    def __init__(self, *args, request, uuid, **kwargs):
+        super(EstoqueForm, self).__init__(*args, **kwargs)
+        response = requests.get(URL_API + 'produto/' + str(uuid), headers=session_get_headers(request))
+        print(response.json())
+        if response.status_code == 200:
+            self.initial = response.json()
+        else:
+            raise Exception(tratar_error(response))
+
     def salvar(self, request, uuid=None):
         data = self.json()
         headers = session_get_headers(request)

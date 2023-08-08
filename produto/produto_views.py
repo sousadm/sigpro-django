@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render
 from core.controle import require_token
+from produto.estoque_forms import EstoqueForm
 from produto.produto_forms import ProdutoForm, ProdutoListForm
 
 
@@ -41,5 +42,19 @@ def produtoList(request):
         'page': page
     }
     return render(request, template_name, context)
+
+
+@require_token
+def produtoEstoque(request, uuid):
+    template_name = 'produto/produto_estoque.html'
+    try:
+        if request.POST.get('btn_salvar'):
+            form = EstoqueForm(request.POST, request=request)
+            uuid = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados')
+    except Exception as e:
+        messages.error(request, e)
+    form = EstoqueForm(request=request, uuid=uuid)
+    return render(request, template_name, {'form': form})
 
 
