@@ -4,6 +4,8 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.urls import reverse
 
+from core.tipos import TIPO_SITUACAO
+
 # Create your models here.
 
 #PESSOA_FIELDS = ['nome', 'email', 'fone', 'pessoaId']
@@ -43,11 +45,6 @@ TIPO_CONTRIBUINTE_CHOICES = (
 TIPO_SIM_NAO = (
     (False, "Não"),
     (True, "Sim")
-)
-
-TIPO_SITUACAO = (
-    (False, "Inativo"),
-    (True, "Ativo"),
 )
 
 TIPO_PROPRIETARIO = (

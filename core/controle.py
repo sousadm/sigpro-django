@@ -66,6 +66,15 @@ def tratar_error(response):
         return response.json()
 
 
+def dados_para_json(self_dados):
+    post_data = dict(self_dados)
+    post_data.pop('csrfmiddlewaretoken', None)
+    post_data.pop('btn_salvar', None)
+    json_data = json.dumps(post_data).replace("[", "").replace("]", "")
+    data = json.loads(json_data)
+    return data
+
+
 def format_cpf(cpf):
     cpf = str(cpf)
     return f'{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}'
