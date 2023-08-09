@@ -9,7 +9,7 @@ from core.controle import session_get_headers, tratar_error, dados_para_json, re
 from core.paginacao import get_param, get_page
 from core.settings import URL_API
 from produto.categoria import categoriaChoices
-from produto.estoque_forms import EstoqueForm
+from produto.estoque import EstoqueForm
 from produto.models import TIPO_UNIDADE_MEDIDA
 from produto.precificacao import precificacaoChoices
 
@@ -106,17 +106,6 @@ def produtoList(request):
     return render(request, template_name, context)
 
 
-@require_token
-def produtoEstoque(request, uuid):
-    template_name = 'produto/produto_estoque.html'
-    try:
-        if request.POST.get('btn_salvar'):
-            form = EstoqueForm(request.POST, request=request)
-            uuid = form.salvar(request, uuid)
-            messages.success(request, 'sucesso ao gravar dados')
-    except Exception as e:
-        messages.error(request, e)
-    form = EstoqueForm(request=request, uuid=uuid)
-    return render(request, template_name, {'form': form})
+
 
 

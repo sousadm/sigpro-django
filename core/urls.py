@@ -22,10 +22,11 @@ from pessoa.Endereco import get_municipios
 from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
     pessoaVendedorEdit, pessoaList
 from produto.categoria import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
-from produto.centroDeDistribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew, \
+from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew, \
     centroDistribuicaoChoices
 from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
-from produto.produto import produtoEdit, produtoList, produtoNew, produtoEstoque
+from produto.produto import produtoEdit, produtoList, produtoNew
+from produto.estoque import produtoEstoque
 
 urlpatterns = [
     path('', home, name='home'),
