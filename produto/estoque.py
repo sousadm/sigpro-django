@@ -69,4 +69,9 @@ def produtoEstoque(request, uuid):
     form = EstoqueForm(request=request, uuid=uuid)
     return render(request, template_name, {'form': form})
 
+@require_token
+def produtoEstoqueDetalhe(request, uuid):
+    template_name = 'produto/produto_estoque_detalhe.html'
+    response = requests.get(URL_API + 'produto/' + str(uuid) + '/estoque', headers=session_get_headers(request))
+    return render(request, template_name, {'lista': response.json()})
 

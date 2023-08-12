@@ -26,7 +26,7 @@ from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit,
     centroDistribuicaoChoices
 from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
 from produto.produto import produtoEdit, produtoList, produtoNew
-from produto.estoque import produtoEstoque
+from produto.estoque import produtoEstoque, produtoEstoqueDetalhe
 
 urlpatterns = [
     path('', home, name='home'),
@@ -53,6 +53,7 @@ urlpatterns = [
     path('produto/', produtoList, name='url_produto_list'),
     path('produto/<int:uuid>', produtoEdit, name='url_produto_edit'),
     path('produto/<int:uuid>/estoque', produtoEstoque, name='url_produto_estoque'),
+    path('produto/<int:uuid>/estoque-detalhe', produtoEstoqueDetalhe, name='url_produto_estoque_detalhe'),
     path('produto/add', produtoNew, name='url_produto_add'),
 
     path('distribuicao/', centroDistribuicaoList, name='url_distribuicao_list'),
