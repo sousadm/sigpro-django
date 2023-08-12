@@ -4,6 +4,8 @@ import requests
 from django import forms
 from django.contrib import messages
 from django.shortcuts import render
+from django.http import HttpResponseRedirect, JsonResponse
+from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error, dados_para_json, require_token
 from core.paginacao import get_param, get_page
@@ -84,6 +86,10 @@ def produto_render(request, uuid=None):
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar o registro')
         form = ProdutoForm(request=request, uuid=uuid)
+
+        if request.POST.get('btn_estoque'):
+            return HttpResponseRedirect(reverse('url_produto_estoque', kwargs={'uuid': uuid}))
+
     except Exception as e:
         messages.error(request, e)
     return render(request, template_name, {'form': form})

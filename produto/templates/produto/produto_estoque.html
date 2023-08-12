@@ -9,14 +9,67 @@
 
         {% csrf_token %}
 
+        <input type="hidden" name="produtoId" value={{ form.produtoId.value }}>
+
         <div class="card">
             <div class="card-header">
-                <h3>Estoque de Produto</h3>
+                <h3>Movimentação de Produto</h3>
             </div>
             <div class="card-body">
 
-                {{ form }}
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        {{ form.produtoId|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-6">
 
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-9">
+                        {{ form.descricao|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-3">
+                        {{ form.estoque|bootstrap }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-2">
+                        {{ form.documento|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-7">
+                        {{ form.historico|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-3">
+                        {{ form.quantidade|bootstrap }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        <label>{{ form.tipo.label }}</label>
+                        <select name="tipo" id="tipo" class="form-control"
+                                onchange="selecionaTipoChange(this)">
+                            {% for choice in form.tipo.field.choices %}
+                            <option value="{{ choice.0 }}" {% if choice.0 == tipo_selected %} selected {% endif %}>
+                                {{ choice.1 }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        {{ form.centroDistribuicaoId|bootstrap }}
+                    </div>
+                </div>
+
+                <div id="destino" class="row">
+                    <div class="col-12 col-md-3"></div>
+                    <div class="col-12 col-md-9">
+                        {{ form.centroDistribuicaoDestinoId|bootstrap }}
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -34,4 +87,20 @@
 
     </form>
 </div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var sel = document.getElementById('tipo');
+        selecionaTipoChange(sel);
+    });
+
+    function selecionaTipoChange(sel) {
+        var element_fisica = document.getElementById('destino');
+        element_fisica.style.display = sel.value == 'TRANSFERENCIA' ? 'flex' : 'none';
+    }
+
+</script>
+
+
 {% endblock %}
