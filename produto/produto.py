@@ -87,9 +87,6 @@ def produto_render(request, uuid=None):
             messages.success(request, 'sucesso ao gravar o registro')
         form = ProdutoForm(request=request, uuid=uuid)
 
-        if request.POST.get('btn_estoque'):
-            return HttpResponseRedirect(reverse('url_produto_estoque', kwargs={'uuid': uuid}))
-
     except Exception as e:
         messages.error(request, e)
     return render(request, template_name, {'form': form})

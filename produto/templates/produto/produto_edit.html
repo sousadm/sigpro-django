@@ -97,11 +97,9 @@
             <a href="{% url 'url_produto_list' %}">
                 <button type="button" class="btn"> <i class="fas fa-list"></i> Lista </button>
             </a>
-
-            <button type="submit" value="btn_estoque" name="btn_estoque" class="btn btn-secondary">
-                <i class="fas fa-building"></i> Estoque
-            </button>
-
+            <a href="{% url 'url_produto_estoque' form.id.value %}">
+                <button type="button" class="btn"> <i class="fas fa-building"></i> Estoque </button>
+            </a>
         </div>
 
     </form>

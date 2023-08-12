@@ -77,11 +77,11 @@
             <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
                 <i class="fas fa-save"></i> Salvar
             </button>
-            <a href="{% url 'url_produto_add' %}">
+            <a href="{% url 'url_produto_estoque' form.produtoId.value %}">
                 <button type="button" class="btn"> <i class="fas fa-plus"></i> Novo </button>
             </a>
-            <a href="{% url 'url_produto_list' %}">
-                <button type="button" class="btn"> <i class="fas fa-list"></i> Lista </button>
+            <a href="{% url 'url_produto_edit' form.produtoId.value %}">
+                <button type="button" class="btn"> <i class="fas fa-reply"></i> Produto </button>
             </a>
         </div>
 
