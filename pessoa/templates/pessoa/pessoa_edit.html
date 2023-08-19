@@ -7,9 +7,14 @@
 {% load static %}
 {% block title %} Pessoa {% endblock %}
 
+        {% block butons %}
+
+        {% endblock %}
+
 {% block content %}
 
 <div class="container">
+
     <form method="post">
 
         <input type="hidden" name="clienteId" value={{ form.clienteId.value }}>
@@ -23,8 +28,8 @@
         <fieldset {% if not form.situacaoPessoa.value %} disabled {% endif %}>
 
             <div class="card">
-                <div class="card-header">
-                    <h3>Cadastro de Pessoa</h3>
+                <div class="card-header custom-card-header">
+                    <h4>Cadastro de Pessoa</h4>
                 </div>
                 <div class="card-body">
 
@@ -129,8 +134,7 @@
 
         </fieldset>
 
-        <div class="footer bg-blue">
-
+        <div class="footer bg-red">
             {% if form.situacaoPessoa.value %}
             <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
                 <i class="fas fa-save"></i> Salvar
@@ -170,7 +174,6 @@
                 <i class="fas fa-check"></i> {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%}
             </button>
             {% endif %}
-
         </div>
 
     </form>
