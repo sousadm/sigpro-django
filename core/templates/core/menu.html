@@ -4,8 +4,6 @@
 
     <div class="container">
 
-        {{
-
         <h2 style="color: white">Sistema</h2>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
@@ -13,16 +11,15 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        {% if username %}
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'url_produto_list' %}">Produto</a>
                 </li>
             </ul>
-
             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-
         </div>
-
+        {% endif %}
     </div>
 </nav>

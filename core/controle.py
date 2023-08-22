@@ -83,3 +83,4 @@ def format_cpf(cpf):
 def format_cnpj(cnpj):
     cnpj = str(cnpj)
     return f'{cnpj[:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:12]}-{cnpj[12:14]}'
+
