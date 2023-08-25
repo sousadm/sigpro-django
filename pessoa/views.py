@@ -10,7 +10,7 @@ from core.controle import require_token, session_get_token, session_get_headers,
 from core.settings import URL_API
 from pessoa.Endereco import get_lista_unidade_federacao
 from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorForm, VendedorForm, PessoaListForm
-from pessoa.models import PessoaModel, TIPO_CHOICES
+from pessoa.models import TIPO_CHOICES
 
 
 @require_token

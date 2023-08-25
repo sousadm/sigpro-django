@@ -8,59 +8,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-          integrity="sha512-**********" crossorigin="anonymous"/>
+        integrity="sha512-**********" crossorigin="anonymous" />
 
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
     <title> {% block title %} Sousa {% endblock %} </title>
 
     <script>
-            function confirma(pergunta) {
-                var agree=confirm(pergunta);
-                if (agree)
-                    return true ;
-                else
-                    return false ;
-            }
+        function confirma(pergunta) {
+            var agree = confirm(pergunta);
+            if (agree)
+                return true;
+            else
+                return false;
+        }
 
 
 
     </script>
 
+    <style>
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            /* height: 60px; */
+            background-color: whitesmoke;
+            padding: 0px;
+        }
+    </style>
+
 </head>
 
 <body>
 
-<div class="container">
-    {% include 'core/messages.html' %}
-    <div id="content">
-        {% include 'core/menu.html' %}
-        <div style="margin-top: 2px">
-            {% block content %}
-
-            {% endblock %}
-
-            <div class="position-fixed fixed-bottom fixed-right mr-0">
-            {% block butons %}
-
-            {% endblock %}
+    <div class="container">
+        {% include 'core/messages.html' %}
+        <div id="content">
+            {% if username %}
+            {% include 'core/menu.html' %}
+            {% endif %}
+            <div style="margin-top: 10px">
+                {% block content %} {% endblock %}
             </div>
-
         </div>
+
+        <div class="footer">
+            {% block botoes %}{% endblock %}
+        </div>
+
     </div>
-
-<!--    <footer class="text-right mb-5 text-white">
-    <span style="color: #cccccc">Copyright © 2023 Contrate</span>
-    {% block footer %}
-
-    {% endblock %}
-    </footer>-->
-
-</div>
 
 </body>
 

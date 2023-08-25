@@ -4,84 +4,81 @@
 {% block title %} Cliente {% endblock %}
 
 {% block content %}
-<div class="container">
-    <form method="post">
+<form method="post">
 
-        {% csrf_token %}
+    {% csrf_token %}
 
-        <input type="hidden" name="clienteId" value={{ form.clienteId.value }}>
-        <input type="hidden" name="pessoaId" value={{ form.pessoaId.value }}>
-        <input type="hidden" name="situacaoCliente" value={{ form.situacaoCliente.value }}>
+    <input type="hidden" name="clienteId" value={{ form.clienteId.value }}>
+    <input type="hidden" name="pessoaId" value={{ form.pessoaId.value }}>
+    <input type="hidden" name="situacaoCliente" value={{ form.situacaoCliente.value }}>
 
-        <fieldset {% if not form.situacaoCliente.value %} disabled {% endif %}>
+    <fieldset {% if not form.situacaoCliente.value %} disabled {% endif %}>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3>Cadastro de Cliente</h3>
-                </div>
-                <div class="card-body">
-
-                    <div class="row">
-                        <div class="col-12 col-md-2">
-                            <label class="control-label">Código</label>
-                            <input type="number" disabled="disabled" class="form-control" value={{ form.clienteId.value }}>
-                        </div>
-                        <div class="col-12 col-md-10">
-                            <label class="control-label">Nome</label>
-                            <input type="text" disabled="disabled" class="form-control" value={{ form.nome.value }}>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12 col-md-2">
-
-                        </div>
-                        <div class="col-12 col-md-10">
-                            {{ form.emailFiscal|bootstrap }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12 col-md-2">
-
-                        </div>
-                        <div class="col-12 col-md-2">
-                            {{ form.retencaoIss|bootstrap }}
-                        </div>
-                        <div class="col-12 col-md-4">
-                            {{ form.limiteCredito|bootstrap }}
-                        </div>
-                        <div class="col-12 col-md-4">
-                            {{ form.limitePrazo|bootstrap }}
-                        </div>
-                    </div>
-
-                </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>Cadastro de Cliente</h3>
             </div>
+            <div class="card-body">
 
-        </fieldset>
+                <div class="row">
+                    <div class="col-12 col-md-2">
+                        <label class="control-label">Código</label>
+                        <input type="number" disabled="disabled" class="form-control" value={{ form.clienteId.value }}>
+                    </div>
+                    <div class="col-12 col-md-10">
+                        {{ form.nome|bootstrap }}
+                    </div>
+                </div>
 
-        <div class="footer bg-red">
+                <div class="row">
+                    <div class="col-12 col-md-2">
 
-            {% if form.situacaoCliente.value %}
-            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-success">
-                <i class="fas fa-save"></i> Salvar
-            </button>
-            {% endif %}
+                    </div>
+                    <div class="col-12 col-md-10">
+                        {{ form.emailFiscal|bootstrap }}
+                    </div>
+                </div>
 
-            <button type="submit" value="btn_pessoa" name="btn_pessoa" class="btn btn-secondary">
-                <i class="fas fa-user"></i> Voltar
-            </button>
+                <div class="row">
+                    <div class="col-12 col-md-2">
 
-            {% if form.existe %}
-            <button type="submit" value="btn_ativar" name="btn_ativar" class="btn btn-danger"
-                    onClick='return confirma("Confirma {%if form.situacaoCliente.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")'>
-                <i class="fas fa-check"></i> {%if form.situacaoCliente.value%} Inativar {%else%} Ativar {%endif%}
-            </button>
-            {% endif %}
+                    </div>
+                    <div class="col-12 col-md-2">
+                        {{ form.retencaoIss|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.limiteCredito|bootstrap }}
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {{ form.limitePrazo|bootstrap }}
+                    </div>
+                </div>
 
+            </div>
         </div>
 
-    </form>
-</div>
+    </fieldset>
+
+    <div class="footer">
+
+        {% if form.situacaoCliente.value %}
+        <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+            <i class="fas fa-save"></i> Salvar
+        </button>
+        {% endif %}
+
+        <button type="submit" value="btn_pessoa" name="btn_pessoa" class="btn btn-secondary">
+            <i class="fas fa-user"></i> Voltar
+        </button>
+
+        {% if form.existe %}
+        <button type="submit" value="btn_ativar" name="btn_ativar" class="btn btn-danger"
+            onClick='return confirma("Confirma {%if form.situacaoCliente.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")'>
+            <i class="fas fa-check"></i> {%if form.situacaoCliente.value%} Inativar {%else%} Ativar {%endif%}
+        </button>
+        {% endif %}
+
+    </div>
+
+</form>
 {% endblock %}

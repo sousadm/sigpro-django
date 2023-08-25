@@ -4,28 +4,25 @@ from urllib.parse import urlencode
 import requests
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django import forms
 
 from core.controle import session_get_headers, tratar_error
 from core.settings import URL_API
-from pessoa.Endereco import get_lista_unidade_federacao
-from pessoa.models import PessoaModel, CLIENTE_FIELDS, FORNECEDOR_FIELDS, TRANSPORTADOR_FIELDS, \
-    VENDEDOR_FIELDS, TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TIPO_SIM_NAO, REGIME_TRIBUTARIO_CHOICES, \
+from core.tipos import TIPO_PROPRIETARIO
+from pessoa.models import TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TIPO_SIM_NAO, REGIME_TRIBUTARIO_CHOICES, \
     TIPO_CONTRIBUINTE_CHOICES
-from django import forms
-
 
 # Create your tests here.
 
 class PessoaForm(forms.Form):
-    created_dt = forms.DateTimeField(required=False)
-    updated_dt = forms.DateTimeField(required=False)
     pessoaId = forms.IntegerField(label='Pessoa ID', required=False)
-    nome = forms.CharField(max_length=100, label='Nome', widget=forms.DateInput(
-        attrs={'autofocus': 'true', }))
+    nome = forms.CharField(max_length=100, label='Nome', widget=forms.DateInput(attrs={'autofocus': 'true', }))
     fone = forms.CharField(max_length=20, label='Fone')
     email = forms.EmailField(max_length=254, label='E-mail')
     situacaoPessoa = forms.ChoiceField(label='Situação', choices=TIPO_SITUACAO, initial=True)
     tipoPessoa = forms.ChoiceField(choices=TIPO_CHOICES, initial='INDEFINIDO', label='Tipo')
+    created_dt = forms.DateTimeField(required=False)
+    updated_dt = forms.DateTimeField(required=False)
     # definição para pessoa física
     cpf = forms.CharField(max_length=14, required=False, validators=[cpf_regex], label='CPF')
     identidade = forms.CharField(max_length=20, required=False, label='Identidade')
@@ -127,17 +124,15 @@ class PessoaForm(forms.Form):
         return data
 
 
-class ClienteForm(forms.ModelForm):
-    codigo = forms.CharField(widget=forms.HiddenInput())
-
-    class Meta:
-        model = PessoaModel
-        fields = CLIENTE_FIELDS
-
-    def __init__(self, *args, **kwargs):
-        super(ClienteForm, self).__init__(*args, **kwargs)
-        self.fields['nome'].widget.attrs['autofocus'] = True
-        self.fields['emailFiscal'].required = False
+class ClienteForm(forms.Form):
+    pessoaId = forms.IntegerField()
+    nome = forms.CharField(max_length=100, label='Nome', disabled=True)    
+    clienteId = forms.IntegerField(label='Código', required=False, disabled=True)
+    situacaoCliente = forms.ChoiceField(choices=TIPO_SITUACAO, initial=True)
+    emailFiscal = forms.EmailField(label='E-mail Fiscal', required=False, widget=forms.DateInput(attrs={'autofocus': 'true', }))
+    limiteCredito = forms.FloatField(label='Limite de Crédito', initial=0)
+    limitePrazo = forms.FloatField(label='Limite de Prazo', initial=0)
+    retencaoIss = forms.ChoiceField(choices=TIPO_SIM_NAO, initial=False, label='Retenção ISS')
 
     def existe(self):
         return existe_registro(self, self.initial, 'clienteId')
@@ -162,17 +157,12 @@ class ClienteForm(forms.ModelForm):
         salvar_pessoa_tipo(self, request, data, 'cliente')
 
 
-class FornecedorForm(forms.ModelForm):
-    codigo = forms.CharField(widget=forms.HiddenInput())
-
-    class Meta:
-        model = PessoaModel
-        fields = FORNECEDOR_FIELDS
-
-    def __init__(self, *args, **kwargs):
-        super(FornecedorForm, self).__init__(*args, **kwargs)
-        self.fields['nome'].widget.attrs['autofocus'] = True
-        self.fields['email'].required = False
+class FornecedorForm(forms.Form):
+    pessoaId = forms.IntegerField()
+    nome = forms.CharField(max_length=100, label='Nome', disabled=True)    
+    fornecedorId = forms.IntegerField(label='Código', required=False, disabled=True)
+    situacaoFornecedor = forms.ChoiceField(choices=TIPO_SITUACAO, initial=True)
+    created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
 
     def existe(self):
         return existe_registro(self, self.initial, 'fornecedorId')
@@ -198,17 +188,14 @@ class FornecedorForm(forms.ModelForm):
 
 
 # TRANSPORTADOR
-class TransportadorForm(forms.ModelForm):
-    codigo = forms.CharField(widget=forms.HiddenInput())
-
-    class Meta:
-        model = PessoaModel
-        fields = TRANSPORTADOR_FIELDS
-
-    def __init__(self, *args, **kwargs):
-        super(TransportadorForm, self).__init__(*args, **kwargs)
-        self.fields['nome'].widget.attrs['autofocus'] = True
-        self.fields['email'].required = False
+class TransportadorForm(forms.Form):
+    pessoaId = forms.IntegerField()
+    nome = forms.CharField(max_length=100, label='Nome', disabled=True)
+    transportadorId = forms.IntegerField(label='Código', required=False, disabled=True)
+    situacaoTransportador = forms.ChoiceField(choices=TIPO_SITUACAO, initial=True)
+    codigoRNTRC = forms.CharField(max_length=20, label='RNTRC') 
+    tipoProprietario = forms.ChoiceField(choices=TIPO_PROPRIETARIO, initial="OUTROS")
+    created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
 
     def existe(self):
         return existe_registro(self, self.initial, 'transportadorId')
@@ -234,17 +221,13 @@ class TransportadorForm(forms.ModelForm):
 
 
 # VENDEDOR
-class VendedorForm(forms.ModelForm):
-    codigo = forms.CharField(widget=forms.HiddenInput())
-
-    class Meta:
-        model = PessoaModel
-        fields = VENDEDOR_FIELDS
-
-    def __init__(self, *args, **kwargs):
-        super(VendedorForm, self).__init__(*args, **kwargs)
-        self.fields['nome'].widget.attrs['autofocus'] = True
-        self.fields['email'].required = False
+class VendedorForm(forms.Form):
+    pessoaId = forms.IntegerField()
+    nome = forms.CharField(max_length=100, label='Nome', disabled=True)
+    vendedorId = forms.IntegerField(label='Código', required=False, disabled=True)
+    situacaoVendedor = forms.ChoiceField(choices=TIPO_SITUACAO, initial=True)
+    comissao = forms.FloatField(label='Percentual de Comissão', initial=0, widget=forms.DateInput(attrs={'autofocus': 'true', }))
+    created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
 
     def existe(self):
         return existe_registro(self, self.initial, 'vendedorId')
@@ -275,7 +258,8 @@ def existe_registro(self, dados, campo):
 
 
 def pesquisa_pessoa(self, request, uuid, tipo):
-    response = requests.get(URL_API + 'pessoa/' + str(uuid) + "/" + tipo, headers=session_get_headers(request))
+    url = URL_API + 'pessoa/' + str(uuid) + "/" + tipo
+    response = requests.get(url, headers=session_get_headers(request))
     if response.status_code == 200:
         return response.json()
     else:

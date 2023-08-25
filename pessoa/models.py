@@ -8,12 +8,6 @@ from core.tipos import TIPO_SITUACAO
 
 # Create your models here.
 
-#PESSOA_FIELDS = ['nome', 'email', 'fone', 'pessoaId']
-CLIENTE_FIELDS = ['clienteId', 'situacaoCliente', 'emailFiscal', 'retencaoIss', 'limiteCredito', 'limitePrazo']
-TRANSPORTADOR_FIELDS = ['transportadorId', 'situacaoTransportador', 'codigoRNTRC', 'tipoProprietario']
-FORNECEDOR_FIELDS = ['fornecedorId', 'situacaoFornecedor']
-VENDEDOR_FIELDS = ['vendedorId', 'situacaoVendedor', 'comissao']
-
 cpf_regex = RegexValidator(
     regex=r'^\d{3}\.\d{3}\.\d{3}-\d{2}$',
     message="CPF must be in the format XXX.XXX.XXX-XX"
@@ -46,36 +40,3 @@ TIPO_SIM_NAO = (
     (False, "Não"),
     (True, "Sim")
 )
-
-TIPO_PROPRIETARIO = (
-    ("TAC_AGREGADO", "TAC – Agregado"),
-    ("TAC_INDEPENDENTE", "TAC – Independente"),
-    ("OUTROS", "Outros")
-)
-
-
-class PessoaModel(models.Model):
-    # definição para cliente
-    clienteId = models.IntegerField(verbose_name='Código')
-    situacaoCliente = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
-    emailFiscal = models.EmailField(max_length=254, verbose_name='E-mail Fiscal')
-    retencaoIss = models.BooleanField(verbose_name='Retenção ISS', choices=TIPO_SIM_NAO, default=False)
-    limiteCredito = models.FloatField(verbose_name='Limite de Crédito', default=0)
-    limitePrazo = models.FloatField(verbose_name='Limite de Prazo', default=0)
-    # definição para Fornecedor
-    fornecedorId = models.IntegerField(verbose_name='Código')
-    situacaoFornecedor = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
-    # definição para Transportador
-    transportadorId = models.IntegerField(verbose_name='Código')
-    situacaoTransportador = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
-    codigoRNTRC = models.CharField(max_length=20, verbose_name='RNTRC')
-    tipoProprietario = models.CharField(max_length=20, choices=TIPO_PROPRIETARIO, default='OUTROS', verbose_name='Tipo')
-    # DEFINIÇÃO PARA VENDEDOR
-    vendedorId = models.IntegerField(verbose_name='Código')
-    situacaoVendedor = models.BooleanField(verbose_name='Situação', choices=TIPO_SITUACAO, default=True)
-    comissao = models.FloatField(verbose_name='Comissão %', default=0)
-
-    def define_cliente_url(self):
-        return reverse("url_define_cliente", kwargs={"pk": self.pk})
-
-
