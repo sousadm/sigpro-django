@@ -193,8 +193,8 @@ class TransportadorForm(forms.Form):
     nome = forms.CharField(max_length=100, label='Nome', disabled=True)
     transportadorId = forms.IntegerField(label='Código', required=False, disabled=True)
     situacaoTransportador = forms.ChoiceField(choices=TIPO_SITUACAO, initial=True)
-    codigoRNTRC = forms.CharField(max_length=20, label='RNTRC') 
-    tipoProprietario = forms.ChoiceField(choices=TIPO_PROPRIETARIO, initial="OUTROS")
+    codigoRNTRC = forms.CharField(max_length=20, label='RNTRC', required=False) 
+    tipoProprietario = forms.ChoiceField(choices=TIPO_PROPRIETARIO, initial="OUTROS", label="Tipo de Proprietário")
     created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
 
     def existe(self):

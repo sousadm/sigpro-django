@@ -4,68 +4,66 @@
 {% block title %} Cliente {% endblock %}
 
 {% block content %}
-<div class="container">
-    <form method="post">
+<form method="post">
 
-        {% csrf_token %}
+    {% csrf_token %}
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Precificação de Produto</h3>
+    <div class="card">
+        <div class="card-header">
+            <h3>Precificação de Produto</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <label class="control-label">Código</label>
+                    <input type="number" disabled="disabled" class="form-control" value={{form.id.value}}>
+                </div>
+                <div class="col-12 col-md-10">
+                    {{ form.descricao|bootstrap }}
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 col-md-2">
-                        <label class="control-label">Código</label>
-                        <input type="number" disabled="disabled" class="form-control" value={{form.id.value}}>
-                    </div>
-                    <div class="col-12 col-md-10">
-                        {{ form.descricao|bootstrap }}
-                    </div>
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    {{ form.frete|bootstrap }}
                 </div>
-                <div class="row">
-                    <div class="col-12 col-md-3">
-                        {{ form.frete|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.imposto|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.agregado|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.credito|bootstrap }}
-                    </div>
+                <div class="col-12 col-md-3">
+                    {{ form.imposto|bootstrap }}
                 </div>
-                <div class="row">
-                    <div class="col-12 col-md-3">
-                        {{ form.despesaFixa|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.despesaVariavel|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.margemLucro|bootstrap }}
-                    </div>
-                    <div class="col-12 col-md-3">
-                        {{ form.markup|bootstrap }}
-                    </div>
+                <div class="col-12 col-md-3">
+                    {{ form.agregado|bootstrap }}
+                </div>
+                <div class="col-12 col-md-3">
+                    {{ form.credito|bootstrap }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    {{ form.despesaFixa|bootstrap }}
+                </div>
+                <div class="col-12 col-md-3">
+                    {{ form.despesaVariavel|bootstrap }}
+                </div>
+                <div class="col-12 col-md-3">
+                    {{ form.margemLucro|bootstrap }}
+                </div>
+                <div class="col-12 col-md-3">
+                    {{ form.markup|bootstrap }}
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="footer bg-red">
-            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
-                <i class="fas fa-save"></i> Salvar
-            </button>
-            <a href="{% url 'url_precificacao_add' %}">
-                <button type="button" class="btn"> <i class="fas fa-plus"></i> Novo </button>
-            </a>
-            <a href="{% url 'url_precificacao_list' %}">
-                <button type="button" class="btn"> <i class="fas fa-list"></i> Lista </button>
-            </a>
-        </div>
+    <div class="footer">
+        <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+            <i class="fas fa-save"></i> Salvar
+        </button>
+        <a href="{% url 'url_precificacao_add' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i> Novo </button>
+        </a>
+        <a href="{% url 'url_precificacao_list' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i> Lista </button>
+        </a>
+    </div>
 
-    </form>
-</div>
+</form>
 {% endblock %}
