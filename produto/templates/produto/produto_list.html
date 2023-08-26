@@ -40,6 +40,7 @@
                         <th>Unidade</th>
                         <th>NCM</th>
                         <th>Preço</th>
+                        <th>Estoque</th>
                         <th width="90"></th>
                     </tr>
                     </thead>
@@ -51,6 +52,7 @@
                         <td>{{ item.unidade|lower }}</td>
                         <td>{{ item.ncm }}</td>
                         <td>{{ item.precoVenda|floatformat:2 }}</td>
+                        <td>{{ item.estoque|floatformat:2 }}</td>
                         <td>
                             <a href="{% url 'url_produto_edit' uuid=item.id %}">
                                 <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>

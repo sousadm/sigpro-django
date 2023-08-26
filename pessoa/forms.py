@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django import forms
 
-from core.controle import session_get_headers, tratar_error
+from core.controle import format_cnpj, format_cpf, session_get_headers, tratar_error
 from core.settings import URL_API
 from core.tipos import TIPO_PROPRIETARIO
 from pessoa.models import TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TIPO_SIM_NAO, REGIME_TRIBUTARIO_CHOICES, \
@@ -65,10 +65,33 @@ class PessoaForm(forms.Form):
     referencia = forms.CharField(max_length=100, label='Referência', required=False)
     complemento = forms.CharField(max_length=60, label='Complemento', required=False)
     numero = forms.IntegerField(label='Número', initial=100, required=False)
+    clienteId = forms.IntegerField(label='Cliente', required=False)
+    vendedorId = forms.IntegerField(label='Vendedor', required=False)
+    transportadorId = forms.IntegerField(label='Transportador', required=False)
+    fornecedorId = forms.IntegerField(label='Fornecedor', required=False)
 
-    def __init__(self, *args, request=None, **kwargs):
+    def __init__(self, *args, request, uuid=None, **kwargs):
         super(PessoaForm, self).__init__(*args, **kwargs)
-        #POSSIBILIDADES
+        if uuid:
+            response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
+            if response.status_code == 200:
+                self.initial = response.json()
+                if self.data.get('cpf'):
+                    self.data['cpf'] = format_cpf(self.data.get('cpf'))
+                if self.data.get('cnpj'):
+                    self.data['cnpj'] = format_cnpj(self.data.get('cnpj'))
+                # self.dat
+                # return self, self.municipios(request, 'PI')
+            else:
+                raise Exception(tratar_error(response))
+
+    def municipios(self, request, uf):
+        municipios = []
+        response = requests.get(URL_API + 'municipio/estado/' + str(uf), headers=session_get_headers(request))
+        if response.status_code == 200:
+            for n in response.json():
+                municipios.append((n['id'], n['descricao']))
+        return municipios    
 
     def existe(self):
         return existe_registro(self, self.data, 'pessoaId')
@@ -78,7 +101,6 @@ class PessoaForm(forms.Form):
 
     def salvar(self, request, uuid=None):
         data = self.json()
-        #if self.is_valid():
         headers = session_get_headers(request)
         if uuid:
             response = requests.patch(URL_API + 'pessoa/' + str(uuid), json=data, headers=headers)
@@ -121,8 +143,11 @@ class PessoaForm(forms.Form):
         json_data = json.dumps(post_data).replace("[", "").replace("]", "")
         data = json.loads(json_data)
         if data['enderecoId'] == 'None': data['enderecoId'] = None
+        if data['clienteId'] == 'None': data['clienteId'] = None
+        if data['vendedorId'] == 'None': data['vendedorId'] = None
+        if data['transportadorId'] == 'None': data['transportadorId'] = None
+        if data['fornecedorId'] == 'None': data['fornecedorId'] = None
         return data
-
 
 class ClienteForm(forms.Form):
     pessoaId = forms.IntegerField()
@@ -258,14 +283,13 @@ def existe_registro(self, dados, campo):
 
 
 def pesquisa_pessoa(self, request, uuid, tipo):
-    url = URL_API + 'pessoa/' + str(uuid) + "/" + tipo
-    response = requests.get(url, headers=session_get_headers(request))
-    if response.status_code == 200:
+    url = URL_API + 'pessoa/' + str(uuid)
+    if tipo:
+        response = requests.get(url +"/" +tipo, headers=session_get_headers(request))
         return response.json()
     else:
-        response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
-        if response.status_code == 200:
-            return response.json()
+        response = requests.get(url, headers=session_get_headers(request))
+        return response.json()
 
 
 def ativar_pessoa_tipo(self, request, tipo, uuid):
@@ -291,8 +315,8 @@ def salvar_pessoa_tipo(self, request, data, tipo):
 class PessoaListForm(forms.Form):
     nome = forms.CharField(label='Pesquisa', required=False,
                            widget=forms.TextInput(attrs={'autofocus': 'autofocus'}))
-    def pesquisar(self, request, data):
+    def pesquisar(self, request, params):
         headers = session_get_headers(request)
-        response = requests.get(URL_API + 'pessoa?' + urlencode(data), headers=headers, data=data)
+        response = requests.get(URL_API + 'pessoa', headers=headers, params=params)
         data = response.json()
         return data['content'] if 'content' in data else []

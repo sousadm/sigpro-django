@@ -22,7 +22,7 @@ def login(request):
                     session_add_token(request, response.json())
                     # return HttpResponseRedirect(reverse('url_pessoa_add'))
                     #return HttpResponseRedirect(reverse('url_produto_estoque', kwargs={'uuid': 3}))
-                    return HttpResponseRedirect(reverse('url_pessoa_vendedor', kwargs={'uuid': 7}))
+                    return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': 7}))
                 else:
                     messages.error(request, 'erro ao acessar o sistema')
         else:

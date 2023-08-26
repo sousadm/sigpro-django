@@ -36,8 +36,10 @@
                     <tr>
                         <th class="d-none d-sm-table-cell">ID</th>
                         <th>Nome</th>
+                        <th>CPF/CNPJ</th>
                         <th class="d-none d-sm-table-cell">E-mail</th>
                         <th>Celular</th>
+                        <th class="d-none d-sm-table-cell">Município</th>
                         <th class="d-none d-sm-table-cell">UF</th>
                         <th width="90"></th>
                     </tr>
@@ -47,8 +49,10 @@
                     <tr {% if not item.situacaoPessoa %} class="text-danger" {%endif%}>
                         <td class="d-none d-sm-table-cell">{{ item.pessoaId }}</td>
                         <td>{{ item.nome|default_if_none:"" }}</td>
+                        <td>{% if item.cnpj %}{{ item.cnpj|default_if_none:"" }}{% else %}{{ item.cpf|default_if_none:"" }}{% endif %}</td>
                         <td class="d-none d-sm-table-cell">{{ item.email|default_if_none:"" }}</td>
                         <td>{{ item.fone|default_if_none:"" }}</td>
+                        <td class="d-none d-sm-table-cell">{{ item.municipio }}</td>                        
                         <td class="d-none d-sm-table-cell">{{ item.uf }}</td>
                         <td>
                             <a href="{% url 'url_pessoa_edit' uuid=item.pessoaId %}">

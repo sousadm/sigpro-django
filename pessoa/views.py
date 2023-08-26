@@ -24,31 +24,11 @@ def pessoaEdit(request, uuid):
 
 @require_token
 def pessoa_render(request, uuid=None):
+    form = PessoaForm(request=request)
     template_name = 'pessoa/pessoa_edit.html'
     tipo_selected = TIPO_CHOICES[0][0]
     municipios = []
     try:
-
-        if uuid:
-            response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
-            if response.status_code == 200:
-                form = PessoaForm(data=response.json(), request=request)
-                if form.data.get('cpf'):
-                    form.data['cpf'] = format_cpf(form.data.get('cpf'))
-                if form.data.get('cnpj'):
-                    form.data['cnpj'] = format_cnpj(form.data.get('cnpj'))
-                tipo_selected = form.data.get('tipoPessoa')
-
-                municipios = []
-                response = requests.get(URL_API + 'municipio/estado/' + str(form.data.get('uf')), headers=session_get_headers(request))
-                if response.status_code == 200:
-                    for n in response.json():
-                        municipios.append((n['id'], n['descricao']))
-
-            else:
-                messages.error(request, 'registro não localizado')
-        else:
-            form = PessoaForm(request=request)
 
         if request.POST.get('btn_salvar'):
             form = PessoaForm(request.POST, request=request)
@@ -61,10 +41,14 @@ def pessoa_render(request, uuid=None):
             form.ativar(request, uuid)
             return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
 
+        form = PessoaForm(request=request, uuid=uuid)        
+        municipios = form.municipios(request, form.initial.get('uf'))
+        
     except Exception as e:
         messages.error(request, e)
 
     ufs = get_lista_unidade_federacao(request)
+    tipo_selected = form.initial.get('tipoPessoa')
     context = {
         "form": form,
         "tipo_selected": tipo_selected,
@@ -179,8 +163,8 @@ def pessoaVendedorEdit(request, uuid):
 
 @require_token
 def pessoaList(request):
-    data = {}
     lista = []
+    params = {'sort':'nome,asc'}
     template_name = 'pessoa/pessoa_list.html'
     form = PessoaListForm()
     try:
@@ -190,9 +174,9 @@ def pessoaList(request):
 
         if request.POST.get('btn_listar'):
             form = PessoaListForm(request.POST)
-            data['nome'] = request.POST['nome']
+            params['nome'] = request.POST['nome']
 
-        lista = form.pesquisar(request, data)
+        lista = form.pesquisar(request, params)
     except Exception as e:
         messages.error(request, e)
 

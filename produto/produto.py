@@ -28,6 +28,7 @@ class ProdutoForm(forms.Form):
     precificacaoId = forms.ChoiceField(label='Precificação', initial=None)
     ncm = forms.CharField(max_length=10, label='NCM', initial=None)
     cest = forms.CharField(max_length=10, label='CEST', initial=None)
+    
     def __init__(self, *args, request, uuid=None, **kwargs):
         super(ProdutoForm, self).__init__(*args, **kwargs)
         self.fields['categoriaId'].choices = categoriaChoices(request)
@@ -95,11 +96,13 @@ def produto_render(request, uuid=None):
             form = ProdutoForm(request.POST, request=request)
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar o registro')
+
         form = ProdutoForm(request=request, uuid=uuid)
 
     except Exception as e:
         messages.error(request, e)
     return render(request, template_name, {'form': form})
+
 
 @require_token
 def produtoList(request):
