@@ -126,63 +126,53 @@
     <br />
 
     <div class="footer">
-
-        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-            <button type="button" class="btn btn-secondary">1</button>
-            <button type="button" class="btn btn-secondary">2</button>
-          
-            <div class="btn-group" role="group">
-              <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown
-              </button>
-              <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <a class="dropdown-item" href="#">Dropdown link</a>
-                <a class="dropdown-item" href="#">Dropdown link</a>
-              </div>
-            </div>
-          </div>        
-
         {% if form.situacaoPessoa.value %}
         <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
-            <i class="fas fa-save"></i> Salvar
+            <i class="fas fa-save"></i> <span class="d-none d-md-inline">Salvar</span>
         </button>
         {% endif %}
 
         <a href="{% url 'url_pessoa_add' %}">
-            <button type="button" class="btn"> <i class="fa fa-plus"></i> Novo </button>
+            <button type="button" class="btn btn-secondary"> <i class="fa fa-plus"></i>  
+                <span class="d-none d-md-inline">Novo</span>
+            </button>
         </a>
-
         <a href="{% url 'url_pessoa_list' %}">
-            <button type="button" class="btn"> <i class="fas fa-list"></i> Lista </button>
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i>  
+                <span class="d-none d-md-inline">Lista</span>
+            </button>
         </a>
 
         {% if form.existe %}
-        <button type="submit" value="btn_cliente" name="btn_cliente" title="{{form.clienteId.value}}"
-            class="btn btn-secondary">
-            <i class="fas fa-user"></i> Cliente
-        </button>
-        <button type="submit" value="btn_cliente" name="btn_fornecedor" title="{{form.fornecedorId.value}}"
-            class="btn btn-secondary">
-            <i class="fas fa-building"></i> Fornecedor
-        </button>
-        <button type="submit" value="btn_transportador" name="btn_transportador" title="{{form.transportadorId.value}}"
-            class="btn btn-secondary">
-            <i class="fas fa-car"></i> Transportador
-        </button>
-        <button type="submit" value="btn_vendedor" name="btn_vendedor" title="{{form.vendedorId.value}}"
-            class="btn btn-secondary">
-            <i class="fas fa-vcard"></i> Vendedor
-        </button>
         {% endif %}
-
+        
         {% if form.existe %}
-        <button type="submit" value="btn_ativar" name="btn_ativar" class="btn btn-danger"
-            onClick='return confirma("Confirma {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")'>
-            <i class="fas fa-check"></i> {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%}
-        </button>
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-cog"></i> <span class="d-none d-md-inline">Opções</span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" href="#" onClick='return confirma("Confirma {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%} o registro atual?")'>
+                        <i class="fas fa-check"></i> {%if form.situacaoPessoa.value%} Inativar {%else%} Ativar {%endif%}
+                    </a>            
+                    <a class="dropdown-item" href="{% url 'url_pessoa_cliente' form.pessoaId.value %}">
+                        <i class="fas fa-user"></i> Cliente
+                    </a>
+                    <a class="dropdown-item" href="{% url 'url_pessoa_fornecedor' form.pessoaId.value %}">
+                        <i class="fas fa-building"></i> Fornecedor
+                    </a>
+                    <a class="dropdown-item" href="{% url 'url_pessoa_transportador' form.pessoaId.value %}">
+                        <i class="fas fa-car"></i> Transportador
+                    </a>
+                    <a class="dropdown-item" href="{% url 'url_pessoa_vendedor' form.pessoaId.value %}">
+                        <i class="fa fa-id-card"></i> Vendedor
+                    </a>
+                </div>
+            </div>
+        </div>
         {% endif %}
-
-
 
     </div>
 

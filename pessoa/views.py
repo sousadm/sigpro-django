@@ -30,19 +30,6 @@ def pessoa_render(request, uuid=None):
     try:
 
         if uuid:
-
-            if request.POST.get('btn_cliente'):
-                return HttpResponseRedirect(reverse('url_pessoa_cliente', kwargs={'uuid': uuid}))
-
-            if request.POST.get('btn_fornecedor'):
-                return HttpResponseRedirect(reverse('url_pessoa_fornecedor', kwargs={'uuid': uuid}))
-
-            if request.POST.get('btn_transportador'):
-                return HttpResponseRedirect(reverse('url_pessoa_transportador', kwargs={'uuid': uuid}))
-
-            if request.POST.get('btn_vendedor'):
-                return HttpResponseRedirect(reverse('url_pessoa_vendedor', kwargs={'uuid': uuid}))
-
             response = requests.get(URL_API + 'pessoa/' + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
                 form = PessoaForm(data=response.json(), request=request)
