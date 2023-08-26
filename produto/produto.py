@@ -11,7 +11,6 @@ from core.controle import session_get_headers, tratar_error, dados_para_json, re
 from core.paginacao import get_param, get_page
 from core.settings import URL_API
 from produto.categoria import categoriaChoices
-from produto.estoque import EstoqueForm
 from produto.models import TIPO_UNIDADE_MEDIDA
 from produto.precificacao import precificacaoChoices
 
@@ -51,6 +50,12 @@ class ProdutoForm(forms.Form):
             return response.json()['id']
         else:
             raise Exception(tratar_error(response))
+        
+    def atualizarEstoqueProduto(self, request, uuid):
+        response = requests.post(URL_API + 'produto/' + str(uuid) + '/atualizar-estoque', headers=session_get_headers(request))
+        if not response.status_code in [200, 201]:
+            raise Exception(tratar_error(response))            
+
 
 class ProdutoListForm(forms.Form):
     descricao = forms.CharField(label='Pesquisa', required=False,
@@ -81,6 +86,11 @@ def produto_render(request, uuid=None):
     form = ProdutoForm(request=request)
     template_name = 'produto/produto_edit.html'
     try:
+
+        if request.POST.get('btn_atualizar'):
+            form.atualizarEstoqueProduto(request, uuid)
+            messages.success(request, 'sucesso ao atualizar o estoque')
+
         if request.POST.get('btn_salvar'):
             form = ProdutoForm(request.POST, request=request)
             uuid = form.salvar(request, uuid)

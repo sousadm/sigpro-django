@@ -72,20 +72,25 @@
         </div>
     </div>
 
+    </br>
+
     <div class="footer bg-red">
         <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary" title="salvar movimentação">
-            <i class="fas fa-save"></i> Salvar
+            <i class="fas fa-save"></i> <span class="d-none d-md-inline">Salvar</span>
         </button>
         <a href="{% url 'url_produto_estoque' form.produtoId.value %}" title="nova movimentaçaõ do estoque">
-            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i> Novo </button>
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i> 
+                <span class="d-none d-md-inline">Novo</span>
+            </button>
         </a>
         <a href="{% url 'url_produto_edit' form.produtoId.value %}" title="retorna para o cadastro do produto">
-            <button type="button" class="btn btn-secondary"> <i class="fas fa-reply"></i> Produto </button>
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-reply"></i> 
+                <span class="d-none d-md-inline">Produto</span>
+            </button>
         </a>
         <button type="button" id="openModalButton" class="btn btn-secondary" title="mostra a distribuição do estoque">
-            <i class="fas fa-cubes"></i> Detalhe
+            <i class="fas fa-cubes"></i> <span class="d-none d-md-inline">Detalhe</span>
         </button>
-
     </div>
 
 </form>

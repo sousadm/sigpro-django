@@ -2,6 +2,8 @@ import requests
 from django import forms
 from django.contrib import messages
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error, dados_para_json, require_token
 from core.settings import URL_API
@@ -52,12 +54,12 @@ class EstoqueForm(forms.Form):
                 return response.json()['produtoId']
             else:
                 raise Exception(tratar_error(response))
+            
 
 @require_token
 def produtoEstoque(request, uuid):
     template_name = 'produto/produto_estoque.html'
     try:
-
         if request.POST.get('btn_salvar'):
             form = EstoqueForm(request.POST, request=request)
             form.salvar(request, uuid)

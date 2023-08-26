@@ -86,20 +86,31 @@
         </div>
     </div>
 
+    <br />
+    
     <div class="footer">
         <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
-            <i class="fas fa-save"></i> Salvar
+            <i class="fas fa-save"></i> <span class="d-none d-md-inline">Salvar</span>
         </button>
         <a href="{% url 'url_produto_add' %}">
-            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i> Novo </button>
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i>  
+                <span class="d-none d-md-inline">Novo</span>
+            </button>
         </a>
         <a href="{% url 'url_produto_list' %}">
-            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i> Lista </button>
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i>  
+                <span class="d-none d-md-inline">Lista</span>
+            </button>
         </a>
         {% if form.id.value %}
         <a href="{% url 'url_produto_estoque' form.id.value %}">
-            <button type="button" class="btn btn-secondary"> <i class="fas fa-building"></i> Estoque </button>
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-building"></i>
+                 <span class="d-none d-md-inline">Estoque</span>
+            </button>
         </a>
+        <button type="submit" value="btn_atualizar" name="btn_atualizar" class="btn btn-secondary" title="atualizar o estoque">
+            <i class="fa fa-cogs"></i> <span class="d-none d-md-inline">Atualizar</span>
+        </button>        
         {% endif %}
     </div>
 
