@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from acesso.views import login, home, logout
+from compra.cotacao import cotacaoEdit, cotacaoNew
 from pessoa.Endereco import get_municipios
 from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
     pessoaVendedorEdit, pessoaList
@@ -60,5 +61,8 @@ urlpatterns = [
     path('distribuicao/<int:uuid>', centroDistribuicaoEdit, name='url_distribuicao_edit'),
     path('distribuicao/add', centroDistribuicaoNew, name='url_distribuicao_add'),
     path('get_distribuicoes/', centroDistribuicaoChoices, name='get_distribuicoes'),
+
+    path('cotacao/add', cotacaoNew, name='url_cotacao_add'),
+    path('cotacao/<int:uuid>', cotacaoEdit, name='url_cotacao_edit'),
 
 ]
