@@ -66,10 +66,11 @@ def tratar_error(response):
         return response.json()
 
 
-def dados_para_json(self_dados):
+def dados_para_json(self_dados, nones=[]):
     post_data = dict(self_dados)
     post_data.pop('csrfmiddlewaretoken', None)
     post_data.pop('btn_salvar', None)
+    for item in nones: post_data.pop(item, None)
     json_data = json.dumps(post_data).replace("[", "").replace("]", "")
     data = json.loads(json_data)
     return data

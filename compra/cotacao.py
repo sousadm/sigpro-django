@@ -7,16 +7,25 @@ from django.shortcuts import render
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 
 from core.settings import URL_API
+from produto.models import TIPO_UNIDADE_MEDIDA
 
 # Create your views here.
 
 URL_RECURSO = URL_API + 'cotacao/'
 
+class CotacaoItemForm(forms.Form):
+    id = forms.IntegerField(label='ID', required=False)
+    produtoId = forms.IntegerField(label='Produto', required=False)
+    descricao = forms.CharField(max_length=100, label='Descrição do produto', initial='')
+    unidade = forms.ChoiceField(choices=TIPO_UNIDADE_MEDIDA, label='Unidade', initial='UNID')
+    quantidade = forms.IntegerField(label='Quantidade', initial=1)
+
 class CotacaoForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
     usuarioId = forms.IntegerField(label='Usuário', required=False)
-    usuario = forms.CharField(label='Usuário')
-    observacao = forms.CharField(max_length=100, label='Observação', widget=forms.DateInput(attrs={'autofocus': 'true', }), initial='')
+    usuario = forms.CharField(label='Cotista', disabled=True, required=False)
+    descricao = forms.CharField(max_length=100, label='Descrição da Cotação', widget=forms.DateInput(attrs={'autofocus': 'true', }), initial='TESTE INICIAL')
+    created_dt = forms.DateTimeField(label='Data do cadastro', required=False, disabled=True)
         
     def __init__(self, *args, request, uuid=None, **kwargs):
         super(CotacaoForm, self).__init__(*args, **kwargs)
@@ -28,7 +37,8 @@ class CotacaoForm(forms.Form):
                 raise Exception(tratar_error(response))
 
     def salvar(self, request, uuid=None):
-        data = dados_para_json(self.data)
+        data = dados_para_json(self.data, ['usuarioId'])
+        print(data)
         headers = session_get_headers(request)
         if uuid:
             response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
@@ -50,14 +60,24 @@ def cotacaoEdit(request, uuid):
 
 @require_token
 def cotacao_render(request, uuid=None):
+    items = []
     form = CotacaoForm(request=request)
     template_name = 'compra/cotacao_edit.html'
     try:
+        if request.POST.get('btn_salvar'):
+            form = CotacaoForm(request.POST, request=request)
+            uuid = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados')
 
         form = CotacaoForm(request=request, uuid=uuid)
-
     except Exception as e:
         messages.error(request, e)
-    return render(request, template_name, {'form': form})
+
+    context = {
+        'form': form,
+        'formItem': CotacaoItemForm(),
+        'items': items
+    }
+    return render(request, template_name, context)
 
 
