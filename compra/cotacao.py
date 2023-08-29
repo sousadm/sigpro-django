@@ -13,13 +13,6 @@ from produto.models import TIPO_UNIDADE_MEDIDA
 
 URL_RECURSO = URL_API + 'cotacao/'
 
-class CotacaoItemForm(forms.Form):
-    id = forms.IntegerField(label='ID', required=False)
-    produtoId = forms.IntegerField(label='Produto', required=False)
-    descricao = forms.CharField(max_length=100, label='Descrição do produto', initial='')
-    unidade = forms.ChoiceField(choices=TIPO_UNIDADE_MEDIDA, label='Unidade', initial='UNID')
-    quantidade = forms.IntegerField(label='Quantidade', initial=1)
-
 class CotacaoForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
     usuarioId = forms.IntegerField(label='Usuário', required=False)
@@ -69,13 +62,15 @@ def cotacao_render(request, uuid=None):
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
 
+        if request.POST.get('btn_add_item'):
+            messages.success(request, 'item adicionado com sucesso')            
+
         form = CotacaoForm(request=request, uuid=uuid)
     except Exception as e:
         messages.error(request, e)
 
     context = {
         'form': form,
-        'formItem': CotacaoItemForm(),
         'items': items
     }
     return render(request, template_name, context)

@@ -19,6 +19,7 @@ from django.urls import path
 
 from acesso.views import login, home, logout
 from compra.cotacao import cotacaoEdit, cotacaoNew
+from compra.cotacao_item import cotacaoItemNew
 from pessoa.Endereco import get_municipios
 from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
     pessoaVendedorEdit, pessoaList
@@ -64,5 +65,7 @@ urlpatterns = [
 
     path('cotacao/add', cotacaoNew, name='url_cotacao_add'),
     path('cotacao/<int:uuid>', cotacaoEdit, name='url_cotacao_edit'),
+
+    path('cotacao/<int:uuid>/add-item', cotacaoItemNew, name='url_cotacaoitem_add'),
 
 ]

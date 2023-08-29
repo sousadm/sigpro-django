@@ -8,7 +8,8 @@
 
     {% csrf_token %}
 
-    <input type="hidden" name="usuarioId" value={{ form.usuarioId.value }}>
+    <input type="hidden" name="usuarioId" value={{form.usuarioId.value}}>
+    <input type="hidden" id="cotacaoId" name="cotacaoId" value={{form.id.value}}>
 
     <fieldset>
 
@@ -21,7 +22,7 @@
                 <div class="row">
                     <div class="col-12 col-md-2">
                         <label class="control-label">Código</label>
-                        <input type="number" disabled="disabled" class="form-control" value={{ form.id.value }}>
+                        <input name="id" type="number" disabled="disabled" class="form-control" value={{form.id.value}}>
                     </div>
                     <div class="col-12 col-md-2">
                         {{ form.created_dt|bootstrap }}
@@ -82,14 +83,56 @@
             <i class="fas fa-save"></i> Salvar
         </button>
         {% if form.id.value %}
-        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalFormItem">Adicionar Item</button>
+
+        <button type="button" id="openModalButton" class="btn btn-secondary">
+            <i class="fas fa-cubes"></i> <span class="d-none d-md-inline">Adicionar Item</span>
+        </button>
+
         <button type="button" class="btn btn-secondary" disabled>Importar Produto</button>
         {% endif %}
     </div>
 
 </form>
 
-{% include 'compra/cotacao_item.html' %}
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Item de Cotação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalContent"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Inclua aqui seus scripts JavaScript -->
+<script>
+
+    $(document).ready(function () {
+        $('#openModalButton').on('click', function () {
+            $('#myModal').modal('show');
+            var cotacaoId = document.getElementById('cotacaoId').value;
+            var url = '{% url "url_cotacaoitem_add" 0 %}'.replace('0', cotacaoId);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+
+</script>
 
 {% endblock %}
-

@@ -8,7 +8,7 @@
 
     {% csrf_token %}
 
-    <input type="hidden" id="produtoId" name="produtoId" value={{ form.produtoId.value }}>
+    <input type="hidden" id="produtoId" name="produtoId" value={{form.produtoId.value}}>
 
     <div class="card">
         <div class="card-header">
@@ -95,15 +95,20 @@
 
 </form>
 
-<div class="modal fade" id="myModal">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-        <h4 class="modal-title">Detalhe do Estoque</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Detalhe do Estoque</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalContent"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
         </div>
-        <div class="modal-body" id="modalContent"></div>
-    </div>
     </div>
 </div>
 
