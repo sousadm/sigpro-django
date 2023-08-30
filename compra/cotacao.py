@@ -4,6 +4,7 @@ import requests
 from django.contrib import messages
 from django import forms
 from django.shortcuts import render
+from compra.cotacao_item import CotacaoItemForm
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 
 from core.settings import URL_API
@@ -31,7 +32,6 @@ class CotacaoForm(forms.Form):
 
     def salvar(self, request, uuid=None):
         data = dados_para_json(self.data, ['usuarioId'])
-        print(data)
         headers = session_get_headers(request)
         if uuid:
             response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
@@ -57,13 +57,15 @@ def cotacao_render(request, uuid=None):
     form = CotacaoForm(request=request)
     template_name = 'compra/cotacao_edit.html'
     try:
+        if request.POST.get('btn_item_salvar'):
+            formItem = CotacaoItemForm(request.POST, request=request)
+            formItem.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar item')
+
         if request.POST.get('btn_salvar'):
             form = CotacaoForm(request.POST, request=request)
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
-
-        if request.POST.get('btn_add_item'):
-            messages.success(request, 'item adicionado com sucesso')            
 
         form = CotacaoForm(request=request, uuid=uuid)
     except Exception as e:

@@ -1,15 +1,21 @@
 {% load bootstrap %}
 <div class="container">
     <div class="row">
-        <div class="col">
-            {{ form.descricao|bootstrap }}
+        <div class="col-12 col-md-2">
+            {{ form.cotacaoId|bootstrap }}
+        </div>
+        <div class="col-12 col-md-10">
+            {{ form.descricaoItem|bootstrap }}
         </div>
     </div>
     <div class="row">
-        <div class="col-12 col-md-6">
-            {{ form.unidade|bootstrap }}
+        <div class="col-12 col-md-4">
+            {{ form.ncm|bootstrap }}
         </div>
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-4">
+            {{ form.unidade|bootstrap }}
+        </div>        
+        <div class="col-12 col-md-4">
             {{ form.quantidade|bootstrap }}
         </div>
     </div>
