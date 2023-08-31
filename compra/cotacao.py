@@ -20,6 +20,7 @@ class CotacaoForm(forms.Form):
     usuario = forms.CharField(label='Cotista', disabled=True, required=False)
     descricao = forms.CharField(max_length=100, label='Descrição da Cotação', widget=forms.DateInput(attrs={'autofocus': 'true', }), initial='TESTE INICIAL')
     created_dt = forms.DateTimeField(label='Data do cadastro', required=False, disabled=True)
+    items = []
         
     def __init__(self, *args, request, uuid=None, **kwargs):
         super(CotacaoForm, self).__init__(*args, **kwargs)
@@ -27,6 +28,7 @@ class CotacaoForm(forms.Form):
             response = requests.get(URL_RECURSO + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
                 self.initial = response.json()
+                self.items = response.json()['items']
             else:
                 raise Exception(tratar_error(response))
 
@@ -68,13 +70,14 @@ def cotacao_render(request, uuid=None):
             messages.success(request, 'sucesso ao gravar dados')
 
         form = CotacaoForm(request=request, uuid=uuid)
+
     except Exception as e:
         messages.error(request, e)
 
     context = {
-        'form': form,
-        'items': items
+        'form': form
     }
+    print(form.initial)
     return render(request, template_name, context)
 
 

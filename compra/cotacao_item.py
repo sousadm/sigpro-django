@@ -19,7 +19,7 @@ class CotacaoItemForm(forms.Form):
                                     initial='PRODUTO TESTE', widget=forms.DateInput(attrs={'autofocus': 'true', }))
     unidade = forms.ChoiceField(
         choices=TIPO_UNIDADE_MEDIDA, label='Unidade', initial='UNID')
-    ncm = forms.CharField(label='NCM', initial='000000')
+    ncm = forms.CharField(label='NCM', initial='000000', max_length=10)
     quantidade = forms.IntegerField(label='Quantidade', initial=1)
 
     def __init__(self, *args, request, uuid=None, cotacao=None, **kwargs):
