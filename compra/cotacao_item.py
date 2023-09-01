@@ -9,7 +9,6 @@ from produto.models import TIPO_UNIDADE_MEDIDA
 
 URL_RECURSO = URL_API + 'cotacao/'
 
-
 class CotacaoItemForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
     cotacaoId = forms.IntegerField(
@@ -26,22 +25,12 @@ class CotacaoItemForm(forms.Form):
         super(CotacaoItemForm, self).__init__(*args, **kwargs)
         if cotacao:
             self.fields['cotacaoId'].initial = cotacao
-        # if uuid:
-        #     response = requests.get(URL_RECURSO + str(uuid), headers=session_get_headers(request))
-        #     if response.status_code == 200:
-        #         self.initial = response.json()
-        #     else:
-        #         raise Exception(tratar_error(response))
 
     def salvar(self, request, uuid=None):
         data = dados_para_json(
-            self.data, ['descricaoItem', 'usuarioId', 'btn_item_salvar'])
+            self.data, nones=['descricaoItem', 'usuarioId', 'btn_item_salvar'])
         data['descricao'] = self.data.get('descricaoItem')
-        # print('data', data)
         headers = session_get_headers(request)
-        # if uuid:
-        #     response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
-        # else:
         response = requests.post(
             URL_RECURSO + str(uuid) + "/additem", json=data, headers=headers)
         if not response.status_code in [200, 201]:
@@ -60,7 +49,6 @@ def cotacaoItemEdit(request, uuid):
 
 @require_token
 def cotacao_item_render(request, uuid=None, cotacao=None):
-    form = CotacaoItemForm(request=request)
     template_name = 'compra/cotacao_item.html'
     form = CotacaoItemForm(request=request, uuid=uuid, cotacao=cotacao)
     return render(request, template_name, {'form': form})

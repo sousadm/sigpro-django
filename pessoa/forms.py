@@ -80,8 +80,6 @@ class PessoaForm(forms.Form):
                     self.data['cpf'] = format_cpf(self.data.get('cpf'))
                 if self.data.get('cnpj'):
                     self.data['cnpj'] = format_cnpj(self.data.get('cnpj'))
-                # self.dat
-                # return self, self.municipios(request, 'PI')
             else:
                 raise Exception(tratar_error(response))
 

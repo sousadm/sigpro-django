@@ -84,41 +84,29 @@
         </button>
         {% if form.id.value %}
 
-        <button type="button" id="openModalButton" class="btn btn-secondary">
-            <i class="fas fa-cubes"></i> <span class="d-none d-md-inline">Adicionar Item</span>
+        <button type="button" id="openModalProduto" class="btn btn-secondary">
+            <i class="fas fa-cubes"></i> <span class="d-none d-md-inline">Add Item</span>
+        </button>
+
+        <button type="button" id="openModalOrcamento" class="btn btn-secondary">
+            <i class="fa fa-university"></i> <span class="d-none d-md-inline">Add Orçamento</span>
         </button>
 
         <button type="button" class="btn btn-secondary" disabled>Importar Produto</button>
         {% endif %}
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Item de Cotação</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="modalContent"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" value="btn_item_salvar" name="btn_item_salvar" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Salvar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include "compra/cotacao_item_modal.html" %}
+
+    {% include "compra/cotacao_orcamento_modal.html" %}
 
 </form>
 
 <script>
 
     $(document).ready(function () {
-        $('#openModalButton').on('click', function () {
-            $('#myModal').modal('show');
+        $('#openModalProduto').on('click', function () {
+            $('#modalProduto').modal('show');
             var cotacaoId = document.getElementById('cotacaoId').value;
             var url = '{% url "url_cotacaoitem_add" 0 %}'.replace('0', cotacaoId);
             $.ajax({
@@ -133,6 +121,24 @@
             });
         });
     });
+
+    $(document).ready(function () {
+        $('#openModalOrcamento').on('click', function () {
+            $('#modalOrcamento').modal('show');
+            var cotacaoId = document.getElementById('cotacaoId').value;
+            var url = '{% url "url_orcamento_add" 0 %}'.replace('0', cotacaoId);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalContentOrcamento').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });    
 
 </script>
 

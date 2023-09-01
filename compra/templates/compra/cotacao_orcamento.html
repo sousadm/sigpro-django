@@ -1,0 +1,44 @@
+{% load bootstrap %}
+
+<input type="hidden" name="orcamentoId" value={{form.id.value}}>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-9">
+            {{ form.nome|bootstrap }}
+        </div>
+        <div class="col-12 col-md-3">
+            {{ form.status|bootstrap }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            {{ form.email|bootstrap }}
+        </div>
+        <div class="col-12 col-md-3">
+            {{ form.fone|bootstrap }}
+        </div>
+        <div class="col-12 col-md-3">
+            {{ form.documento|bootstrap }}
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <label class="control-label">{{form.precificacaoId.field.label}}</label>
+            <select id="precificacaoId" name="precificacaoId" class="form-control" required>
+                <option value=""></option>
+                {% for item in form.precificacaoId.field.choices %}
+                    <option value="{{ item.0 }}" {% if item.0 == form.precificacaoId.value %} selected {% endif %} >
+                        {{ item.1 }}
+                    </option>
+                {% endfor %}
+            </select>            
+        </div>
+        <div class="col-12 col-md-3">
+            {{ form.frete|bootstrap }}
+        </div>
+        <div class="col-12 col-md-3">
+            {{ form.desconto|bootstrap }}
+        </div>        
+    </div>    
+</div>

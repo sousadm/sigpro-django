@@ -5,6 +5,7 @@ from django.contrib import messages
 from django import forms
 from django.shortcuts import render
 from compra.cotacao_item import CotacaoItemForm
+from compra.cotacao_orcamento import CotacaoOrcamentoForm
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 
 from core.settings import URL_API
@@ -55,7 +56,6 @@ def cotacaoEdit(request, uuid):
 
 @require_token
 def cotacao_render(request, uuid=None):
-    items = []
     form = CotacaoForm(request=request)
     template_name = 'compra/cotacao_edit.html'
     try:
@@ -63,6 +63,12 @@ def cotacao_render(request, uuid=None):
             formItem = CotacaoItemForm(request.POST, request=request)
             formItem.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar item')
+
+        if request.POST.get('btn_orcamento_salvar'):
+            formOrcamento = CotacaoOrcamentoForm(request.POST, request=request)
+            messages.info(request, formOrcamento.data)
+            # formOrcamento.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar orçamento')            
 
         if request.POST.get('btn_salvar'):
             form = CotacaoForm(request.POST, request=request)
@@ -77,7 +83,6 @@ def cotacao_render(request, uuid=None):
     context = {
         'form': form
     }
-    print(form.initial)
     return render(request, template_name, context)
 
 
