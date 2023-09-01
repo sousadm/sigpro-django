@@ -32,7 +32,7 @@ class CotacaoItemForm(forms.Form):
         data['descricao'] = self.data.get('descricaoItem')
         headers = session_get_headers(request)
         response = requests.post(
-            URL_RECURSO + str(uuid) + "/additem", json=data, headers=headers)
+            URL_RECURSO + str(uuid) + "/item", json=data, headers=headers)
         if not response.status_code in [200, 201]:
             raise Exception(tratar_error(response))
 

@@ -21,11 +21,11 @@ class CotacaoOrcamentoForm(forms.Form):
     email = forms.EmailField(label='E-mail', initial='borracha@hot.com')
     fone = forms.CharField(label='Fone', max_length=20, initial='8599994400')
     desconto = forms.DecimalField(decimal_places=2, label='Desconto', initial=0)
-    frete = forms.DecimalField(decimal_places=2, label='Frete Valor', initial=0)
-    # valorItem = forms.DecimalField(decimal_places=2, label='Valor dos Itens', initial=0, disabled=True)
+    frete = forms.DecimalField(decimal_places=2, label='Frete Valor', initial=100)
     precificacaoId = forms.ChoiceField(label='Método de Precificação', required=True, initial=None)
-    # created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
     status = forms.ChoiceField(label='Situação', choices=TIPO_COTACAO_STATUS, initial=True)
+    # created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
+    # valorItem = forms.DecimalField(decimal_places=2, label='Valor dos Itens', initial=0, disabled=True)
 
     def __init__(self, *args, request, uuid=None, cotacao=None, **kwargs):
         super(CotacaoOrcamentoForm, self).__init__(*args, **kwargs)
@@ -35,7 +35,7 @@ class CotacaoOrcamentoForm(forms.Form):
         data = dados_para_json(self.data, nones=[])
         headers = session_get_headers(request)
         response = requests.post(
-            URL_RECURSO + str(uuid) + "/additem", json=data, headers=headers)
+            URL_RECURSO + str(uuid) + "/orcamento", json=data, headers=headers)
         if not response.status_code in [200, 201]:
             raise Exception(tratar_error(response))
 
@@ -52,7 +52,6 @@ def cotacaoOrcamentoEdit(request, uuid):
 
 @require_token
 def cotacao_orcamento_render(request, uuid=None, cotacao=None):
-    print('cotacao', cotacao)
     template_name = 'compra/cotacao_orcamento.html'
     form = CotacaoOrcamentoForm(request=request, uuid=uuid, cotacao=cotacao)
     return render(request, template_name, {'form': form})

@@ -66,8 +66,8 @@ def cotacao_render(request, uuid=None):
 
         if request.POST.get('btn_orcamento_salvar'):
             formOrcamento = CotacaoOrcamentoForm(request.POST, request=request)
-            messages.info(request, formOrcamento.data)
-            # formOrcamento.salvar(request, uuid)
+            # messages.info(request, formOrcamento.data)
+            formOrcamento.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar orçamento')            
 
         if request.POST.get('btn_salvar'):
@@ -75,14 +75,11 @@ def cotacao_render(request, uuid=None):
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
 
-        form = CotacaoForm(request=request, uuid=uuid)
-
     except Exception as e:
         messages.error(request, e)
 
-    context = {
-        'form': form
-    }
+    form = CotacaoForm(request=request, uuid=uuid)
+    context = {'form': form}
     return render(request, template_name, context)
 
 
