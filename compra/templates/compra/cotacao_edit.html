@@ -9,7 +9,6 @@
     {% csrf_token %}
 
     <input type="hidden" name="usuarioId" value={{form.usuarioId.value}}>
-    <input type="hidden" id="cotacaoId" name="cotacaoId" value={{form.id.value}}>
 
     <fieldset>
 
@@ -22,7 +21,7 @@
                 <div class="row">
                     <div class="col-12 col-md-2">
                         <label class="control-label">Código</label>
-                        <input name="id" type="number" disabled="disabled" class="form-control" value={{form.id.value}}>
+                        <input type="number" name="cotacaoId" id="cotacaoId" disabled="disabled" class="form-control" value={{ form.cotacaoId.value }}>                        
                     </div>
                     <div class="col-12 col-md-2">
                         {{ form.created_dt|bootstrap }}
@@ -42,6 +41,7 @@
                                 <th>#</th>
                                 <th>Descrição do Item</th>
                                 <th>NCM</th>
+                                <th>Unidade</th>
                                 <th>Quantidade</th>
                                 <th>Preço</th>
                                 <th width="90"></th>
@@ -50,13 +50,19 @@
                         <tbody>
                             {% for item in form.items %}
                             <tr>
-                                <td>{{ item.id }}</td>
-                                <td>{{ item.descricao|default_if_none:"" }}</td>
+                                <td>{{ item.cotacaoItemId }}</td>
+                                <td>{{ item.descricaoItem|default_if_none:"" }}</td>
                                 <td>{{ item.ncm|default_if_none:"" }}</td>
+                                <td>{{ item.unidade|default_if_none:"" }}</td>
                                 <td>{{ item.quantidade|floatformat:2 }}</td>
                                 <td>{{ item.preco|floatformat:2 }}</td>
                                 <td>
-
+                                    <a href="#" class="editar-item" data-item-id="{{ item.cotacaoItemId }}">
+                                        <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
+                                    </a>
+                                    <a href="{% url 'url_cotacao_remove_item' form.cotacaoId.value item.cotacaoItemId %}" class="excluir-item">
+                                        <button type="button" onClick='return confirma("EXCLUIR o item: {{item.descricaoItem}} ?")' class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
+                                    </a>                                                                  
                                 </td>
                             </tr>
                             {% empty %}
@@ -71,6 +77,45 @@
 
                 </div>
 
+                {% if form.orcamentos %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr colspan="6">
+                                <h4 class="bg-dark text-white">Lista de Orçamentos</h4>
+                            </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>Nome do Fornecedor</th>
+                                <th>Fone</th>
+                                <th>Frete R$</th>
+                                <th>Desconto R$</th>
+                                <th width="90"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in form.orcamentos %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.nome|default_if_none:"" }}</td>
+                                <td>{{ item.fone|default_if_none:"" }}</td>
+                                <td>{{ item.frete|floatformat:2 }}</td>
+                                <td>{{ item.desconto|floatformat:2 }}</td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6"><span>sem registros</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+    
+                </div>    
+                {% endif %} 
+
             </div>
 
         </div>
@@ -83,7 +128,7 @@
             <i class="fas fa-save"></i> Salvar
         </button>
 
-        {% if form.id.value %}
+        {% if form.cotacaoId.value %}
         <button type="button" id="openModalProduto" class="btn btn-secondary">
             <i class="fas fa-cubes"></i> <span class="d-none d-md-inline">Add Item</span>
         </button>
@@ -94,7 +139,7 @@
 
         <button type="button" class="btn btn-secondary" disabled>Importar Produto</button>
         {% endif %}
-
+        
     </div>
 
     {% include "compra/cotacao_item_modal.html" %}
@@ -106,9 +151,28 @@
 <script>
 
     $(document).ready(function () {
+        $('.editar-item').click(function (e) {
+            $('#modalProduto').modal('show');
+            e.preventDefault();
+            var item_id = $(this).data('item-id');
+            var url = '{% url "url_cotacaoitem_edit" 0 %}'.replace('0', item_id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+    });    
+
+    $(document).ready(function () {
         $('#openModalProduto').on('click', function () {
             $('#modalProduto').modal('show');
-            var cotacaoId = document.getElementById('cotacaoId').value || document.getElementById('id').value;
+            var cotacaoId = document.getElementById('cotacaoId').value;
             var url = '{% url "url_cotacaoitem_add" 0 %}'.replace('0', cotacaoId);
             $.ajax({
                 type: 'GET',
@@ -126,7 +190,7 @@
     $(document).ready(function () {
         $('#openModalOrcamento').on('click', function () {
             $('#modalOrcamento').modal('show');
-            var cotacaoId = document.getElementById('cotacaoId').value || document.getElementById('id').value;
+            var cotacaoId = document.getElementById('cotacaoId').value;
             var url = '{% url "url_orcamento_add" 0 %}'.replace('0', cotacaoId);
             $.ajax({
                 type: 'GET',

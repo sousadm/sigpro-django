@@ -18,12 +18,13 @@ from produto.models import TIPO_UNIDADE_MEDIDA
 URL_RECURSO = URL_API + 'cotacao/'
 
 class CotacaoForm(forms.Form):
-    id = forms.IntegerField(label='ID', required=False)
+    cotacaoId = forms.IntegerField(label='ID', required=False)
     usuarioId = forms.IntegerField(label='Usuário', required=False)
     usuario = forms.CharField(label='Cotista', disabled=True, required=False)
     descricao = forms.CharField(max_length=100, label='Descrição da Cotação', widget=forms.DateInput(attrs={'autofocus': 'true', }), initial='TESTE INICIAL')
     created_dt = forms.DateTimeField(label='Data do cadastro', required=False, disabled=True)
     items = []
+    orcamentos = []
         
     def __init__(self, *args, request, uuid=None, **kwargs):
         super(CotacaoForm, self).__init__(*args, **kwargs)
@@ -33,11 +34,13 @@ class CotacaoForm(forms.Form):
                 data = dict(response.json())
                 self.initial = data
                 self.items = data.get('items')
+                self.orcamentos = data.get('orcamentos')
             else:
                 raise Exception(tratar_error(response))
 
     def salvar(self, request, uuid=None):
         data = dados_para_json(self.data, ['usuarioId'])
+        print(data)
         headers = session_get_headers(request)
         if uuid:
             response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
@@ -64,12 +67,12 @@ def cotacao_render(request, uuid=None):
     try:
         if request.POST.get('btn_item_salvar'):
             formItem = CotacaoItemForm(request.POST, request=request)
-            formItem.salvar(request, uuid)
+            cotacaoItemId = request.POST.get('cotacaoItemId')
+            formItem.salvar(request, uuid, cotacaoItemId)
             messages.success(request, 'sucesso ao gravar item')
 
         if request.POST.get('btn_orcamento_salvar'):
             formOrcamento = CotacaoOrcamentoForm(request.POST, request=request)
-            # messages.info(request, formOrcamento.data)
             formOrcamento.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar orçamento')            
 
