@@ -3,6 +3,8 @@ import json
 import requests
 from django.contrib import messages
 from django import forms
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.shortcuts import render
 from compra.cotacao_item import CotacaoItemForm
 from compra.cotacao_orcamento import CotacaoOrcamentoForm
@@ -28,8 +30,9 @@ class CotacaoForm(forms.Form):
         if uuid:
             response = requests.get(URL_RECURSO + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
-                self.initial = response.json()
-                self.items = response.json()['items']
+                data = dict(response.json())
+                self.initial = data
+                self.items = data.get('items')
             else:
                 raise Exception(tratar_error(response))
 
@@ -74,6 +77,7 @@ def cotacao_render(request, uuid=None):
             form = CotacaoForm(request.POST, request=request)
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
+            return HttpResponseRedirect(reverse('url_cotacao_edit', kwargs={'uuid': uuid}))
 
     except Exception as e:
         messages.error(request, e)

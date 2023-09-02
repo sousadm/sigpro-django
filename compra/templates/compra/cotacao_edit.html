@@ -82,8 +82,8 @@
         <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
             <i class="fas fa-save"></i> Salvar
         </button>
-        {% if form.id.value %}
 
+        {% if form.id.value %}
         <button type="button" id="openModalProduto" class="btn btn-secondary">
             <i class="fas fa-cubes"></i> <span class="d-none d-md-inline">Add Item</span>
         </button>
@@ -94,6 +94,7 @@
 
         <button type="button" class="btn btn-secondary" disabled>Importar Produto</button>
         {% endif %}
+
     </div>
 
     {% include "compra/cotacao_item_modal.html" %}
@@ -107,7 +108,7 @@
     $(document).ready(function () {
         $('#openModalProduto').on('click', function () {
             $('#modalProduto').modal('show');
-            var cotacaoId = document.getElementById('cotacaoId').value;
+            var cotacaoId = document.getElementById('cotacaoId').value || document.getElementById('id').value;
             var url = '{% url "url_cotacaoitem_add" 0 %}'.replace('0', cotacaoId);
             $.ajax({
                 type: 'GET',
@@ -125,7 +126,7 @@
     $(document).ready(function () {
         $('#openModalOrcamento').on('click', function () {
             $('#modalOrcamento').modal('show');
-            var cotacaoId = document.getElementById('cotacaoId').value;
+            var cotacaoId = document.getElementById('cotacaoId').value || document.getElementById('id').value;
             var url = '{% url "url_orcamento_add" 0 %}'.replace('0', cotacaoId);
             $.ajax({
                 type: 'GET',
