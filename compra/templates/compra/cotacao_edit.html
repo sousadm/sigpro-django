@@ -96,13 +96,15 @@
                         <tbody>
                             {% for item in form.orcamentos %}
                             <tr>
-                                <td>{{ item.id }}</td>
+                                <td>{{ item.orcamentoId }}</td>
                                 <td>{{ item.nome|default_if_none:"" }}</td>
                                 <td>{{ item.fone|default_if_none:"" }}</td>
                                 <td>{{ item.frete|floatformat:2 }}</td>
                                 <td>{{ item.desconto|floatformat:2 }}</td>
                                 <td>
-
+                                    <a href="#" class="editar-orcamento" data-item-id="{{ item.orcamentoId }}">
+                                        <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
+                                    </a>
                                 </td>
                             </tr>
                             {% empty %}
@@ -167,7 +169,7 @@
                 }
             });
         });
-    });    
+    });
 
     $(document).ready(function () {
         $('#openModalProduto').on('click', function () {
@@ -186,6 +188,27 @@
             });
         });
     });
+
+
+    $(document).ready(function () {
+        $('.editar-orcamento').click(function (e) {
+            $('#modalOrcamento').modal('show');
+            e.preventDefault();
+            var item_id = $(this).data('item-id');
+            var url = '{% url "url_orcamento_edit" 0 %}'.replace('0', item_id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalContentOrcamento').html(data);
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+    });        
+
 
     $(document).ready(function () {
         $('#openModalOrcamento').on('click', function () {

@@ -20,7 +20,7 @@ from django.urls import path
 from acesso.views import login, home, logout
 from compra.cotacao import cotacaoEdit, cotacaoNew
 from compra.cotacao_item import cotacaoItemDelete, cotacaoItemEdit, cotacaoItemNew
-from compra.cotacao_orcamento import cotacaoOrcamentoNew
+from compra.cotacao_orcamento import cotacaoOrcamentoEdit, cotacaoOrcamentoNew
 from pessoa.Endereco import get_municipios
 from pessoa.views import pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
     pessoaVendedorEdit, pessoaList
@@ -68,8 +68,10 @@ urlpatterns = [
     path('cotacao/<int:uuid>', cotacaoEdit, name='url_cotacao_edit'),
 
     path('cotacao/<int:uuid>/add-item', cotacaoItemNew, name='url_cotacaoitem_add'),
-    path('cotacao/<int:uuid>/add-orcamento', cotacaoOrcamentoNew, name='url_orcamento_add'),
     path('cotacao-item/<int:uuid>', cotacaoItemEdit, name='url_cotacaoitem_edit'),
     path('cotacao/<int:uuid>/remove-item/<int:item>', cotacaoItemDelete, name='url_cotacao_remove_item'),
+
+    path('cotacao/<int:uuid>/add-orcamento', cotacaoOrcamentoNew, name='url_orcamento_add'),
+    path('cotacao-orcamento/<int:uuid>', cotacaoOrcamentoEdit, name='url_orcamento_edit'),
 
 ]

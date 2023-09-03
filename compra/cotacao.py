@@ -66,14 +66,15 @@ def cotacao_render(request, uuid=None):
     template_name = 'compra/cotacao_edit.html'
     try:
         if request.POST.get('btn_item_salvar'):
-            formItem = CotacaoItemForm(request.POST, request=request)
             cotacaoItemId = request.POST.get('cotacaoItemId')
+            formItem = CotacaoItemForm(request.POST, request=request)
             formItem.salvar(request, uuid, cotacaoItemId)
             messages.success(request, 'sucesso ao gravar item')
 
         if request.POST.get('btn_orcamento_salvar'):
+            orcamentoId = request.POST.get('orcamentoId')
             formOrcamento = CotacaoOrcamentoForm(request.POST, request=request)
-            formOrcamento.salvar(request, uuid)
+            formOrcamento.salvar(request, uuid, orcamentoId)
             messages.success(request, 'sucesso ao gravar orçamento')            
 
         if request.POST.get('btn_salvar'):
