@@ -45,8 +45,8 @@
                                 <th>#</th>
                                 <th>Nome do Fornecedor</th>
                                 <th>Fone</th>
-                                <th>Frete R$</th>
                                 <th>Vr.Produto R$</th>
+                                <th>Vr.Total R$</th>
                                 <th width="90"></th>
                             </tr>
                         </thead>
@@ -56,8 +56,8 @@
                                 <td>{{ item.orcamentoId }}</td>
                                 <td>{{ item.nome|default_if_none:"" }}</td>
                                 <td>{{ item.fone|default_if_none:"" }}</td>
-                                <td>{{ item.frete|floatformat:2 }}</td>
                                 <td>{{ item.valorItem|floatformat:2 }}</td>
+                                <td>{{ item.valorTotal|floatformat:2 }}</td>
                                 <td>
                                     <a href="#" class="editar-orcamento" data-item-id="{{ item.orcamentoId }}">
                                         <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
@@ -137,6 +137,9 @@
         <a href="{% url 'url_cotacao_add' %}">
             <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i> Novo </button>
         </a>
+        <a href="{% url 'url_cotacao_list' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i> Lista </button>
+        </a>        
         {% if form.cotacaoId.value %}
         <button type="button" id="openModalProduto" class="btn btn-secondary">
             <i class="fas fa-cubes"></i> <span class="d-none d-md-inline">Add Item</span>

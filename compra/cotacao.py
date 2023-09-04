@@ -9,6 +9,7 @@ from django.shortcuts import render
 from compra.cotacao_item import CotacaoItemForm
 from compra.cotacao_orcamento import CotacaoOrcamentoForm
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
+from core.paginacao import get_page, get_param
 
 from core.settings import URL_API
 from produto.models import TIPO_UNIDADE_MEDIDA
@@ -90,3 +91,36 @@ def cotacao_render(request, uuid=None):
     return render(request, template_name, context)
 
 
+class CotacaoListForm(forms.Form):
+    descricao = forms.CharField(label='Pesquisa', required=False,
+                                widget=forms.TextInput(
+                                    attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
+    def pesquisar(self, request):
+        itens_por_pagina = 5
+        self.initial = request.POST or request.GET
+        params = get_param(self.initial, itens_por_pagina)
+        # if self.initial.get('descricao'): params['descricao'] = self.initial.get('descricao')
+        headers = session_get_headers(request)
+        response = requests.get(URL_RECURSO, headers=headers, params=params)
+        if response.status_code == 200:
+            self.fields['descricao'].initial = self.initial.get('descricao')
+            self.initial = dict(response.json())
+            return get_page(self.initial, params)
+
+
+@require_token
+def cotacaoListForm(request):
+    template_name = 'compra/cotacao_list.html'
+    try:
+        form = CotacaoListForm() \
+            if request.POST.get('btn_listar') \
+            else CotacaoListForm(request.POST)
+        page = form.pesquisar(request)
+
+    except Exception as e:
+        messages.error(request, e)
+    context = {
+        'form': form,
+        'page': page
+    }
+    return render(request, template_name, context)
