@@ -46,7 +46,7 @@ class CotacaoForm(forms.Form):
         else:
             response = requests.post(URL_RECURSO, json=data, headers=headers)
         if response.status_code in [200, 201]:
-            return response.json()['id']
+            return response.json()['cotacaoId']
         else:
             raise Exception(tratar_error(response))
         

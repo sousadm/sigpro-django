@@ -33,9 +33,10 @@
                 <span>Tomada de Preços</span>
             </div>
             <tr>
-                <th>Nome do Fornecedor</th>
+                <th style="width: 40%;">Nome do Fornecedor</th>
                 <th>Pr.Unitário R$</th>
                 <th>IPI %</th>
+                <th>Custo R$</th>
             </tr>
         </thead>
         <tbody>
@@ -47,9 +48,12 @@
                 </td>
                 <td>
                     <input type="number" class="form-control" name="preco_{{forloop.counter}}" value={{item.preco}} step="0.01">
-                </td>
+                </td>                
                 <td>
                     <input type="number" class="form-control" name="ipi_{{forloop.counter}}" value={{item.ipi}} step="0.01">
+                </td>
+                <td>
+                    <input type="number" disabled="disabled" class="form-control" value={{item.precoCusto}} step="0.01">
                 </td>
             </tr>
             {%endfor%}
