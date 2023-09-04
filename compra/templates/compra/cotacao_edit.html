@@ -60,9 +60,9 @@
                                     <a href="#" class="editar-item" data-item-id="{{ item.cotacaoItemId }}">
                                         <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
                                     </a>
-                                    <a href="{% url 'url_cotacao_remove_item' form.cotacaoId.value item.cotacaoItemId %}" class="excluir-item">
+                                    <a href="{% url 'url_cotacao_remove_item' form.cotacaoId.value item.cotacaoItemId %}">
                                         <button type="button" onClick='return confirma("EXCLUIR o item: {{item.descricaoItem}} ?")' class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
-                                    </a>                                                                  
+                                    </a>
                                 </td>
                             </tr>
                             {% empty %}
@@ -105,6 +105,9 @@
                                     <a href="#" class="editar-orcamento" data-item-id="{{ item.orcamentoId }}">
                                         <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
                                     </a>
+                                    <a href="{% url 'url_cotacao_remove_orcamento' form.cotacaoId.value item.orcamentoId %}">
+                                        <button type="button" onClick='return confirma("EXCLUIR o orçamento {{item.orcamentoId}} ?")' class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
+                                    </a>                                    
                                 </td>
                             </tr>
                             {% empty %}

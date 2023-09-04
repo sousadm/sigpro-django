@@ -40,7 +40,6 @@ class CotacaoForm(forms.Form):
 
     def salvar(self, request, uuid=None):
         data = dados_para_json(self.data, ['usuarioId'])
-        print(data)
         headers = session_get_headers(request)
         if uuid:
             response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
@@ -68,7 +67,7 @@ def cotacao_render(request, uuid=None):
         if request.POST.get('btn_item_salvar'):
             cotacaoItemId = request.POST.get('cotacaoItemId')
             formItem = CotacaoItemForm(request.POST, request=request)
-            formItem.salvar(request, uuid, cotacaoItemId)
+            formItem.salvar(request, cotacaoItemId=cotacaoItemId, cotacao=uuid)
             messages.success(request, 'sucesso ao gravar item')
 
         if request.POST.get('btn_orcamento_salvar'):

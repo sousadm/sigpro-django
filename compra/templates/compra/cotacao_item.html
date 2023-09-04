@@ -17,9 +17,41 @@
         </div>
         <div class="col-12 col-md-4">
             {{ form.unidade|bootstrap }}
-        </div>        
+        </div>
         <div class="col-12 col-md-4">
             {{ form.quantidade|bootstrap }}
         </div>
     </div>
+
+    {% if form.precos %}
+    <table id="precos" name="precos" class="table table-sm">
+        <thead>
+            <div class="col text-white bg-dark">
+                <span>Tomada de Preços</span>
+            </div>
+            <tr>
+                <th>Nome do Fornecedor</th>
+                <th>Pr.Unitário R$</th>
+                <th>IPI %</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in form.precos %}
+            <tr>
+                <td>
+                    <input type="text" disabled="disabled" class="form-control" value={{item.nome}}>
+                </td>
+                <td>
+                    <input type="number" class="form-control" name="tomada_{{item.orcamentoId}}_preco"
+                        value={{item.preco}}>
+                </td>
+                <td>
+                    <input type="number" class="form-control" name="tomada_{{item.orcamentoId}}_ipi" value={{item.ipi}}>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+    {%endif%}
+
 </div>

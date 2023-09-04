@@ -2,6 +2,8 @@ import requests
 from django.contrib import messages
 from django import forms
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 from core.settings import URL_API
 from produto.precificacao import precificacaoChoices
@@ -17,12 +19,13 @@ TIPO_COTACAO_STATUS = (
 
 class CotacaoOrcamentoForm(forms.Form):
     orcamentoId = forms.IntegerField(label='ID', required=False)
-    nome = forms.CharField(label='Nome do Fornecedor', max_length=100, initial='Casa da Borracha')
-    documento = forms.CharField(label='Documento', max_length=14, required=False, widget=forms.DateInput(attrs={'title': 'digite o CPF ou CNPJ', }), initial='10101010101010')
-    email = forms.EmailField(label='E-mail', initial='borracha@hot.com')
-    fone = forms.CharField(label='Fone', max_length=20, initial='8599994400')
-    desconto = forms.DecimalField(decimal_places=2, label='Desconto', initial=0)
-    frete = forms.DecimalField(decimal_places=2, label='Frete Valor', initial=100)
+    nome = forms.CharField(label='Nome do Fornecedor', max_length=100)
+    documento = forms.CharField(label='Documento', max_length=14, required=False, widget=forms.DateInput(attrs={'title': 'digite o CPF ou CNPJ', }))
+    observacao = forms.CharField(label='Observação', max_length=100, required=False)
+    email = forms.EmailField(label='E-mail')
+    fone = forms.CharField(label='Fone', max_length=20)
+    desconto = forms.DecimalField(decimal_places=2, initial=0)
+    frete = forms.DecimalField(decimal_places=2, initial=0)
     precificacaoId = forms.ChoiceField(label='Método de Precificação', required=True, initial=None)
     status = forms.ChoiceField(label='Situação', choices=TIPO_COTACAO_STATUS, initial=True)
     # created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
@@ -37,12 +40,12 @@ class CotacaoOrcamentoForm(forms.Form):
             self.initial = data        
 
     def salvar(self, request, uuid=None, orcamentoId=None):
-        data = dados_para_json(self.data, nones=[])
+        data = dados_para_json(self.data, nones=['orcamentoId'])
         headers = session_get_headers(request)
-        if orcamentoId:
-            response = requests.patch(URL_RECURSO_ORCAMENTO + str(orcamentoId), json=data, headers=headers)
-        else:
+        if not orcamentoId or orcamentoId == 'None':
             response = requests.post(URL_RECURSO + str(uuid) + "/orcamento", json=data, headers=headers)
+        else:
+            response = requests.patch(URL_RECURSO_ORCAMENTO + str(orcamentoId), json=data, headers=headers)
         if not response.status_code in [200, 201]:
             raise Exception(tratar_error(response))
 
@@ -62,4 +65,14 @@ def cotacao_orcamento_render(request, uuid=None, cotacao=None):
     template_name = 'compra/cotacao_orcamento.html'
     form = CotacaoOrcamentoForm(request=request, uuid=uuid, cotacao=cotacao)
     return render(request, template_name, {'form': form})
+
+
+@require_token
+def cotacaoOrcamentoDelete(request, uuid, orcamento):
+    response = requests.delete(URL_RECURSO_ORCAMENTO + str(orcamento), headers=session_get_headers(request))
+    if response.status_code == 200:
+        messages.success(request, 'orçamento excluído com sucesso')
+    else:
+        messages.error(request, Exception(tratar_error(response)))
+    return HttpResponseRedirect(reverse('url_cotacao_edit', kwargs={'uuid': uuid}))
 
