@@ -24,6 +24,9 @@
     </div>
 
     {% if form.precos %}
+
+    <input type="hidden" name="qtde" value="{{form.precos|length}}">
+
     <table id="precos" name="precos" class="table table-sm">
         <thead>
             <div class="col text-white bg-dark">
@@ -38,15 +41,15 @@
         <tbody>
             {% for item in form.precos %}
             <tr>
+                <input type="hidden" name="cotacaoPrecoId_{{forloop.counter}}" value="{{item.cotacaoPrecoId}}">
                 <td>
                     <input type="text" disabled="disabled" class="form-control" value={{item.nome}}>
                 </td>
                 <td>
-                    <input type="number" class="form-control" name="tomada_{{item.orcamentoId}}_preco"
-                        value={{item.preco}}>
+                    <input type="number" class="form-control" name="preco_{{forloop.counter}}" value={{item.preco}} step="0.01">
                 </td>
                 <td>
-                    <input type="number" class="form-control" name="tomada_{{item.orcamentoId}}_ipi" value={{item.ipi}}>
+                    <input type="number" class="form-control" name="ipi_{{forloop.counter}}" value={{item.ipi}} step="0.01">
                 </td>
             </tr>
             {%endfor%}

@@ -40,6 +40,17 @@ class CotacaoItemForm(forms.Form):
         if not cotacaoItemId or cotacaoItemId == 'None':
             response = requests.post(URL_RECURSO + str(cotacao) + "/item", json=data, headers=headers)
         else:
+            if data['qtde']:
+                precos = []
+                qtde = int(data['qtde'])+1
+                for index in range(1, qtde):
+                    objeto = {
+                        'cotacaoPrecoId':data[f"cotacaoPrecoId_{index}"],
+                        'preco':data[f"preco_{index}"],
+                        'ipi':data[f"ipi_{index}"],
+                    }
+                    precos.append(objeto)
+                data['precos'] = precos
             response = requests.patch(URL_RECURSO_ITEM + str(cotacaoItemId), json=data, headers=headers)
         if not response.status_code in [200, 201]:
             raise Exception(tratar_error(response))
