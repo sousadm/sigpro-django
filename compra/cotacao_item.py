@@ -19,9 +19,8 @@ class CotacaoItemForm(forms.Form):
     produtoId = forms.IntegerField(label='Produto', required=False)
     descricaoItem = forms.CharField(max_length=100, label='Descrição do produto', widget=forms.DateInput(attrs={'autofocus': 'true', }))
     unidade = forms.ChoiceField(choices=TIPO_UNIDADE_MEDIDA, label='Unidade', initial='UNID')
-    ncm = forms.CharField(label='NCM', max_length=10)
+    ncm = forms.CharField(label='NCM', max_length=10, required=False)
     quantidade = forms.IntegerField(label='Quantidade')
-    # precos = forms.JSONField()
     precos = []
 
     def __init__(self, *args, request, uuid=None, cotacao=None, **kwargs):
