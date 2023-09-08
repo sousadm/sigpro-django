@@ -19,9 +19,8 @@ class CotacaoItemForm(forms.Form):
     produtoId = forms.IntegerField(label='Produto', required=False)
     descricaoItem = forms.CharField(max_length=100, label='Descrição do produto', widget=forms.DateInput(attrs={'autofocus': 'true', }))
     unidade = forms.ChoiceField(choices=TIPO_UNIDADE_MEDIDA, label='Unidade', initial='UNID')
-    ncm = forms.CharField(label='NCM', max_length=10)
+    ncm = forms.CharField(label='NCM', max_length=10, required=False)
     quantidade = forms.IntegerField(label='Quantidade')
-    # precos = forms.JSONField()
     precos = []
 
     def __init__(self, *args, request, uuid=None, cotacao=None, **kwargs):
@@ -31,7 +30,7 @@ class CotacaoItemForm(forms.Form):
         response = requests.get(URL_RECURSO_ITEM + str(uuid), headers=session_get_headers(request))
         if response.status_code == 200:
             data = dict(response.json())
-            self.precos = data['precos']
+            self.precos = data.get('precos')
             self.initial = data 
 
     def salvar(self, request, cotacaoItemId=None, cotacao=None):
@@ -40,13 +39,14 @@ class CotacaoItemForm(forms.Form):
         if not cotacaoItemId or cotacaoItemId == 'None':
             response = requests.post(URL_RECURSO + str(cotacao) + "/item", json=data, headers=headers)
         else:
-            if data['qtde']:
+            if data.get('qtde'):
                 precos = []
                 qtde = int(data['qtde'])+1
                 for index in range(1, qtde):
                     objeto = {
                         'cotacaoPrecoId':data[f"cotacaoPrecoId_{index}"],
                         'preco':data[f"preco_{index}"],
+                        'quantidade':data[f"quantidade_{index}"],
                         'ipi':data[f"ipi_{index}"],
                     }
                     precos.append(objeto)

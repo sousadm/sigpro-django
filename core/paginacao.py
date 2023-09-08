@@ -23,7 +23,7 @@ def get_param(data, size):
     params = {}
     params['page'] = data.get('page', 0)
     params['size'] = data.get('size', size)
-    params['sort'] = 'descricao,asc'
+    params['sort'] = 'id,desc'
     return params
 
 def page_url(params, page):

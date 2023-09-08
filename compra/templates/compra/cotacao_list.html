@@ -39,7 +39,7 @@
                         <th>Descrição</th>
                         <th>Usuário</th>
                         <th>Data</th>
-                        <th width="90"></th>
+                        <th width="120"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -53,6 +53,9 @@
                             <a href="{% url 'url_cotacao_edit' uuid=item.cotacaoId %}">
                                 <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
                             </a>
+                            <a href="{% url 'url_cotacao_imprimir' item.cotacaoId %}" target="_blank">
+                                <button type="button" class="btn btn-sm"> <i class="fas fa-print"></i> </button>
+                            </a>                    
                         </td>
                     </tr>
                     {% empty %}

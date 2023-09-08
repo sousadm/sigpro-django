@@ -4,11 +4,97 @@
 {% block title %} Login {% endblock %}
 
 {% block content %}
-<div class="container">
+<form method="post">
+    {% csrf_token %}
 
-    <h4>BEM VINDO AO SISTEMA</h4>
+     <div class="btn-group" role="group" aria-label="Basic example"><a href="#" data-id="{% url 'url_pessoa_edit' 1 %}" data-toggle="modal"
+            data-target="#confirmDeleteModal" class="btn btn-danger"><i class="fa fa-trash"></i></a></div>
 
-    <p>{{ username }}</p>
+    <input type="text" id="codigo-produto" placeholder="código">
+    <button id="openModalPesquisaProduto" class="selecionar-produto">Produto</button>
 
+ 
+</form>
+
+<!-- Confirm detele Modal-->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Atenção!!</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Tem mesmo a certeza que pretende eliminar este registo?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Não</button>
+                <a class="btn btn-danger" id="confirmDeleteId" href="#">Sim</a>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#confirmDeleteModal').on('show.bs.modal', function (e) { // executs when the modal opens
+            var url = $(e.relatedTarget).data("id"); // gets data-id from the clicked button
+            $("#confirmDeleteId").attr("href", url)
+        }).on('hide.bs.modal', function (e) { // when modal closes
+            $("#confirmNo").off(); // canceles the click event in button "no"
+        });
+    });
+</script>
+
+<script>
+    // Captura o código do produto ao clicar em um link na lista
+    $('.selecionar-produto').click(function (e) {
+        var codigoProduto = $(this).data('codigo');
+        // Aqui você pode fazer o que quiser com o código do produto selecionado, como enviá-lo para o servidor ou usá-lo em JavaScript
+        console.log('Código do Produto Selecionado: ' + codigoProduto);
+        // Feche a janela modal
+        $('#myModal').modal('hide');
+    });
+
+    $(document).ready(function () {
+        $('#openModalPesquisaProduto').on('click', function () {
+            $('#modalOrcamento').modal('show');
+            var url = '{% url "url_produto_list" %}';
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+
+</script>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalOrcamento">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Orçamento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalContentOrcamento"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="submit" value="btn_orcamento_salvar" name="btn_orcamento_salvar" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>  
+
 {% endblock %}

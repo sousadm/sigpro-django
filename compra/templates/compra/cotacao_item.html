@@ -34,6 +34,7 @@
             </div>
             <tr>
                 <th style="width: 40%;">Nome do Fornecedor</th>
+                <th>Quantidade</th>
                 <th>Pr.Unitário R$</th>
                 <th>IPI %</th>
                 <th>Custo R$</th>
@@ -45,6 +46,9 @@
                 <input type="hidden" name="cotacaoPrecoId_{{forloop.counter}}" value="{{item.cotacaoPrecoId}}">
                 <td>
                     <input type="text" disabled="disabled" class="form-control" value={{item.nome}}>
+                </td>
+                <td>
+                    <input type="number" class="form-control" name="quantidade_{{forloop.counter}}" value={{item.quantidade}} min="{{form.quantidade.value}}" step="1">
                 </td>
                 <td>
                     <input type="number" class="form-control" name="preco_{{forloop.counter}}" value={{item.preco}} step="0.01">

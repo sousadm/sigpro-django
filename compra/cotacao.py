@@ -1,9 +1,11 @@
+from http.client import HTTPResponse
 import json
 
 import requests
 from django.contrib import messages
 from django import forms
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
+
 from django.urls import reverse
 from django.shortcuts import render
 from compra.cotacao_item import CotacaoItemForm
@@ -124,3 +126,18 @@ def cotacaoListForm(request):
         'page': page
     }
     return render(request, template_name, context)
+
+@require_token
+def cotacaoImprimir(request, uuid):
+    headers = session_get_headers(request)
+    response = requests.get(f'{URL_RECURSO}{uuid}/imprimir', headers=headers)
+    if response.status_code == 200:
+        content_type = 'application/pdf'
+        relatorio_conteudo = response.content
+        response_django = HttpResponse(relatorio_conteudo, content_type=content_type)        
+        return response_django
+    return HttpResponse('Erro ao gerar o relatório', status=response.status_code)
+
+
+
+
