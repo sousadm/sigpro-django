@@ -37,6 +37,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Descrição</th>
+                        <th>Qt.Itens</th>
                         <th>Usuário</th>
                         <th>Data</th>
                         <th width="120"></th>
@@ -47,8 +48,9 @@
                     <tr>
                         <td>{{ item.cotacaoId }}</td>
                         <td>{{ item.descricao|default_if_none:"" }}</td>
+                        <td>{{ item.qtdeItems }}</td>
                         <td>{{ item.usuario|default_if_none:"" }}</td>
-                        <td>{{ item.created_dt|date:"d/M/y" }}</td>
+                        <td>{{ item.created_dt }}</td>
                         <td>
                             <a href="{% url 'url_cotacao_edit' uuid=item.cotacaoId %}">
                                 <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
