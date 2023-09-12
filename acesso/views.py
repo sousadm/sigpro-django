@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 from acesso.forms import LoginForm
 from core.controle import session_add_token, session_get, require_token
@@ -33,6 +35,12 @@ def login(request):
 
     return render(request, template_name, {"form": form})
 
+
+def authenticate_user(self, username, password):
+    user = authenticate(username=username, password=password)
+    if not user or not user.is_active:
+        raise Exception(u"Usuário ou senha inválidos.")
+    return user
 
 # decorator
 @require_token
