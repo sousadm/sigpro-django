@@ -121,3 +121,14 @@ def produtoList(request):
     }
     return render(request, template_name, context)
 
+
+@require_token
+def produtoPesquisa(request):
+    template_name = 'produto/produto_pesquisa.html'
+    form = ProdutoListForm(request.POST)
+    page = form.pesquisar(request)
+    context = {
+        'form': form,
+        'page': page
+    }
+    return render(request, template_name, context)

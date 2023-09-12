@@ -31,7 +31,24 @@
                 return false;
         }
 
-
+        $(document).ready(function () {
+        $('#modalPadraoButton').on('click', function () {
+            $('#modalPadraoPesquisa').modal('show');
+            var url = $(this).data("url");
+            var titulo = $(this).data("titulo");
+            $('#modalPadraoTitulo').text(titulo);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalPadraoContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
 
     </script>
 
@@ -48,6 +65,25 @@
 </head>
 
 <body>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalPadraoPesquisa">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPadraoTitulo" />
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalPadraoContent"> </div>
+                <div class="modal-footer">
+                    <button id="fechar" type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="pesquisaRetornoValor">
 
     <div class="container">
         {% include 'core/messages.html' %}

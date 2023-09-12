@@ -1,0 +1,55 @@
+{% load bootstrap %}
+
+<script>
+
+    $(document).ready(function () {
+        $('.item-button').on('click', function () {
+            var itemRow = $(this).closest('.item-row');
+            var itemId = itemRow.data('id');
+            $('#produtoId').val(itemId);
+            $('#produtoId').focus();
+        });
+    });
+
+</script>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+                <th>Unidade</th>
+                <th>NCM</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th width="90"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in page.object_list %}
+            <tr data-id="{{item.id}}" data-descricao="{{item.descricao}}" class="item-row">
+                <td>{{ item.id }}</td>
+                <td>{{ item.descricao|default_if_none:"" }}</td>
+                <td>{{ item.unidade|lower }}</td>
+                <td>{{ item.ncm }}</td>
+                <td>{{ item.precoVenda|floatformat:2 }}</td>
+                <td>{{ item.estoque|floatformat:2 }}</td>
+                <td>
+                    <!-- Adicione uma classe ao botão -->
+                    <button type="button" class="btn btn-sm item-button" data-dismiss="modal">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4"><span>sem registros</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "core/paginacao.html" %}
+
+</div>
