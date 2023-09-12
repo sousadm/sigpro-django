@@ -31,7 +31,24 @@
                 return false;
         }
 
-
+        $(document).ready(function () {
+        $('#openModalProduto').on('click', function () {
+            $('#modalPesquisa').modal('show');
+            var url = $(this).data("url");
+            var titulo = $(this).data("titulo");
+            $('#pesquisaTitulo').text(titulo);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
 
     </script>
 
@@ -48,6 +65,25 @@
 </head>
 
 <body>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalPesquisa">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pesquisaTitulo" />
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalContent"> </div>
+                <div class="modal-footer">
+                    <button id="fechar" type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="pesquisaRetornoValor">
 
     <div class="container">
         {% include 'core/messages.html' %}
