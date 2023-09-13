@@ -132,3 +132,8 @@ def produtoPesquisa(request):
         'page': page
     }
     return render(request, template_name, context)
+
+@require_token
+def get_produto(request, uuid):
+    response = requests.get(URL_API + 'produto/' + str(uuid), headers=session_get_headers(request))
+    return response.json()

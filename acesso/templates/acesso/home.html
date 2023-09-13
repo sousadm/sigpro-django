@@ -7,8 +7,12 @@
 <form method="post">
     {% csrf_token %}
 
-    <input id="produtoId">
-    <input id="descricao" name="descricao">
+    <div class="form-group">
+        <label>Código</label>
+        <input type="text" class="form-control" id="produtoId">
+    </div>
+
+    <!-- <input id="descricao" name="descricao"> -->
 
     <button type="button" id="modalPadraoButton" class="btn btn-secondary" data-titulo="Pesquisa de Produto"
         data-url="{% url 'url_produto_pesquisa' %}">
@@ -21,25 +25,8 @@
 
 
 <script>
-    $(document).ready(function () {
-        // Quando o usuário sai do campo de entrada
-        $('#produtoId').blur(function () {
-            var produtoId = $(this).val();
-            $('#descricao').val('descrição do produto');
 
-            // // Faça a solicitação AJAX
-            // $.ajax({
-            //     url: '/url/do/seu/view/',  // Substitua pelo URL da sua view do Django
-            //     method: 'POST',  // Ou 'GET' se preferir
-            //     data: {
-            //         'valor_campo': valorCampo,
-            //         'csrfmiddlewaretoken': '{{ csrf_token }}'  // Use o token CSRF do Django
-            //     },
-            //     success: function (data) {
-            //         // Manipule a resposta do servidor aqui, por exemplo, exiba no resultado_ajax
-            //         $('#resultado_ajax').html(data);
-            //     }
-            // });
-        });
-    });
+
+
+
 </script>

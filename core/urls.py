@@ -56,6 +56,7 @@ urlpatterns = [
     path('produto/', produtoList, name='url_produto_list'),
     path('produto/pesquisa', produtoPesquisa, name='url_produto_pesquisa'),    
     path('produto/<int:uuid>', produtoEdit, name='url_produto_edit'),
+    path('produto/<int:uuid>/detalhe', produtoEdit, name='url_produto_detalhe'),
     path('produto/<int:uuid>/estoque', produtoEstoque, name='url_produto_estoque'),
     path('produto/<int:uuid>/estoque-detalhe', produtoEstoqueDetalhe, name='url_produto_estoque_detalhe'),
     path('produto/add', produtoNew, name='url_produto_add'),
