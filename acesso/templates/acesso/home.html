@@ -7,12 +7,23 @@
 <form method="post">
     {% csrf_token %}
 
-    <div class="form-group">
-        <label>Código</label>
-        <input type="text" class="form-control" id="produtoId">
+    <div class="card">
+        <div class="card-header">
+            <h3>ÁREA DE TESTE</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <label class="control-label">Código</label>
+                    <input id="produtoId" type="number" class="form-control">
+                </div>
+                <div class="col-12 col-md-10">
+                    <label class="control-label">Descrição</label>
+                    <input id="descricao" type="text" class="form-control">
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- <input id="descricao" name="descricao"> -->
 
     <button type="button" id="modalPadraoButton" class="btn btn-secondary" data-titulo="Pesquisa de Produto"
         data-url="{% url 'url_produto_pesquisa' %}">
@@ -21,12 +32,27 @@
 
 </form>
 
-{% endblock %}
-
-
 <script>
 
-
-
+    $(document).ready(function () {
+        $('#modalPadraoButton').on('click', function () {
+            $('#modalPadraoPesquisa').modal('show');
+            var url = $(this).data("url");
+            var titulo = $(this).data("titulo");
+            $('#modalPadraoTitulo').text(titulo);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalPadraoContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
 
 </script>
+
+{% endblock %}
