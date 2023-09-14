@@ -1,10 +1,11 @@
+from http.client import HTTPResponse
 import json
 
 import requests
 from django import forms
 from django.contrib import messages
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error, dados_para_json, require_token
@@ -135,5 +136,7 @@ def produtoPesquisa(request):
 
 @require_token
 def get_produto(request, uuid):
-    response = requests.get(URL_API + 'produto/' + str(uuid), headers=session_get_headers(request))
-    return response.json()
+    headers = session_get_headers(request)
+    response = requests.get(URL_RECURSO + str(uuid), headers=headers)
+    return JsonResponse(response.json())
+

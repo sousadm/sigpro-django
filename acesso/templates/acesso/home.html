@@ -35,6 +35,26 @@
 <script>
 
     $(document).ready(function () {
+        $('#produtoId').blur(function () {
+            var produtoId = document.getElementById('produtoId').value;
+            var url = '{% url "url_produto_get" 0 %}'.replace('0', produtoId);            
+            $.ajax({
+                url: url,
+                type: 'GET',  // Ou 'POST' dependendo da sua necessidade
+                success: function (data) {
+                    $('#descricao').val(data['descricao']);
+                    // Manipule a resposta da solicitação AJAX aqui
+                    // console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    // Lidar com erros, se houver
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
         $('#modalPadraoButton').on('click', function () {
             $('#modalPadraoPesquisa').modal('show');
             var url = $(this).data("url");

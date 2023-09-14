@@ -28,7 +28,7 @@ from produto.categoria import categoriaList, categoriaEdit, categoriaNew, catego
 from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew, \
     centroDistribuicaoChoices
 from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
-from produto.produto import produtoEdit, produtoList, produtoNew, produtoPesquisa
+from produto.produto import get_produto, produtoEdit, produtoList, produtoNew, produtoPesquisa
 from produto.estoque import produtoEstoque, produtoEstoqueDetalhe
 
 urlpatterns = [
@@ -55,6 +55,7 @@ urlpatterns = [
 
     path('produto/', produtoList, name='url_produto_list'),
     path('produto/pesquisa', produtoPesquisa, name='url_produto_pesquisa'),    
+    path('produto/<int:uuid>/pesquisa', get_produto, name='url_produto_get'),
     path('produto/<int:uuid>', produtoEdit, name='url_produto_edit'),
     path('produto/<int:uuid>/detalhe', produtoEdit, name='url_produto_detalhe'),
     path('produto/<int:uuid>/estoque', produtoEstoque, name='url_produto_estoque'),
