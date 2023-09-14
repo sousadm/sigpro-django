@@ -51,6 +51,7 @@ class CotacaoItemForm(forms.Form):
                     }
                     precos.append(objeto)
                 data['precos'] = precos
+            print(data)
             response = requests.patch(URL_RECURSO_ITEM + str(cotacaoItemId), json=data, headers=headers)
         if not response.status_code in [200, 201]:
             raise Exception(tratar_error(response))

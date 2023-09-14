@@ -21,7 +21,8 @@
                 <div class="row">
                     <div class="col-12 col-md-2">
                         <label class="control-label">Código</label>
-                        <input type="number" name="cotacaoId" id="cotacaoId" disabled="disabled" class="form-control" value={{ form.cotacaoId.value }}>                        
+                        <input type="number" name="cotacaoId" id="cotacaoId" disabled="disabled" class="form-control"
+                            value={{ form.cotacaoId.value }}>
                     </div>
                     <div class="col-12 col-md-2">
                         {{ form.created_dt|bootstrap }}
@@ -60,11 +61,15 @@
                                 <td>{{ item.valorTotal|floatformat:2 }}</td>
                                 <td>
                                     <a href="#" class="editar-orcamento" data-item-id="{{ item.orcamentoId }}">
-                                        <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
+                                        <button type="button" class="btn btn-sm" title="editar"> <i
+                                                class="fas fa-edit"></i> </button>
                                     </a>
-                                    <a href="{% url 'url_cotacao_remove_orcamento' form.cotacaoId.value item.orcamentoId %}">
-                                        <button type="button" onClick='return confirma("EXCLUIR o orçamento {{item.orcamentoId}} ?")' class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
-                                    </a>                                    
+                                    <a
+                                        href="{% url 'url_cotacao_remove_orcamento' form.cotacaoId.value item.orcamentoId %}">
+                                        <button type="button"
+                                            onClick='return confirma("EXCLUIR o orçamento {{item.orcamentoId}} ?")'
+                                            class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
+                                    </a>
                                 </td>
                             </tr>
                             {% empty %}
@@ -74,13 +79,16 @@
                             {% endfor %}
                         </tbody>
                     </table>
-    
-                </div>    
-                {% endif %} 
+
+                </div>
+                {% endif %}
 
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead>
+                            <tr colspan="8">
+                                <h4 class="bg-dark text-white">Lista de Itens</h4>
+                            </tr>
                             <tr>
                                 <th>#</th>
                                 <th>Descrição do Item</th>
@@ -95,19 +103,23 @@
                         <tbody>
                             {% for item in form.items %}
                             <tr>
-                                <td>{{ item.cotacaoItemId }}</td>
-                                <td>{{ item.descricaoItem|default_if_none:"" }}</td>
-                                <td>{{ item.ncm|default_if_none:"" }}</td>
-                                <td>{{ item.unidade|default_if_none:"" }}</td>
-                                <td>{{ item.quantidade|floatformat:2 }}</td>
-                                <td>{{ item.menorPreco|floatformat:2 }}</td>
-                                <td>{{ item.menorCusto|floatformat:2 }}</td>
+                                <td>{{item.cotacaoItemId}}</td>
+                                <td>{{item.descricaoItem|default_if_none:""}}</td>
+                                <td>{{item.ncm|default_if_none:""}}</td>
+                                <td>{{item.unidade|default_if_none:""}}</td>
+                                <td>{{item.quantidade|floatformat:2}}</td>
+                                <td>{{item.menorPreco|floatformat:2}}</td>
+                                <td>{{item.menorCusto|floatformat:2}}</td>
                                 <td>
-                                    <a href="#" class="editar-item" data-item-id="{{ item.cotacaoItemId }}">
-                                        <button type="button" class="btn btn-sm" title="editar"> <i class="fas fa-edit"></i> </button>
+                                    <a href="#" class="editar-item" data-item-id="{{item.cotacaoItemId}}">
+                                        <button type="button" class="btn btn-sm" title="editar"> <i
+                                                class="fas fa-edit"></i> </button>
                                     </a>
-                                    <a href="{% url 'url_cotacao_remove_item' form.cotacaoId.value item.cotacaoItemId %}">
-                                        <button type="button" onClick='return confirma("EXCLUIR o item: {{item.descricaoItem}} ?")' class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
+                                    <a
+                                        href="{% url 'url_cotacao_remove_item' form.cotacaoId.value item.cotacaoItemId %}">
+                                        <button type="button"
+                                            onClick='return confirma("EXCLUIR o item: {{item.descricaoItem}} ?")'
+                                            class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
                                     </a>
                                 </td>
                             </tr>
@@ -154,7 +166,7 @@
         </a>
 
         {% endif %}
-        
+
     </div>
 
     {% include "compra/cotacao_item_modal.html" %}
@@ -220,7 +232,7 @@
                 }
             });
         });
-    });        
+    });
 
 
     $(document).ready(function () {
@@ -239,7 +251,7 @@
                 }
             });
         });
-    });    
+    });
 
 </script>
 
