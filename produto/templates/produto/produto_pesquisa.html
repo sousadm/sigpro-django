@@ -7,7 +7,6 @@
             var itemRow = $(this).closest('.item-row');
             var itemId = itemRow.data('id');
             $('#produtoId').val(itemRow.data('id'));
-            $('#descricao').val(itemRow.data('descricao'));
             $('#produtoId').focus();
         });
     });
@@ -37,9 +36,8 @@
                 <td>{{ item.precoVenda|floatformat:2 }}</td>
                 <td>{{ item.estoque|floatformat:2 }}</td>
                 <td>
-                    <!-- Adicione uma classe ao botão -->
                     <button type="button" class="btn btn-sm item-button" data-dismiss="modal">
-                        <i class="fas fa-search"></i>
+                        <i class="fa fa-check" aria-hidden="true"></i>
                     </button>
                 </td>
             </tr>

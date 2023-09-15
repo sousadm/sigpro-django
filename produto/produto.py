@@ -124,6 +124,13 @@ def produtoList(request):
 
 
 @require_token
+def get_produto(request, uuid):
+    headers = session_get_headers(request)
+    response = requests.get(URL_RECURSO + str(uuid), headers=headers)
+    return JsonResponse(response.json())
+
+
+@require_token
 def produtoPesquisa(request):
     template_name = 'produto/produto_pesquisa.html'
     form = ProdutoListForm(request.POST)
@@ -134,9 +141,7 @@ def produtoPesquisa(request):
     }
     return render(request, template_name, context)
 
-@require_token
-def get_produto(request, uuid):
-    headers = session_get_headers(request)
-    response = requests.get(URL_RECURSO + str(uuid), headers=headers)
-    return JsonResponse(response.json())
+
+
+
 

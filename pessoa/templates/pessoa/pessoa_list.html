@@ -45,7 +45,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for item in lista %}
+                    {% for item in page.object_list %}
                     <tr {% if not item.situacaoPessoa %} class="text-danger" {%endif%}>
                         <td class="d-none d-sm-table-cell">{{ item.pessoaId }}</td>
                         <td>{{ item.nome|default_if_none:"" }}</td>

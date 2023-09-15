@@ -1,6 +1,7 @@
 {% load bootstrap %}
 
 <input type="hidden" name="orcamentoId" value={{form.orcamentoId.value}}>
+<input type="hidden" name="pessoaId">
 
 <div class="container">
     <div class="row">
@@ -9,8 +10,8 @@
             <div class="input-group">
                 <input type="text" id="documento" name="documento" class="form-control" value={{form.documento.value|default_if_none:""}}>
                 <div class="input-group-btn">
-                    <button type="button" id="modalPadraoButton" class="btn"
-                        data-titulo="Pesquisa de Pessoa" data-url="{% url 'url_produto_pesquisa' %}">
+                    <button type="button" id="buttonPesquisaPessoa" class="btn"
+                        data-titulo="Pesquisa de Pessoa" data-url="{% url 'url_pessoa_pesquisa' %}">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -60,24 +61,83 @@
 
 <script>
 
-    $(document).ready(function () {
-        $('#documento').blur(function () {
-            var documento = document.getElementById('documento').value;
-            var url = '{% url "url_pessoa_docto_get" 0 %}'.replace('0', documento);
-            $.ajax({
-                url: url,
-                type: 'GET',  // Ou 'POST' dependendo da sua necessidade
-                success: function (data) {
-                    $('#id_nome').val(data['nome']);
-                    $('#id_email').val(data['email']);
-                    $('#id_fone').val(data['fone']);
-                    $('#id_nome').focus();
-                },
-                error: function (xhr, status, error) {
-                    console.log(error);
-                }
+        $(document).ready(function () {
+            $('#pessoaId').blur(function () {
+                var pessoaId = document.getElementById('pessoaId').value;
+                var url = '{% url "url_pessoa_get" 0 %}'.replace('0', pessoaId);
+                $.ajax({
+                    url: url,
+                    type: 'GET',  // Ou 'POST' dependendo da sua necessidade
+                    success: function (data) {
+                        $('#documento').val(data['cpf'] || data['cnpj']);
+                        $('#id_nome').val(data['nome']);
+                        $('#id_email').val(data['email']);
+                        $('#id_fone').val(data['fone']);
+                        $('#id_nome').focus();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
             });
         });
-    });    
+
+        $(document).ready(function () {
+            $('#documento').blur(function () {
+                var documento = document.getElementById('documento').value;
+                var url = '{% url "url_pessoa_docto_get" 0 %}'.replace('0', documento);
+                $.ajax({
+                    url: url,
+                    type: 'GET',  // Ou 'POST' dependendo da sua necessidade
+                    success: function (data) {
+                        $('#id_nome').val(data['nome']);
+                        $('#id_email').val(data['email']);
+                        $('#id_fone').val(data['fone']);
+                        $('#id_nome').focus();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#buttonPesquisaPessoa').on('click', function () {
+                $('#modalPadraoPesquisa').modal('show');
+                var url = $(this).data("url");
+                var titulo = $(this).data("titulo");
+                $('#modalPadraoTitulo').text(titulo);
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: function (data) {
+                        $('#modalPadraoContent').html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#modalPadraoButton').on('click', function () {
+                $('#modalPadraoPesquisa').modal('show');
+                var url = $(this).data("url");
+                var titulo = $(this).data("titulo");
+                $('#modalPadraoTitulo').text(titulo);
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: function (data) {
+                        $('#modalPadraoContent').html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });           
 </script>
 

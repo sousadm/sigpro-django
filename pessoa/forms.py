@@ -7,6 +7,7 @@ from django.urls import reverse
 from django import forms
 
 from core.controle import format_cnpj, format_cpf, session_get_headers, tratar_error
+from core.paginacao import get_page
 from core.settings import URL_API
 from core.tipos import TIPO_PROPRIETARIO
 from pessoa.models import TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TIPO_SIM_NAO, REGIME_TRIBUTARIO_CHOICES, \
@@ -316,5 +317,10 @@ class PessoaListForm(forms.Form):
     def pesquisar(self, request, params):
         headers = session_get_headers(request)
         response = requests.get(URL_API + 'pessoa', headers=headers, params=params)
-        data = response.json()
-        return data['content'] if 'content' in data else []
+        # data = response.json()
+        # return data['content'] if 'content' in data else []
+        if response.status_code == 200:
+            self.fields['nome'].initial = self.initial.get('nome')
+            self.initial = dict(response.json())
+            return get_page(self.initial, params)    
+

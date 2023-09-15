@@ -22,7 +22,7 @@ from compra.cotacao import cotacaoEdit, cotacaoImprimir, cotacaoListForm, cotaca
 from compra.cotacao_item import cotacaoItemDelete, cotacaoItemEdit, cotacaoItemNew
 from compra.cotacao_orcamento import cotacaoOrcamentoDelete, cotacaoOrcamentoEdit, cotacaoOrcamentoNew
 from pessoa.Endereco import get_municipios
-from pessoa.views import get_pessoa_documento, pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaTransportadorEdit, \
+from pessoa.views import get_pessoa_documento, get_pessoa_uuid, pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaPesquisa, pessoaTransportadorEdit, \
     pessoaVendedorEdit, pessoaList
 from produto.categoria import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
 from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew, \
@@ -36,8 +36,10 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
     path('pessoa/', pessoaList, name='url_pessoa_list'),
+    path('pessoa/pesquisa', pessoaPesquisa, name='url_pessoa_pesquisa'),    
     path('pessoa/add', pessoaNew, name='url_pessoa_add'),
     path('pessoa/<str:docto>/pesquisa-docto', get_pessoa_documento, name='url_pessoa_docto_get'),
+    path('pessoa/<int:uuid>/pesquisa', get_pessoa_uuid, name='url_pessoa_get'),
     path('pessoa/<int:uuid>', pessoaEdit, name='url_pessoa_edit'),
     path('pessoa/<int:uuid>/cliente', pessoaClienteEdit, name='url_pessoa_cliente'),
     path('pessoa/<int:uuid>/fornecedor', pessoaFornecedorEdit, name='url_pessoa_fornecedor'),

@@ -165,7 +165,6 @@ def pessoaVendedorEdit(request, uuid):
 
 @require_token
 def pessoaList(request):
-    lista = []
     params = {'sort':'nome,asc'}
     template_name = 'pessoa/pessoa_list.html'
     form = PessoaListForm()
@@ -178,16 +177,15 @@ def pessoaList(request):
             form = PessoaListForm(request.POST)
             params['nome'] = request.POST['nome']
 
-        lista = form.pesquisar(request, params)
+        page = form.pesquisar(request, params)
     except Exception as e:
         messages.error(request, e)
 
     context = {
         'form': form,
-        'lista': lista,
+        'page': page
     }
     return render(request, template_name, context)
-
 
 
 @require_token
@@ -198,7 +196,33 @@ def get_pessoa_documento(request, docto: str):
         response = requests.get(URL_RECURSO, headers=headers, params=params)
         data = dict(response.json())
         return JsonResponse(data.get('content')[0])
-    except Exception as e:        
+    except Exception as e:
         return JsonResponse({})
+
+
+@require_token
+def get_pessoa_uuid(request, uuid):
+    try:
+        headers = session_get_headers(request)
+        response = requests.get(URL_RECURSO + str(uuid), headers=headers, params={})
+        data = dict(response.json())
+        return JsonResponse(data.get('content')[0])
+    except Exception as e:
+        return JsonResponse({})
+
+
+
+@require_token
+def pessoaPesquisa(request):
+    template_name = 'pessoa/pessoa_pesquisa.html'
+    params = {'sort':'nome,asc'}
+    form = PessoaListForm(request.POST)
+    page = form.pesquisar(request, params)
+    context = {
+        'form': form,
+        'page': page
+    }
+    return render(request, template_name, context)
+
 
 
