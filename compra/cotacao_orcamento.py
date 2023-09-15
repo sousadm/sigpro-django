@@ -27,7 +27,7 @@ class CotacaoOrcamentoForm(forms.Form):
     desconto = forms.DecimalField(decimal_places=2, initial=0)
     frete = forms.DecimalField(decimal_places=2, initial=0)
     precificacaoId = forms.ChoiceField(label='Método de Precificação', required=True, initial=None)
-    status = forms.ChoiceField(label='Situação', choices=TIPO_COTACAO_STATUS, initial=True)
+    status = forms.ChoiceField(label='Situação', choices=TIPO_COTACAO_STATUS, initial=True, disabled=True)
     # created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
     # valorItem = forms.DecimalField(decimal_places=2, label='Valor dos Itens', initial=0, disabled=True)
 
@@ -40,7 +40,7 @@ class CotacaoOrcamentoForm(forms.Form):
             self.initial = data        
 
     def salvar(self, request, uuid=None, orcamentoId=None):
-        data = dados_para_json(self.data, nones=['orcamentoId'])
+        data = dados_para_json(self.data, nones=['orcamentoId','btn_orcamento_salvar','btn_orcamento_salvar'])
         headers = session_get_headers(request)
         if not orcamentoId or orcamentoId == 'None':
             response = requests.post(URL_RECURSO + str(uuid) + "/orcamento", json=data, headers=headers)

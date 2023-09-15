@@ -152,18 +152,24 @@
         <a href="{% url 'url_cotacao_list' %}">
             <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i> Lista </button>
         </a>
+
         {% if form.cotacaoId.value %}
         <button type="button" id="openModalProduto" class="btn btn-secondary">
             <i class="fas fa-cubes"></i> <span class="d-none d-md-inline">Add Item</span>
         </button>
 
+        {% if form.items %}
         <button type="button" id="openModalOrcamento" class="btn btn-secondary">
             <i class="fa fa-university"></i> <span class="d-none d-md-inline">Add Orçamento</span>
         </button>
-
+        
+        {% if form.orcamentos %}
         <a href="{% url 'url_cotacao_imprimir' form.cotacaoId.value %}" target="_blank">
             <button type="button" class="btn btn-secondary"> <i class="fas fa-print"></i> Imprimir </button>
         </a>
+        {% endif %}
+        
+        {% endif %}
 
         {% endif %}
 

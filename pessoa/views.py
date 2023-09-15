@@ -13,6 +13,8 @@ from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorF
 from pessoa.models import TIPO_CHOICES
 
 
+URL_RECURSO = URL_API + 'pessoa/'
+
 @require_token
 def pessoaNew(request):
     return pessoa_render(request, None)
@@ -185,4 +187,18 @@ def pessoaList(request):
         'lista': lista,
     }
     return render(request, template_name, context)
+
+
+
+@require_token
+def get_pessoa_documento(request, docto: str):
+    try:
+        params = {'cpf' if len(docto) < 14 else 'cnpj': docto}
+        headers = session_get_headers(request)
+        response = requests.get(URL_RECURSO, headers=headers, params=params)
+        data = dict(response.json())
+        return JsonResponse(data.get('content')[0])
+    except Exception as e:        
+        return JsonResponse({})
+
 

@@ -5,6 +5,7 @@ import requests
 from django.contrib import messages
 from django import forms
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 
 from django.urls import reverse
 from django.shortcuts import render
@@ -77,7 +78,7 @@ def cotacao_render(request, uuid=None):
             orcamentoId = request.POST.get('orcamentoId')
             formOrcamento = CotacaoOrcamentoForm(request.POST, request=request)
             formOrcamento.salvar(request, uuid, orcamentoId)
-            messages.success(request, 'sucesso ao gravar orçamento')            
+            messages.success(request, 'sucesso ao gravar orçamento')
 
         if request.POST.get('btn_salvar'):
             form = CotacaoForm(request.POST, request=request)

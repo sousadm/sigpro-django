@@ -4,14 +4,20 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-12 col-md-2">
-            {{ form.documento|bootstrap }}
-        </div>
-        <div class="col-12 col-md-7">
-            {{ form.nome|bootstrap }}
-        </div>        
         <div class="col-12 col-md-3">
-            {{ form.status|bootstrap }}
+            <label class="control-label">Documento</label>
+            <div class="input-group">
+                <input type="text" id="documento" name="documento" class="form-control" value={{form.documento.value|default_if_none:""}}>
+                <div class="input-group-btn">
+                    <button type="button" id="modalPadraoButton" class="btn"
+                        data-titulo="Pesquisa de Pessoa" data-url="{% url 'url_produto_pesquisa' %}">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-9">
+            {{ form.nome|bootstrap }}
         </div>
     </div>
     <div class="row">
@@ -22,8 +28,8 @@
             {{ form.fone|bootstrap }}
         </div>
         <div class="col-12 col-md-3">
-            {{ form.documento|bootstrap }}
-        </div>        
+            {{ form.status|bootstrap }}
+        </div>
     </div>
     <div class="row">
         <div class="col-12 col-md-6">
@@ -31,22 +37,47 @@
             <select id="precificacaoId" name="precificacaoId" class="form-control" required>
                 <option value=""></option>
                 {% for item in form.precificacaoId.field.choices %}
-                    <option value="{{ item.0 }}" {% if item.0 == form.precificacaoId.value %} selected {% endif %} >
-                        {{ item.1 }}
-                    </option>
+                <option value="{{ item.0 }}" {% if item.0 == form.precificacaoId.value %} selected {% endif %}>
+                    {{ item.1 }}
+                </option>
                 {% endfor %}
-            </select>            
+            </select>
         </div>
         <div class="col-12 col-md-3">
             {{ form.frete|bootstrap }}
         </div>
         <div class="col-12 col-md-3">
             {{ form.desconto|bootstrap }}
-        </div>        
-    </div>    
+        </div>
+    </div>
     <div class="row">
         <div class="col">
             {{ form.observacao|bootstrap }}
         </div>
-    </div>    
+    </div>
 </div>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#documento').blur(function () {
+            var documento = document.getElementById('documento').value;
+            var url = '{% url "url_pessoa_docto_get" 0 %}'.replace('0', documento);
+            $.ajax({
+                url: url,
+                type: 'GET',  // Ou 'POST' dependendo da sua necessidade
+                success: function (data) {
+                    $('#id_nome').val(data['nome']);
+                    $('#id_email').val(data['email']);
+                    $('#id_fone').val(data['fone']);
+                    $('#id_nome').focus();
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });    
+</script>
+
