@@ -175,7 +175,7 @@ def pessoaList(request):
 
         if request.POST.get('btn_listar'):
             form = PessoaListForm(request.POST)
-            params['nome'] = request.POST['nome']
+            params['nome'] = request.POST['descricao']
 
         page = form.pesquisar(request, params)
     except Exception as e:

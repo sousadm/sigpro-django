@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'pessoa',
     'produto',
     'compra',
+    'venda',
     'bootstrapform',
 ]
 

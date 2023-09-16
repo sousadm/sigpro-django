@@ -30,6 +30,7 @@ from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit,
 from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
 from produto.produto import get_produto, produtoEdit, produtoList, produtoNew, produtoPesquisa
 from produto.estoque import produtoEstoque, produtoEstoqueDetalhe
+from venda.formapgto import formaPgtoEdit, formaPgtoNew, formapgtoList
 
 urlpatterns = [
     path('', home, name='home'),
@@ -82,5 +83,11 @@ urlpatterns = [
     path('cotacao/<int:uuid>/add-orcamento', cotacaoOrcamentoNew, name='url_orcamento_add'),
     path('cotacao-orcamento/<int:uuid>', cotacaoOrcamentoEdit, name='url_orcamento_edit'),
     path('cotacao/<int:uuid>/remove-orcamento/<int:orcamento>', cotacaoOrcamentoDelete, name='url_cotacao_remove_orcamento'),
+
+    path('formapgto/', formapgtoList, name='url_formapgto_list'),
+    path('formapgto/<int:uuid>', formaPgtoEdit, name='url_formapgto_edit'),
+    path('formapgto/add', formaPgtoNew, name='url_formapgto_add'),
+    # path('get_categorias/', categoriaChoices, name='get_categorias'),
+
 
 ]

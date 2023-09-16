@@ -38,7 +38,7 @@
             position: fixed;
             bottom: 10px;
             /* height: 60px; */
-            background-color: whitesmoke;
+            background-color: rgb(175, 152, 152);
             padding: 0px;
         }
     </style>
@@ -46,6 +46,17 @@
 </head>
 
 <body>
+
+    <script>
+        // selecionar o conteúdo do campo pesquisa
+        function selecionarConteudoDescricao() {
+            var descricaoField = document.getElementById("id_descricao");
+            if (descricaoField && descricaoField.value) {
+                descricaoField.select();
+            }
+        }
+        window.onload = selecionarConteudoDescricao;
+    </script>    
 
     <div class="container">
         {% include 'core/messages.html' %}

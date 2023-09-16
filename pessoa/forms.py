@@ -312,15 +312,13 @@ def salvar_pessoa_tipo(self, request, data, tipo):
 
 
 class PessoaListForm(forms.Form):
-    nome = forms.CharField(label='Pesquisa', required=False,
+    descricao = forms.CharField(label='Pesquisa', required=False,
                            widget=forms.TextInput(attrs={'autofocus': 'autofocus'}))
     def pesquisar(self, request, params):
         headers = session_get_headers(request)
         response = requests.get(URL_API + 'pessoa', headers=headers, params=params)
-        # data = response.json()
-        # return data['content'] if 'content' in data else []
         if response.status_code == 200:
-            self.fields['nome'].initial = self.initial.get('nome')
+            self.fields['descricao'].initial = self.initial.get('descricao')
             self.initial = dict(response.json())
             return get_page(self.initial, params)    
 
