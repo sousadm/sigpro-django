@@ -18,14 +18,14 @@
                     <label class="control-label">Código</label>
                     <input type="number" disabled="disabled" class="form-control" value={{form.id.value}}>
                 </div>
-                <div class="col-12 col-md-7">
+                <div class="col-12 col-md-10">
                     {{ form.descricao|bootstrap }}
                 </div>
-                <div class="col-12 col-md-3">
-                    {{ form.margemLucro|bootstrap }}
-                </div>                
             </div>
             <div class="row">
+                <div class="col-12 col-md-3">
+                    {{ form.agregado|bootstrap }}
+                </div>
                 <div class="col-12 col-md-3">
                     {{ form.frete|bootstrap }}
                 </div>
@@ -33,10 +33,18 @@
                     {{ form.imposto|bootstrap }}
                 </div>
                 <div class="col-12 col-md-3">
-                    {{ form.agregado|bootstrap }}
-                </div>
-                <div class="col-12 col-md-3">
                     {{ form.credito|bootstrap }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    {{ form.margemLucro|bootstrap }}
+                </div>
+                <div class="col-12 col-md-4">
+                    {{ form.margemNegociacao|bootstrap }}
+                </div>
+                <div class="col-12 col-md-4">
+                    {{ form.comissao|bootstrap }}
                 </div>
             </div>
             <div class="row">
@@ -45,9 +53,6 @@
                 </div>
                 <div class="col-12 col-md-3">
                     {{ form.despesaVariavel|bootstrap }}
-                </div>
-                <div class="col-12 col-md-3">
-                    {{ form.comissao|bootstrap }}
                 </div>
                 <div class="col-12 col-md-3">
                     {{ form.markup|bootstrap }}

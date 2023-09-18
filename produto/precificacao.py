@@ -21,6 +21,7 @@ class PrecificacaoForm(forms.Form):
 
     comissao = forms.DecimalField(label="Comissão %", min_value=0, decimal_places=2, initial=0)
     margemLucro = forms.DecimalField(label="Margem de Lucro %", min_value=0, decimal_places=2, initial=0)
+    margemNegociacao = forms.DecimalField(label="Margem de Negociação %", min_value=0, decimal_places=2, initial=0)
     despesaFixa = forms.DecimalField(label="Despesa Fixa %", min_value=0, decimal_places=2, initial=0)
     despesaVariavel = forms.DecimalField(label="Despesa Variável %", min_value=0, decimal_places=2, initial=0)
     markup = forms.DecimalField(label="Fator Multiplicador", min_value=0, decimal_places=4, initial=0, disabled=True)
