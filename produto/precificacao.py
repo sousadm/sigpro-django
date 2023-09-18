@@ -19,6 +19,7 @@ class PrecificacaoForm(forms.Form):
     imposto = forms.DecimalField(label="Imposto %", min_value=0, decimal_places=2, initial=0)
     credito = forms.DecimalField(label="Crédito %", min_value=0, decimal_places=2, initial=0)
 
+    comissao = forms.DecimalField(label="Comissão %", min_value=0, decimal_places=2, initial=0)
     margemLucro = forms.DecimalField(label="Margem de Lucro %", min_value=0, decimal_places=2, initial=0)
     despesaFixa = forms.DecimalField(label="Despesa Fixa %", min_value=0, decimal_places=2, initial=0)
     despesaVariavel = forms.DecimalField(label="Despesa Variável %", min_value=0, decimal_places=2, initial=0)
