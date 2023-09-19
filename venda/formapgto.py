@@ -16,9 +16,9 @@ class FormaPgtoForm(forms.Form):
     id = forms.IntegerField(label='ID', required=False)
     descricao = forms.CharField(max_length=100, label='Descrição', widget=forms.DateInput(attrs={'autofocus': 'true', }))
     tipoPagamento = forms.ChoiceField(choices=TIPO_PAGAMENTO, initial='DINHEIRO', label='Tipo de Pagamento', required=True)
-    parcelas = forms.IntegerField(label='Parcelas', initial=1, min_value=1, max_value=24)
-    descontoMaximo = forms.FloatField(label='Desconto', initial=0, min_value=0, max_value=100)
-    valorMinimo = forms.FloatField(label='Mínimo', initial=0, min_value=0.01)
+    parcelas = forms.IntegerField(label='Parcelas (Qtde Máx)', initial=1, min_value=1, max_value=24)
+    descontoMaximo = forms.FloatField(label='Desconto', initial=0, min_value=0, max_value=100, disabled=True)
+    valorMinimo = forms.FloatField(label='Valor Mínimo (parcela)', initial=0, min_value=0.01)
     prazoMedio = forms.FloatField(label='Prazo Médio de Pgto', initial=1, min_value=0.01)
     situacao = forms.ChoiceField(choices=SITUACAO_CADASTRAL, initial='ATIVO', label='Situação', widget=forms.DateInput(attrs={'title': 'situação cadastral', }))
 

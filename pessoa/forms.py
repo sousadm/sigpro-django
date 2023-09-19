@@ -9,7 +9,7 @@ from django import forms
 from core.controle import format_cnpj, format_cpf, session_get_headers, tratar_error
 from core.paginacao import get_page
 from core.settings import URL_API
-from core.tipos import TIPO_PROPRIETARIO
+from core.tipos import NIVEL_NEGOCIACAO, TIPO_PROPRIETARIO
 from pessoa.models import TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TIPO_SIM_NAO, REGIME_TRIBUTARIO_CHOICES, \
     TIPO_CONTRIBUINTE_CHOICES
 
@@ -186,6 +186,7 @@ class FornecedorForm(forms.Form):
     nome = forms.CharField(max_length=100, label='Nome', disabled=True)    
     fornecedorId = forms.IntegerField(label='Código', required=False, disabled=True)
     situacaoFornecedor = forms.ChoiceField(choices=TIPO_SITUACAO, initial=True)
+    nivelNegociacao = forms.ChoiceField(choices=NIVEL_NEGOCIACAO, initial='SEM_DESCONTO')    
     created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
 
     def existe(self):
@@ -250,6 +251,7 @@ class VendedorForm(forms.Form):
     nome = forms.CharField(max_length=100, label='Nome', disabled=True)
     vendedorId = forms.IntegerField(label='Código', required=False, disabled=True)
     situacaoVendedor = forms.ChoiceField(choices=TIPO_SITUACAO, initial=True)
+    nivelNegociacao = forms.ChoiceField(choices=NIVEL_NEGOCIACAO, initial=True)
     comissao = forms.FloatField(label='Percentual de Comissão', initial=0, widget=forms.DateInput(attrs={'autofocus': 'true', }))
     created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
 
