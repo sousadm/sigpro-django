@@ -15,6 +15,11 @@ from produto.categoria import categoriaChoices
 from produto.models import TIPO_UNIDADE_MEDIDA
 from produto.precificacao import precificacaoChoices
 
+TIPO_NEGOCIAVEL = (
+    ('True', 'Permite negociação de preço'),
+    ('False', 'Preço de venda inegociável'),
+)
+
 URL_RECURSO = URL_API + 'produto/'
 
 class ProdutoForm(forms.Form):
@@ -29,6 +34,7 @@ class ProdutoForm(forms.Form):
     precificacaoId = forms.ChoiceField(label='Precificação', initial=None)
     ncm = forms.CharField(max_length=10, label='NCM', initial=None)
     cest = forms.CharField(max_length=10, label='CEST', initial=None)
+    negociavel = forms.ChoiceField(choices=TIPO_NEGOCIAVEL, label='Quanto Negociação', initial=False)
     
     def __init__(self, *args, request, uuid=None, **kwargs):
         super(ProdutoForm, self).__init__(*args, **kwargs)

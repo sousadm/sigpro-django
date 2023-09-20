@@ -30,9 +30,11 @@ def session_required(request):
 
 # Atribui o token de acesso à sessão
 def session_add_token(request, token):
-    request.session['username'] = token['username']
-    request.session['userId'] = token['userId']
-    request.session['access_token'] = token['access_token']
+    data = dict(token)
+    request.session['username'] = data.get('username')
+    request.session['userId'] = data.get('userId')
+    request.session['vendedorId'] = data.get('vendedorId')
+    request.session['access_token'] = data.get('access_token')
 
 
 # Obtem o token da sessão

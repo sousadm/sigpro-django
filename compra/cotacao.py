@@ -1,6 +1,3 @@
-from http.client import HTTPResponse
-import json
-
 import requests
 from django.contrib import messages
 from django import forms
@@ -65,7 +62,7 @@ def cotacaoEdit(request, uuid):
 
 @require_token
 def cotacao_render(request, uuid=None):
-    form = CotacaoForm(request=request)
+    # form = CotacaoForm(request=request)
     template_name = 'compra/cotacao_edit.html'
     try:
         if request.POST.get('btn_item_salvar'):

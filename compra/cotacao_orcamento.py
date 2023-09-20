@@ -28,8 +28,6 @@ class CotacaoOrcamentoForm(forms.Form):
     frete = forms.DecimalField(decimal_places=2, initial=0)
     precificacaoId = forms.ChoiceField(label='Método de Precificação', required=True, initial=None)
     status = forms.ChoiceField(label='Situação', choices=TIPO_COTACAO_STATUS, initial=True, disabled=True)
-    # created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
-    # valorItem = forms.DecimalField(decimal_places=2, label='Valor dos Itens', initial=0, disabled=True)
 
     def __init__(self, *args, request, uuid=None, cotacao=None, **kwargs):
         super(CotacaoOrcamentoForm, self).__init__(*args, **kwargs)
