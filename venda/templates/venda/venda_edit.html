@@ -31,7 +31,7 @@
                         {{ form.fone|bootstrap }}
                     </div>
                     <div class="col-12 col-md-2">
-                        {{ form.vendedorId|bootstrap }}
+                        {{ form.vendedorNome|bootstrap }}
                     </div>                    
                 </div>
                 <div class="row" hidden="true">
@@ -46,9 +46,9 @@
                     <div class="col-12 col-md-2">
                         <label class="control-label">Produto</label>
                         <div class="input-group">
-                            <input type="number" id="produtoId" class="form-control" value={{form.produtoId.value}}>
+                            <input type="number" id="produtoId" name="produtoId" class="form-control" value={{form.produtoId.value}}>
                             <div class="input-group-btn">
-                                <button type="button" id="modalPadraoButton" class="btn"
+                                <button type="button" id="modalPadraoButton" class="btn btn-dark"
                                     data-titulo="Pesquisa de Produto" data-url="{% url 'url_produto_pesquisa' %}">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -60,14 +60,10 @@
                     </div>
                     <div class="col-12 col-md-2">
                         {{ form.quantidade|bootstrap }}
-                    </div>                    
-                    <div class="col-auto mb-3 d-flex align-items-end">
-                        <button type="button" name="btn_gravar_item" id="btn_gravar_item" class="btn btn-dark ml-2"> <i class="fa fa-plus"></i></button>
-                        <!-- <a href="{% url 'url_produto_add' %}">
-                            <button type="button" class="btn btn-dark ml-2"> <i class="fa fa-plus"></i></button>
-                        </a> -->    
                     </div>
-    
+                    <div class="col-12 col-md-2">
+                        {{ form.preco|bootstrap }}
+                    </div>                    
                 </div>                
  
                 <div class="table-responsive">
@@ -145,6 +141,7 @@
                     $('#id_descricaoItem').val(data['descricao']);
                     $('#id_ncm').val(data['ncm']);
                     $('#id_unidade').val(data['unidade']);
+                    $('#id_preco').val(data['precoVenda']);
                     $('#id_quantidade').focus();
                 },
                 error: function (xhr, status, error) {

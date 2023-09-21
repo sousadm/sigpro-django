@@ -32,6 +32,7 @@ def session_required(request):
 def session_add_token(request, token):
     data = dict(token)
     request.session['username'] = data.get('username')
+    request.session['nome'] = data.get('nome')
     request.session['userId'] = data.get('userId')
     request.session['vendedorId'] = data.get('vendedorId')
     request.session['access_token'] = data.get('access_token')
