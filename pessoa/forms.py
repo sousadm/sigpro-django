@@ -4,6 +4,7 @@ from urllib.parse import urlencode
 import requests
 from django import forms
 
+from django.http import JsonResponse
 from core.controle import format_cnpj, format_cpf, session_get_headers, tratar_error
 from core.paginacao import get_page
 from core.settings import URL_API
@@ -12,6 +13,8 @@ from pessoa.models import TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TI
     TIPO_CONTRIBUINTE_CHOICES
 
 # Create your tests here.
+
+URL_RECURSO = URL_API + 'pessoa/'
 
 class PessoaForm(forms.Form):
     pessoaId = forms.IntegerField(label='Pessoa ID', required=False)
@@ -146,38 +149,6 @@ class PessoaForm(forms.Form):
         if data['fornecedorId'] == 'None': data['fornecedorId'] = None
         return data
 
-class ClienteForm(forms.Form):
-    pessoaId = forms.IntegerField()
-    nome = forms.CharField(max_length=100, label='Nome', disabled=True)    
-    clienteId = forms.IntegerField(label='Código', required=False, disabled=True)
-    situacaoCliente = forms.ChoiceField(choices=TIPO_SITUACAO, initial=True)
-    emailFiscal = forms.EmailField(label='E-mail Fiscal', required=False, widget=forms.DateInput(attrs={'autofocus': 'true', }))
-    limiteCredito = forms.FloatField(label='Limite de Crédito', initial=0)
-    limitePrazo = forms.FloatField(label='Limite de Prazo', initial=0)
-    retencaoIss = forms.ChoiceField(choices=TIPO_SIM_NAO, initial=False, label='Retenção ISS')
-
-    def existe(self):
-        return existe_registro(self, self.initial, 'clienteId')
-
-    def pesquisaPorPessoa(self, request, uuid):
-        self.initial = pesquisa_pessoa(self, request, uuid, 'cliente')
-
-    def json(self):
-        post_data = dict(self.data)  # Converter QueryDict para dicionário
-        post_data.pop('csrfmiddlewaretoken', None)
-        post_data.pop('btn_salvar', None)
-        json_data = json.dumps(post_data).replace("[", "").replace("]", "")
-        data = json.loads(json_data)
-        if data['clienteId'] == 'None': data['clienteId'] = None
-        return data
-
-    def ativar(self, request, uuid):
-        ativar_pessoa_tipo(self, request, 'cliente', uuid)
-
-    def salvar(self, request):
-        data = self.json()
-        salvar_pessoa_tipo(self, request, data, 'cliente')
-
 
 class FornecedorForm(forms.Form):
     pessoaId = forms.IntegerField()
@@ -247,17 +218,6 @@ class TransportadorForm(forms.Form):
 def existe_registro(self, dados, campo):
     return True if dados.get(campo) and dados.get(campo) != 'None' else False
 
-
-def pesquisa_pessoa(self, request, uuid, tipo):
-    url = URL_API + 'pessoa/' + str(uuid)
-    if tipo:
-        response = requests.get(url +"/" +tipo, headers=session_get_headers(request))
-        return response.json()
-    else:
-        response = requests.get(url, headers=session_get_headers(request))
-        return response.json()
-
-
 def ativar_pessoa_tipo(self, request, tipo, uuid):
     headers = session_get_headers(request)
     url = URL_API + tipo + '/' + str(uuid) + "/ativar-inativar"
@@ -289,3 +249,16 @@ class PessoaListForm(forms.Form):
             self.initial = dict(response.json())
             return get_page(self.initial, params)    
 
+
+def pesquisa_pessoa(self, request, uuid, tipo):
+    headers = session_get_headers(request)
+    if tipo:
+        response = requests.get(URL_RECURSO + str(uuid) + "/" +tipo, headers=headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            response = requests.get(URL_RECURSO + str(uuid), headers=headers, params={})
+            return response.json()
+    else:
+        response = requests.get(URL_RECURSO + str(uuid), headers=headers)
+        return response.json()

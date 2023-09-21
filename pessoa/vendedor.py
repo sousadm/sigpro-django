@@ -1,11 +1,10 @@
 import json
-from urllib.parse import urlencode
-import requests
 from django.contrib import messages
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
+from core.controle import require_token
 
 from core.tipos import NIVEL_NEGOCIACAO, TIPO_SITUACAO
 from pessoa.forms import ativar_pessoa_tipo, existe_registro, pesquisa_pessoa, salvar_pessoa_tipo
@@ -45,7 +44,7 @@ class VendedorForm(forms.Form):
         salvar_pessoa_tipo(self, request, data, 'vendedor')
 
 
-
+@require_token
 def pessoaVendedorEdit(request, uuid):
     template_name = 'pessoa/vendedor_edit.html'
     form = VendedorForm()

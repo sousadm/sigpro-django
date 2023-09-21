@@ -6,10 +6,10 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from core.controle import require_token, session_get_token, session_get_headers, format_cpf, format_cnpj
+from core.controle import require_token, session_get_headers
 from core.settings import URL_API
 from pessoa.Endereco import get_lista_unidade_federacao
-from pessoa.forms import PessoaForm, ClienteForm, FornecedorForm, TransportadorForm, PessoaListForm
+from pessoa.forms import PessoaForm, FornecedorForm, TransportadorForm, PessoaListForm
 from pessoa.models import TIPO_CHOICES
 
 
@@ -59,33 +59,6 @@ def pessoa_render(request, uuid=None):
         'municipios': municipios
     }
     return render(request, template_name, context)
-
-
-@require_token
-def pessoaClienteEdit(request, uuid):
-    template_name = 'pessoa/cliente_edit.html'
-    form = ClienteForm()
-    try:
-
-        if request.POST.get('btn_pessoa'):
-            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
-
-        if request.POST.get('btn_salvar'):
-            form = ClienteForm(request.POST)
-            form.salvar(request)
-            messages.success(request, 'sucesso ao gravar dados')
-            return HttpResponseRedirect(reverse('url_pessoa_cliente', kwargs={'uuid': uuid}))
-
-        if request.POST.get('btn_ativar'):
-            form.ativar(request, request.POST.get('clienteId'))
-            return HttpResponseRedirect(reverse('url_pessoa_cliente', kwargs={'uuid': uuid}))
-
-    except Exception as e:
-        messages.error(request, e)
-
-    form.pesquisaPorPessoa(request, uuid)
-    return render(request, template_name, {'form': form})
-
 
 @require_token
 def pessoaFornecedorEdit(request, uuid):
