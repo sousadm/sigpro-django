@@ -22,8 +22,8 @@ from compra.cotacao import cotacaoEdit, cotacaoImprimir, cotacaoListForm, cotaca
 from compra.cotacao_item import cotacaoItemDelete, cotacaoItemEdit, cotacaoItemNew
 from compra.cotacao_orcamento import cotacaoOrcamentoDelete, cotacaoOrcamentoEdit, cotacaoOrcamentoNew
 from pessoa.Endereco import get_municipios
-from pessoa.views import get_pessoa_documento, get_pessoa_uuid, pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaPesquisa, pessoaTransportadorEdit, \
-    pessoaVendedorEdit, pessoaList
+from pessoa.vendedor import pessoaVendedorEdit
+from pessoa.views import get_pessoa_documento, get_pessoa_uuid, pessoaNew, pessoaEdit, pessoaClienteEdit, pessoaFornecedorEdit, pessoaPesquisa, pessoaTransportadorEdit, pessoaList
 from produto.categoria import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
 from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew, \
     centroDistribuicaoChoices
@@ -46,7 +46,7 @@ urlpatterns = [
     path('pessoa/<int:uuid>/cliente', pessoaClienteEdit, name='url_pessoa_cliente'),
     path('pessoa/<int:uuid>/fornecedor', pessoaFornecedorEdit, name='url_pessoa_fornecedor'),
     path('pessoa/<int:uuid>/transportador', pessoaTransportadorEdit, name='url_pessoa_transportador'),
-    path('pessoa/<int:uuid>/vendedor', pessoaVendedorEdit, name='url_pessoa_vendedor'),
+    path('pessoa/<int:uuid>/vendedor', pessoaVendedorEdit, name='url_pessoa_vendedor'), 
     path('get_municipios/', get_municipios, name='get_municipios'),
 
     path('categoria/', categoriaList, name='url_categoria_list'),

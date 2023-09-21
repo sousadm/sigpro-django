@@ -2,7 +2,7 @@ import requests
 from django.urls import reverse
 from django import forms
 from django.contrib import messages
-from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
+from core.controle import dados_para_json, require_token, session_get, session_get_headers, tratar_error
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
@@ -41,6 +41,10 @@ class VendaForm(forms.Form):
                 self.orcamentos = data.get('orcamentos')
             else:
                 raise Exception(tratar_error(response))
+        else:
+            vendedor = session_get(request, 'vendedorId')
+            # print('vendedor', vendedor )
+            self.data['vendedorId'] = vendedor
 
     def salvar(self, request, uuid=None):
         data = dados_para_json(self.data, [])

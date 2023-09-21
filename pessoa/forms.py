@@ -2,8 +2,6 @@ import json
 from urllib.parse import urlencode
 
 import requests
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django import forms
 
 from core.controle import format_cnpj, format_cpf, session_get_headers, tratar_error
@@ -243,39 +241,6 @@ class TransportadorForm(forms.Form):
     def salvar(self, request):
         data = self.json()
         salvar_pessoa_tipo(self, request, data, 'transportador')
-
-
-# VENDEDOR
-class VendedorForm(forms.Form):
-    pessoaId = forms.IntegerField()
-    nome = forms.CharField(max_length=100, label='Nome', disabled=True)
-    vendedorId = forms.IntegerField(label='Código', required=False, disabled=True)
-    situacaoVendedor = forms.ChoiceField(choices=TIPO_SITUACAO, initial=True)
-    nivelNegociacao = forms.ChoiceField(choices=NIVEL_NEGOCIACAO, initial=True)
-    comissao = forms.FloatField(label='Percentual de Comissão', initial=0, widget=forms.DateInput(attrs={'autofocus': 'true', }))
-    created_dt = forms.DateTimeField(label='Data do cadastro', required=False)
-
-    def existe(self):
-        return existe_registro(self, self.initial, 'vendedorId')
-
-    def pesquisaPorPessoa(self, request, uuid):
-        self.initial = pesquisa_pessoa(self, request, uuid, 'vendedor')
-
-    def json(self):
-        post_data = dict(self.data)  # Converter QueryDict para dicionário
-        post_data.pop('csrfmiddlewaretoken', None)
-        post_data.pop('btn_salvar', None)
-        json_data = json.dumps(post_data).replace("[", "").replace("]", "")
-        data = json.loads(json_data)
-        if data['vendedorId'] == 'None': data['vendedorId'] = None
-        return data
-
-    def ativar(self, request, uuid):
-        ativar_pessoa_tipo(self, request, 'vendedor', uuid)
-
-    def salvar(self, request):
-        data = self.json()
-        salvar_pessoa_tipo(self, request, data, 'vendedor')
 
 
 # FUNCÕES AUXILIARES
