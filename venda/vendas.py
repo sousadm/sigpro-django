@@ -62,19 +62,15 @@ class VendaForm(forms.Form):
             data.pop('produtoId', None)
             data.pop('quantidade', None)
             
-        raise Exception(data)
-        # headers = session_get_headers(request)
-        # if uuid:
-        #     response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
-        # else:
-        #     response = requests.post(URL_RECURSO, json=data, headers=headers)
-        # if response.status_code in [200, 201]:
-        #     return response.json()['vendaId']
-        # else:
-        #     raise Exception(tratar_error(response))
-
-    def testar(self):
-        print('AKI DEU CERTO E SEMPRE:')
+        headers = session_get_headers(request)
+        if uuid:
+            response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
+        else:
+            response = requests.post(URL_RECURSO, json=data, headers=headers)
+        if response.status_code in [200, 201]:
+            return response.json()['vendaId']
+        else:
+            raise Exception(tratar_error(response))
 
 
 @require_token

@@ -33,7 +33,7 @@ class ProdutoForm(forms.Form):
     categoriaId = forms.ChoiceField(label='Categoria', initial=None)
     precificacaoId = forms.ChoiceField(label='Precificação', initial=None)
     ncm = forms.CharField(max_length=10, label='NCM', initial=None)
-    cest = forms.CharField(max_length=10, label='CEST', initial=None)
+    cest = forms.CharField(max_length=10, label='CEST', required=False, initial=None)
     negociavel = forms.ChoiceField(choices=TIPO_NEGOCIAVEL, label='Quanto Negociação', initial=False)
     
     def __init__(self, *args, request, uuid=None, **kwargs):

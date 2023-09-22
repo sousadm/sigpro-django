@@ -31,22 +31,25 @@
                         {{ form.fone|bootstrap }}
                     </div>
                     <div class="col-12 col-md-2">
-                        {{ form.vendedorNome|bootstrap }}
-                    </div>                    
+                        <label class="control-label">Vendedor</label>
+                        <input type="text" disabled="disabled" class="form-control" value={{form.vendedorNome.value}}
+                            title={{form.vendedorNome.value}}>
+                    </div>
                 </div>
                 <div class="row" hidden="true">
                     <div class="col-12 col-md-12">
                         {{ form.email|bootstrap }}
-                    </div>                    
+                    </div>
                 </div>
 
-                <h4 class="bg-dark text-white">Itens de Venda</h4>                
+                <h4 class="bg-dark text-white">Itens de Venda</h4>
 
                 <div class="row">
                     <div class="col-12 col-md-2">
                         <label class="control-label">Produto</label>
                         <div class="input-group">
-                            <input type="number" id="produtoId" name="produtoId" class="form-control" value={{form.produtoId.value}}>
+                            <input type="number" id="produtoId" name="produtoId" class="form-control"
+                                value={{form.produtoId.value}}>
                             <div class="input-group-btn">
                                 <button type="button" id="modalPadraoButton" class="btn btn-dark"
                                     data-titulo="Pesquisa de Produto" data-url="{% url 'url_produto_pesquisa' %}">
@@ -63,9 +66,9 @@
                     </div>
                     <div class="col-12 col-md-2">
                         {{ form.preco|bootstrap }}
-                    </div>                    
-                </div>                
- 
+                    </div>
+                </div>
+
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead>
@@ -82,7 +85,7 @@
                         <tbody>
                             {% for item in form.items %}
                             <tr>
-                                <td>{{item.cotacaoItemId}}</td>
+                                <td>{{item.itemId}}</td>
                                 <td>{{item.descricaoItem|default_if_none:""}}</td>
                                 <td>{{item.ncm|default_if_none:""}}</td>
                                 <td>{{item.unidade|default_if_none:""}}</td>
@@ -94,12 +97,7 @@
                                         <button type="button" class="btn btn-sm" title="editar"> <i
                                                 class="fas fa-edit"></i> </button>
                                     </a>
-                                    <a
-                                        href="{% url 'url_cotacao_remove_item' form.cotacaoId.value item.cotacaoItemId %}">
-                                        <button type="button"
-                                            onClick='return confirma("EXCLUIR o item: {{item.descricaoItem}} ?")'
-                                            class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
-                                    </a>
+
                                 </td>
                             </tr>
                             {% empty %}
