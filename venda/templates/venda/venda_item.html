@@ -1,0 +1,59 @@
+{% load bootstrap %}
+
+<input type="hidden" name="cotacaoItemId" value={{form.cotacaoItemId.value}}>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-10">
+            {{ form.descricaoItem|bootstrap }}
+        </div>
+        <div class="col-12 col-md-2">
+            {{ form.unidade|bootstrap }}
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-3">
+            {{ form.quantidade|bootstrap }}
+        </div>
+        <div class="col-12 col-md-3">
+            {{ form.descontoItem|bootstrap }}
+        </div>
+        <div class="col-12 col-md-3">
+            {{ form.preco|bootstrap }}
+        </div>
+        <div class="col-12 col-md-3">
+            {{ form.valorItem|bootstrap }}
+        </div>        
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#id_quantidade').click(function ()) {
+            var quantidade = document.getElementById('id_quantidade').value;
+            alert(quantidade);
+        }
+        
+
+        $('#produtoId').blur(function () {
+            var produtoId = document.getElementById('produtoId').value;
+            var url = '{% url "url_produto_get" 0 %}'.replace('0', produtoId);
+            $.ajax({
+                url: url,
+                type: 'GET',  // Ou 'POST' dependendo da sua necessidade
+                success: function (data) {
+                    $('#id_descricaoItem').val(data['descricao']);
+                    $('#id_ncm').val(data['ncm']);
+                    $('#id_unidade').val(data['unidade']);
+                    $('#id_quantidade').focus();
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+</script>

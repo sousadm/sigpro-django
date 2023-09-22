@@ -92,11 +92,16 @@
                                 <td>{{item.preco|floatformat:2}}</td>
                                 <td>{{item.valorItem|floatformat:2}}</td>
                                 <td>
-                                    <a href="#" class="editar-item" data-item-id="{{item.cotacaoItemId}}">
+                                    <a href="#" class="editar-item" data-item-id="{{item.itemId}}">
                                         <button type="button" class="btn btn-sm" title="editar"> <i
                                                 class="fas fa-edit"></i> </button>
+                                    </a>                                    
+                                    <a
+                                        href="{% url 'url_venda_remove_item' form.vendaId.value item.itemId %}">
+                                        <button type="button"
+                                            onClick='return confirma("EXCLUIR o item: {{item.descricaoItem}} ?")'
+                                            class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
                                     </a>
-
                                 </td>
                             </tr>
                             {% empty %}
@@ -119,17 +124,65 @@
     <br />
 
     <div class="footer">
-        <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
-            <i class="fas fa-save"></i> Salvar
-        </button>
-
-            {{ form.valorItem }}
-
+        <div class="row">
+            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+                <i class="fas fa-save"></i> Salvar
+            </button>
+            <div class="input-group">
+                {{form.valorItem}}
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-dark">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
 </form>
 
+<div class="modal fade" tabindex="-1" role="dialog" id="modalProduto">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Item de Venda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalContent"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="submit" value="btn_item_salvar" name="btn_item_salvar" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
+
+    $(document).ready(function () {
+        $('.editar-item').click(function (e) {
+            $('#modalProduto').modal('show');
+            e.preventDefault();
+            var item_id = $(this).data('item-id');
+            var url = '{% url "url_vendaitem_edit" 0 %}'.replace('0', item_id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+    });
+
     $(document).ready(function () {
         $('#produtoId').blur(function () {
             var produtoId = document.getElementById('produtoId').value;
@@ -168,7 +221,8 @@
                 }
             });
         });
-    });    
+    });   
+    
 </script>
 
 {% endblock %}

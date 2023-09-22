@@ -64,7 +64,7 @@ def tratar_error(response):
         data = json.loads(texto.replace("'", '"'))
         mensagem = data.get("mensagem", None)
         message = data.get("message", None)
-        return message or mensagem or data
+        return (message or mensagem or data) # + "\n Status:" + data.get('status') + "\n Erro:" + data.get('error')
     except:
         return response.json()
 

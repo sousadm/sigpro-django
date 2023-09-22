@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from core.settings import URL_API
 
 URL_RECURSO = URL_API + 'venda/'
+URL_RECURSO_ITEM = URL_API + 'vendaitem/'
 
 STATUS_VENDA = (
     ('ORCAMENTO','Orçamento de Venda'),
@@ -38,7 +39,6 @@ class VendaForm(forms.Form):
             response = requests.get(URL_RECURSO + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
                 data = dict(response.json())
-                print(data)
                 self.initial = data
                 self.items = data.get('items')
                 self.orcamentos = data.get('orcamentos')
@@ -103,3 +103,13 @@ def venda_render(request, uuid=None):
         messages.error(request, e)
     context = {'form': form}
     return render(request, template_name, context)
+
+
+@require_token
+def removeVendaItem(request, uuid):
+    params = {'id': uuid}
+    headers = session_get_headers(request)
+    response = requests.delete(URL_RECURSO_ITEM, headers=headers, params=params)
+    if not response.status_code in [200, 201]:
+        raise Exception(tratar_error(response))
+    
