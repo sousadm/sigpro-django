@@ -14,7 +14,7 @@
 
         <div class="card">
             <div class="card-header">
-                <h3>Vendas</h3>
+                <h4>{{ form.titulo }}</h4>
             </div>
             <div class="card-body">
 
@@ -75,10 +75,10 @@
                             <tr>
                                 <th>#</th>
                                 <th>Descrição do Item</th>
-                                <th>NCM</th>
                                 <th>Unidade</th>
                                 <th>Quantidade</th>
                                 <th>M.Preço</th>
+                                <th>V.Item</th>
                                 <th width="90"></th>
                             </tr>
                         </thead>
@@ -87,11 +87,10 @@
                             <tr>
                                 <td>{{item.itemId}}</td>
                                 <td>{{item.descricaoItem|default_if_none:""}}</td>
-                                <td>{{item.ncm|default_if_none:""}}</td>
                                 <td>{{item.unidade|default_if_none:""}}</td>
                                 <td>{{item.quantidade|floatformat:2}}</td>
-                                <td>{{item.menorPreco|floatformat:2}}</td>
-                                <td>{{item.menorCusto|floatformat:2}}</td>
+                                <td>{{item.preco|floatformat:2}}</td>
+                                <td>{{item.valorItem|floatformat:2}}</td>
                                 <td>
                                     <a href="#" class="editar-item" data-item-id="{{item.cotacaoItemId}}">
                                         <button type="button" class="btn btn-sm" title="editar"> <i
@@ -123,6 +122,9 @@
         <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
             <i class="fas fa-save"></i> Salvar
         </button>
+
+            {{ form.valorItem }}
+
     </div>
 
 </form>

@@ -11,8 +11,8 @@ from core.settings import URL_API
 URL_RECURSO = URL_API + 'venda/'
 
 STATUS_VENDA = (
-    ('ORCAMENTO','Orçamento'),
-    ('PEDIDO','Pedido'),
+    ('ORCAMENTO','Orçamento de Venda'),
+    ('PEDIDO','Pedido de Venda'),
     ('CANCELADO','Cancelado'),
 )
 
@@ -20,7 +20,7 @@ class VendaForm(forms.Form):
     vendaId = forms.IntegerField(label='ID', required=False)
     vendedorId = forms.IntegerField(label='Vendedor', required=False)
     vendedorNome = forms.CharField(max_length=100, label='Vendedor', disabled=True)
-    VendaStatus = forms.ChoiceField(choices=STATUS_VENDA, label='Tipo', required=True, initial='ORCAMENTO')
+    status = forms.ChoiceField(choices=STATUS_VENDA, label='Tipo', required=True, initial='ORCAMENTO')
     nome = forms.CharField(max_length=100, label='Nome do Cliente', widget=forms.DateInput(attrs={'autofocus': 'true', }))
     documento = forms.CharField(max_length=14, label='CPF/CNPJ', required=True)
     fone = forms.CharField(max_length=20, label='Fone/Celular', required=True)
@@ -29,6 +29,7 @@ class VendaForm(forms.Form):
     descricaoItem = forms.CharField(max_length=100, label='Descrição do produto', disabled=True, required=False)
     quantidade = forms.IntegerField(label='Quantidade', initial=1)
     preco = forms.DecimalField(label="Pr.Unit", min_value=0, decimal_places=2, initial=0, disabled=True)
+    valorItem = forms.DecimalField(label="Valor Itens", min_value=0, decimal_places=2, initial=0, disabled=True)
     items = []
 
     def __init__(self, *args, request, uuid=None, **kwargs):         
@@ -37,6 +38,7 @@ class VendaForm(forms.Form):
             response = requests.get(URL_RECURSO + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
                 data = dict(response.json())
+                print(data)
                 self.initial = data
                 self.items = data.get('items')
                 self.orcamentos = data.get('orcamentos')
@@ -50,6 +52,10 @@ class VendaForm(forms.Form):
                 self.initial['nome'] = 'CLIENTE TESTE INICIAL'
                 self.initial['fone'] = '85-94453322'
 
+    def titulo(self):
+        for status, titulo in STATUS_VENDA:
+            if status == self.initial.get('status'):
+                return titulo
 
     def salvar(self, request, uuid=None):
         data = dict(dados_para_json(self.data, []))    
