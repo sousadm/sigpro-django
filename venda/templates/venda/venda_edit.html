@@ -78,6 +78,7 @@
                                 <th>Unidade</th>
                                 <th>Quantidade</th>
                                 <th>M.Preço</th>
+                                <th>Desconto</th>
                                 <th>V.Item</th>
                                 <th width="90"></th>
                             </tr>
@@ -90,6 +91,7 @@
                                 <td>{{item.unidade|default_if_none:""}}</td>
                                 <td>{{item.quantidade|floatformat:2}}</td>
                                 <td>{{item.preco|floatformat:2}}</td>
+                                <td>{{item.descontoItem|floatformat:2}}</td>
                                 <td>{{item.valorItem|floatformat:2}}</td>
                                 <td>
                                     <a href="#" class="editar-item" data-item-id="{{item.itemId}}">
@@ -139,28 +141,27 @@
         </div>
     </div>
 
-</form>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="modalProduto">
-    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Item de Venda</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modalContent"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="submit" value="btn_item_salvar" name="btn_item_salvar" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Salvar
-                </button>
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalProduto">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Item de Venda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalContent"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" value="btn_item_salvar" name="btn_item_salvar" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+</form>
 
 <script>
 

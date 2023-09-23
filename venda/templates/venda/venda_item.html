@@ -1,29 +1,39 @@
 {% load bootstrap %}
 
-<input type="hidden" name="cotacaoItemId" value={{form.cotacaoItemId.value}}>
+<input type="hidden" name="itemId" value={{form.itemId.value}}>
+<input type="hidden" name="produtoItemId" value={{form.produtoId.value}}>
 
 <div class="container">
+
     <div class="row">
         <div class="col-12 col-md-10">
             {{ form.descricaoItem|bootstrap }}
         </div>
         <div class="col-12 col-md-2">
             {{ form.unidade|bootstrap }}
-        </div>        
+        </div>
     </div>
     <div class="row">
         <div class="col-12 col-md-3">
-            {{ form.quantidade|bootstrap }}
+            <label>{{form.quantidade.label}}</label>
+            <input type="number" id="quantidadeItem" name="quantidadeItem" class="form-control"
+                value="{{form.quantidade.value}}" min="1">
         </div>
         <div class="col-12 col-md-3">
-            {{ form.descontoItem|bootstrap }}
+            <label>{{form.descontoItem.label}}</label>
+            <input type="number" id="descontoItem" name="descontoItem" class="form-control"
+                value="{{form.descontoItem.value}}" min="0" max="{{form.preco.value}}" >
         </div>
         <div class="col-12 col-md-3">
-            {{ form.preco|bootstrap }}
+            <label>{{form.preco.label}}</label>
+            <input type="number" id="precoItem" name="precoItem" class="form-control" value="{{form.preco.value}}"
+                disabled>
         </div>
         <div class="col-12 col-md-3">
-            {{ form.valorItem|bootstrap }}
-        </div>        
+            <label>{{form.valorItem.label}}</label>
+            <input type="number" id="valorItem" name="valorItem" class="form-control" value="{{form.valorItem.value}}"
+                disabled>
+        </div>
     </div>
 
 </div>
@@ -31,29 +41,14 @@
 <script>
     $(document).ready(function () {
 
-        $('#id_quantidade').click(function ()) {
-            var quantidade = document.getElementById('id_quantidade').value;
-            alert(quantidade);
-        }
-        
-
-        $('#produtoId').blur(function () {
-            var produtoId = document.getElementById('produtoId').value;
-            var url = '{% url "url_produto_get" 0 %}'.replace('0', produtoId);
-            $.ajax({
-                url: url,
-                type: 'GET',  // Ou 'POST' dependendo da sua necessidade
-                success: function (data) {
-                    $('#id_descricaoItem').val(data['descricao']);
-                    $('#id_ncm').val(data['ncm']);
-                    $('#id_unidade').val(data['unidade']);
-                    $('#id_quantidade').focus();
-                },
-                error: function (xhr, status, error) {
-                    console.log(error);
-                }
-            });
+        $('#quantidadeItem, #precoItem, #descontoItem').change(function () {
+            var quantidade = parseFloat($('#quantidadeItem').val()) || 0;
+            var preco = parseFloat($('#precoItem').val()) || 0;
+            var desconto = parseFloat($('#descontoItem').val()) || 0;
+            var valorItem = quantidade * (preco - desconto);
+            $('#valorItem').val(valorItem.toFixed(2)); // Define o valorItem no campo de input
         });
+
     });
 
 </script>

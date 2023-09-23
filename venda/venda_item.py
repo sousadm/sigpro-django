@@ -14,7 +14,7 @@ URL_RECURSO_ITEM = URL_API + 'venda-item/'
 
 class VendaItemForm(forms.Form):
     vendaId = forms.IntegerField(label='Cotação', required=False)
-    vendaItemId = forms.IntegerField(label='ID', required=False, disabled=True)
+    itemId = forms.IntegerField(label='ID', required=False, disabled=True)
     produtoId = forms.IntegerField(label='Produto', required=False, disabled=True)
     descricaoItem = forms.CharField(max_length=100, label='Descrição do produto', disabled=True)
     unidade = forms.ChoiceField(choices=TIPO_UNIDADE_MEDIDA, label='Unidade', initial='UNID')
@@ -26,20 +26,25 @@ class VendaItemForm(forms.Form):
 
     def __init__(self, *args, request, uuid=None, venda=None, **kwargs):
         super(VendaItemForm, self).__init__(*args, **kwargs)
+        self.fields['itemId'].initial = uuid
         self.fields['vendaId'].initial = venda
-        print(URL_RECURSO_ITEM + str(uuid))
         response = requests.get(URL_RECURSO_ITEM + str(uuid), headers=session_get_headers(request))
         if response.status_code == 200:
             data = dict(response.json())
             self.initial = data 
 
-    def salvar(self, request, vendaItemId=None, vendaId=None):
-        data = dados_para_json(self.data, nones=[])
+    def salvar(self, request, venda=None):    
+        # dados = dict(dados_para_json(self.data, nones=['vendedorId','nome','fone','email','produtoId','btn_item_salvar']))
+        itemId = self.data.get('itemId')
+        if not itemId: raise Exception('sem o identificador do item')
+
+        dados = {
+            'produtoId': self.data.get('produtoItemId'),
+            'quantidade': self.data.get('quantidadeItem'),
+            'descontoItem': self.data.get('descontoItem'),
+        }
         headers = session_get_headers(request)
-        if not vendaItemId or vendaItemId == 'None':
-            response = requests.post(URL_RECURSO + str(vendaId) + "/item", json=data, headers=headers)
-        else:
-            response = requests.patch(URL_RECURSO_ITEM + str(vendaItemId), json=data, headers=headers)
+        response = requests.patch(URL_RECURSO_ITEM + str(itemId), json=dados, headers=headers)
         if not response.status_code in [200, 201]:
             raise Exception(tratar_error(response))
 

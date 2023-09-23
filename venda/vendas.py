@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
 from core.settings import URL_API
+from venda.venda_item import VendaItemForm
 
 URL_RECURSO = URL_API + 'venda/'
 URL_RECURSO_ITEM = URL_API + 'vendaitem/'
@@ -92,13 +93,19 @@ def venda_render(request, uuid=None):
     form = VendaForm(request=request, uuid=uuid)
     template_name = 'venda/venda_edit.html'
     try:
-        if request.POST:
+        if request.POST.get('btn_item_salvar'):
+            formItem = VendaItemForm(request.POST, request=request, venda=uuid)
+            formItem.salvar(request, venda=uuid)
+            messages.success(request, 'sucesso ao gravar item')
+            return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))
+
+        if request.POST.get('btn_salvar'):
             form = VendaForm(request.POST, request=request)
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
             return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))
         
-        form = VendaForm(request=request, uuid=uuid)
+        # form = VendaForm(request=request, uuid=uuid)
     except Exception as e:
         messages.error(request, e)
     context = {'form': form}
