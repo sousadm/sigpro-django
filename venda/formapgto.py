@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.http import JsonResponse
 import requests
 from django import forms
 from django.contrib import messages
@@ -18,8 +18,8 @@ class FormaPgtoForm(forms.Form):
     tipoPagamento = forms.ChoiceField(choices=TIPO_PAGAMENTO, initial='DINHEIRO', label='Tipo de Pagamento', required=True)
     parcelas = forms.IntegerField(label='Parcelas (Qtde Máx)', initial=1, min_value=1, max_value=24)
     descontoMaximo = forms.FloatField(label='Desconto', initial=0, min_value=0, max_value=100, disabled=True)
-    valorMinimo = forms.FloatField(label='Valor Mínimo (parcela)', initial=0, min_value=0.01)
-    prazoMedio = forms.FloatField(label='Prazo Médio de Pgto', initial=1, min_value=0.01)
+    valorMinimo = forms.FloatField(label='Valor Mínimo (parcela)', initial=0, min_value=0.0)
+    prazoMedio = forms.FloatField(label='Prazo Médio de Pgto', initial=1, min_value=0.0)
     situacao = forms.ChoiceField(choices=SITUACAO_CADASTRAL, initial='ATIVO', label='Situação', widget=forms.DateInput(attrs={'title': 'situação cadastral', }))
 
     def __init__(self, *args, request=None, uuid=None, **kwargs):
@@ -65,6 +65,24 @@ def formaPgtoNew(request):
 
 def formaPgtoEdit(request, uuid):
     return formaPgto_render(request, uuid)
+
+
+@require_token
+def get_formapgto(request, uuid):
+    headers = session_get_headers(request)
+    response = requests.get(URL_RECURSO + str(uuid), headers=headers)
+    return JsonResponse(response.json())
+
+
+@require_token
+def formaDePagamentoChoices(request):
+    lista = []
+    response = requests.get(URL_RECURSO, headers=session_get_headers(request))
+    if response.status_code == 200:
+        for n in response.json()['content']:
+            lista.append((n['id'], n['descricao']))
+    return lista
+
 
 
 @require_token

@@ -5,7 +5,7 @@ import requests
 from django import forms
 from django.contrib import messages
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error, dados_para_json, require_token

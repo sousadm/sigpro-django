@@ -9,6 +9,7 @@
     {% csrf_token %}
 
     <input type="hidden" name="vendedorId" value={{form.vendedorId.value}}>
+    <input type="hidden" name="parcelas_max" value="1">
 
     <fieldset>
 
@@ -126,17 +127,25 @@
     <br />
 
     <div class="footer">
-        <div class="row">
-            <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
-                <i class="fas fa-save"></i> Salvar
+        <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+            <i class="fas fa-save"></i> Salvar
+        </button>
+        <a href="{% url 'url_venda_add' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i>  
+                <span class="d-none d-md-inline">Novo</span>
             </button>
-            {{form.valorTotal}}
-            <div class="input-group-btn">
-                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalResumo">
-                    <i class="fas fa-calculator"></i>
-                </button>
-            </div>
-        </div>
+        </a>    
+        <a href="{% url 'url_venda_list' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i>  
+                <span class="d-none d-md-inline">Lista</span>
+            </button>
+        </a>    
+        
+        {{form.valorTotal}}
+
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalResumo">
+            <i class="fas fa-calculator"></i>
+        </button>
     </div>
 
     <div class="modal fade" tabindex="-1" role="dialog" id="modalProduto">
@@ -174,16 +183,28 @@
                         <div class="col-12 col-md-2">
                             {{ form.desconto|bootstrap }}
                         </div>
-                        <div class="col-12 col-md-10">
+                        <div class="col-12 col-md-3">
                             {{ form.documento|bootstrap }}
                         </div>
+                        <div class="col-12 col-md-5">
+                            <label class="control-label">{{form.pagamentoId.field.label}}</label>
+                            <select id="pagamentoId" name="pagamentoId" class="form-control" required>
+                                {% for item in form.pagamentoId.field.choices %}
+                                    <option value="{{ item.0 }}" {% if item.0 == form.pagamentoId.value %} selected {% endif %} >
+                                        {{ item.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            {{ form.parcelas|bootstrap }}
+                        </div>                        
                     </div>
                     <div class="row">
                         <div class="col-12 col-md-12">
                             {{ form.observacao|bootstrap }}
                         </div>                        
                     </div>                    
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -198,6 +219,25 @@
 </form>
 
 <script>
+
+    $(document).ready(function () {
+        $('#pagamentoId').change(function () {
+            var pagamentoId = document.getElementById('pagamentoId').value;
+            var url = '{% url "url_formapgto_get" 0 %}'.replace('0', pagamentoId);            
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    $('#id_parcelas').attr('max', data['parcelas']);
+                    $('#id_parcelas').val(data['parcelas']);
+                },
+                error: function (xhr, status, error) {
+                    // Lidar com erros, se houver
+                    console.log(error);
+                }
+            });
+        });
+    });
 
     $(document).ready(function () {
         $('.editar-item').click(function (e) {

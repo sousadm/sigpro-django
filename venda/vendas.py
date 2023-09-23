@@ -5,8 +5,10 @@ from django.contrib import messages
 from core.controle import dados_para_json, require_token, session_get, session_get_headers, tratar_error
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from core.paginacao import get_param, get_page
 
 from core.settings import URL_API
+from venda.formapgto import formaDePagamentoChoices
 from venda.venda_item import VendaItemForm
 
 URL_RECURSO = URL_API + 'venda/'
@@ -35,10 +37,13 @@ class VendaForm(forms.Form):
     valorItem = forms.DecimalField(label="Valor Itens", min_value=0, decimal_places=2, initial=0, disabled=True)
     valorTotal = forms.DecimalField(label="Valor Total", min_value=0, decimal_places=2, initial=0, disabled=True)
     observacao = forms.CharField(max_length=1000, label='Observação', required=False)
+    pagamentoId = forms.ChoiceField(label='Forma de Pagamento', initial=None, required=False)
+    parcelas = forms.IntegerField(label='Parcelas', min_value=1, initial=1)
     items = []
 
     def __init__(self, *args, request, uuid=None, **kwargs):         
         super(VendaForm, self).__init__(*args, **kwargs)
+        self.fields['pagamentoId'].choices = formaDePagamentoChoices(request)
         if uuid:
             response = requests.get(URL_RECURSO + str(uuid), headers=session_get_headers(request))
             if response.status_code == 200:
@@ -60,6 +65,7 @@ class VendaForm(forms.Form):
         for status, titulo in STATUS_VENDA:
             if status == self.initial.get('status'):
                 return titulo
+        return STATUS_VENDA[0][1]
 
     def salvar(self, request, uuid=None):
         data = dict(dados_para_json(self.data, []))    
@@ -82,6 +88,23 @@ class VendaForm(forms.Form):
         else:
             raise Exception(tratar_error(response))
 
+
+class VendaListForm(forms.Form):
+    descricao = forms.CharField(label='Pesquisa', required=False,
+                                widget=forms.TextInput(
+                                    attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
+    def pesquisar(self, request):
+        itens_por_pagina = 5
+        self.initial = request.POST or request.GET
+        params = get_param(self.initial, itens_por_pagina)
+        if self.initial.get('descricao'): params['descricao'] = self.initial.get('descricao')
+        headers = session_get_headers(request)
+        response = requests.get(URL_RECURSO, headers=headers, params=params)
+        if response.status_code == 200:
+            self.fields['descricao'].initial = self.initial.get('descricao')
+            self.initial = dict(response.json())
+            return get_page(self.initial, params)
+        
 
 @require_token
 def vendaNew(request):
@@ -113,6 +136,24 @@ def venda_render(request, uuid=None):
 
     form = VendaForm(request=request, uuid=uuid)
     context = {'form': form}
+    return render(request, template_name, context)
+
+
+@require_token
+def vendaList(request):
+    template_name = 'venda/venda_list.html'
+    try:
+        form = VendaListForm() \
+            if request.POST.get('btn_listar') \
+            else VendaListForm(request.POST)
+        page = form.pesquisar(request)
+
+    except Exception as e:
+        messages.error(request, e)
+    context = {
+        'form': form,
+        'page': page
+    }
     return render(request, template_name, context)
 
 

@@ -31,9 +31,9 @@ from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit,
 from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
 from produto.produto import get_produto, produtoEdit, produtoList, produtoNew, produtoPesquisa
 from produto.estoque import produtoEstoque, produtoEstoqueDetalhe
-from venda.formapgto import formaPgtoEdit, formaPgtoNew, formapgtoList
+from venda.formapgto import formaDePagamentoChoices, formaPgtoEdit, formaPgtoNew, formapgtoList, get_formapgto
 from venda.venda_item import vendaItemDelete, vendaItemEdit, vendaItemNew
-from venda.vendas import vendaEdit, vendaNew
+from venda.vendas import vendaEdit, vendaList, vendaNew
 
 urlpatterns = [
     path('', home, name='home'),
@@ -90,9 +90,11 @@ urlpatterns = [
     path('formapgto/', formapgtoList, name='url_formapgto_list'),
     path('formapgto/<int:uuid>', formaPgtoEdit, name='url_formapgto_edit'),
     path('formapgto/add', formaPgtoNew, name='url_formapgto_add'),
+    path('formapgto/<int:uuid>/pesquisa', get_formapgto, name='url_formapgto_get'),    
 
     path('venda/add', vendaNew, name='url_venda_add'),
     path('venda/<int:uuid>', vendaEdit, name='url_venda_edit'),
+    path('venda/', vendaList, name='url_venda_list'),
     path('venda/<int:uuid>/add-item', vendaItemNew, name='url_vendaitem_add'),
     path('venda-item/<int:uuid>', vendaItemEdit, name='url_vendaitem_edit'),
     path('venda/<int:uuid>/remove-item/<int:item>', vendaItemDelete, name='url_venda_remove_item'),
