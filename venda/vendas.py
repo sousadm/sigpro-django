@@ -24,14 +24,17 @@ class VendaForm(forms.Form):
     vendedorNome = forms.CharField(max_length=100, label='Vendedor', disabled=True)
     status = forms.ChoiceField(choices=STATUS_VENDA, label='Tipo', required=True, initial='ORCAMENTO')
     nome = forms.CharField(max_length=100, label='Nome do Cliente', widget=forms.DateInput(attrs={'autofocus': 'true', }))
-    documento = forms.CharField(max_length=14, label='CPF/CNPJ', required=True)
+    documento = forms.CharField(max_length=14, label='CPF/CNPJ', required=False)
     fone = forms.CharField(max_length=20, label='Fone/Celular', required=True)
     email = forms.EmailField(max_length=254, label='E-mail', required=False)
     produtoId = forms.IntegerField(label='Produto')
     descricaoItem = forms.CharField(max_length=100, label='Descrição do produto', disabled=True, required=False)
     quantidade = forms.IntegerField(label='Quantidade', initial=1)
     preco = forms.DecimalField(label="Pr.Unit", min_value=0, decimal_places=2, initial=0, disabled=True)
+    desconto = forms.DecimalField(label="Desconto", min_value=0, decimal_places=2, initial=0)
     valorItem = forms.DecimalField(label="Valor Itens", min_value=0, decimal_places=2, initial=0, disabled=True)
+    valorTotal = forms.DecimalField(label="Valor Total", min_value=0, decimal_places=2, initial=0, disabled=True)
+    observacao = forms.CharField(max_length=1000, label='Observação', required=False)
     items = []
 
     def __init__(self, *args, request, uuid=None, **kwargs):         
@@ -90,7 +93,6 @@ def vendaEdit(request, uuid):
 
 @require_token
 def venda_render(request, uuid=None):
-    form = VendaForm(request=request, uuid=uuid)
     template_name = 'venda/venda_edit.html'
     try:
         if request.POST.get('btn_item_salvar'):
@@ -99,15 +101,17 @@ def venda_render(request, uuid=None):
             messages.success(request, 'sucesso ao gravar item')
             return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))
 
-        if request.POST.get('btn_salvar'):
+        if request.POST.get('btn_salvar') or request.POST.get('btn_resumo_salvar'):
+            print(request.POST)
             form = VendaForm(request.POST, request=request)
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
             return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))
         
-        # form = VendaForm(request=request, uuid=uuid)
     except Exception as e:
         messages.error(request, e)
+
+    form = VendaForm(request=request, uuid=uuid)
     context = {'form': form}
     return render(request, template_name, context)
 

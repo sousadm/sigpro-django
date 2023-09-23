@@ -130,13 +130,11 @@
             <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
                 <i class="fas fa-save"></i> Salvar
             </button>
-            <div class="input-group">
-                {{form.valorItem}}
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-dark">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
+            {{form.valorTotal}}
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalResumo">
+                    <i class="fas fa-calculator"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -154,6 +152,42 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                     <button type="submit" value="btn_item_salvar" name="btn_item_salvar" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalResumo">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sobre a Venda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalContent">
+
+                    <div class="row">
+                        <div class="col-12 col-md-2">
+                            {{ form.desconto|bootstrap }}
+                        </div>
+                        <div class="col-12 col-md-10">
+                            {{ form.documento|bootstrap }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-12">
+                            {{ form.observacao|bootstrap }}
+                        </div>                        
+                    </div>                    
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" value="btn_resumo_salvar" name="btn_resumo_salvar" class="btn btn-primary">
                         <i class="fas fa-save"></i> Salvar
                     </button>
                 </div>
