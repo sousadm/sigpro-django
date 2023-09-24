@@ -33,7 +33,7 @@ from produto.produto import get_produto, produtoEdit, produtoList, produtoNew, p
 from produto.estoque import produtoEstoque, produtoEstoqueDetalhe
 from venda.formapgto import formaDePagamentoChoices, formaPgtoEdit, formaPgtoNew, formapgtoList, get_formapgto
 from venda.venda_item import vendaItemDelete, vendaItemEdit, vendaItemNew
-from venda.vendas import vendaEdit, vendaList, vendaNew
+from venda.vendas import vendaEdit, vendaImprimir, vendaList, vendaNew
 
 urlpatterns = [
     path('', home, name='home'),
@@ -98,5 +98,6 @@ urlpatterns = [
     path('venda/<int:uuid>/add-item', vendaItemNew, name='url_vendaitem_add'),
     path('venda-item/<int:uuid>', vendaItemEdit, name='url_vendaitem_edit'),
     path('venda/<int:uuid>/remove-item/<int:item>', vendaItemDelete, name='url_venda_remove_item'),
+    path('venda/<int:uuid>/imprimir', vendaImprimir, name='url_venda_imprimir'),
 
 ]

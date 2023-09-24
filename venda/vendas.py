@@ -6,6 +6,8 @@ from core.controle import dados_para_json, require_token, session_get, session_g
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from core.paginacao import get_param, get_page
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 
 from core.settings import URL_API
 from venda.formapgto import formaDePagamentoChoices
@@ -165,3 +167,15 @@ def removeVendaItem(request, uuid):
     if not response.status_code in [200, 201]:
         raise Exception(tratar_error(response))
     
+
+@require_token
+def vendaImprimir(request, uuid):
+    headers = session_get_headers(request)
+    response = requests.get(f'{URL_RECURSO}{uuid}/imprimir', headers=headers)
+    if response.status_code == 200:
+        content_type = 'application/pdf'
+        relatorio_conteudo = response.content
+        response_django = HttpResponse(relatorio_conteudo, content_type=content_type)        
+        return response_django
+    return HttpResponse('Erro ao gerar o relatório', status=response.status_code)
+
