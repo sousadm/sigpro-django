@@ -34,10 +34,8 @@ class VendaItemForm(forms.Form):
             self.initial = data 
 
     def salvar(self, request, venda=None):    
-        # dados = dict(dados_para_json(self.data, nones=['vendedorId','nome','fone','email','produtoId','btn_item_salvar']))
         itemId = self.data.get('itemId')
         if not itemId: raise Exception('sem o identificador do item')
-
         dados = {
             'produtoId': self.data.get('produtoItemId'),
             'quantidade': self.data.get('quantidadeItem'),

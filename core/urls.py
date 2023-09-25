@@ -31,7 +31,7 @@ from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit,
 from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
 from produto.produto import get_produto, produtoEdit, produtoList, produtoNew, produtoPesquisa
 from produto.estoque import produtoEstoque, produtoEstoqueDetalhe
-from venda.formapgto import formaDePagamentoChoices, formaPgtoEdit, formaPgtoNew, formapgtoList, get_formapgto
+from venda.formapgto import formaPgtoEdit, formaPgtoNew, formapgtoList, get_formapgto
 from venda.venda_item import vendaItemDelete, vendaItemEdit, vendaItemNew
 from venda.vendas import vendaEdit, vendaImprimir, vendaList, vendaNew
 

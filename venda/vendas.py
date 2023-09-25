@@ -30,10 +30,7 @@ class VendaForm(forms.Form):
     nome = forms.CharField(max_length=100, label='Nome do Cliente', widget=forms.DateInput(attrs={'autofocus': 'true', }))
     documento = forms.CharField(max_length=14, label='CPF/CNPJ', required=False)
     fone = forms.CharField(max_length=20, label='Fone/Celular', required=True)
-    email = forms.EmailField(max_length=254, label='E-mail', required=False)
-    produtoId = forms.IntegerField(label='Produto')
-    descricaoItem = forms.CharField(max_length=100, label='Descrição do produto', disabled=True, required=False)
-    quantidade = forms.IntegerField(label='Quantidade', initial=1)
+    email = forms.EmailField(label='E-mail', required=False)
     preco = forms.DecimalField(label="Pr.Unit", min_value=0, decimal_places=2, initial=0, disabled=True)
     desconto = forms.DecimalField(label="Desconto", min_value=0, decimal_places=2, initial=0)
     valorItem = forms.DecimalField(label="Valor Itens", min_value=0, decimal_places=2, initial=0, disabled=True)
@@ -41,6 +38,9 @@ class VendaForm(forms.Form):
     observacao = forms.CharField(max_length=1000, label='Observação', required=False)
     pagamentoId = forms.ChoiceField(label='Forma de Pagamento', initial=None, required=False)
     parcelas = forms.IntegerField(label='Parcelas', min_value=1, initial=1)
+    produtoId = forms.IntegerField(label='Produto', required=False)
+    descricaoItem = forms.CharField(max_length=100, label='Descrição do produto', disabled=True, required=False)
+    quantidade = forms.IntegerField(label='Quantidade', initial=1)
     items = []
 
     def __init__(self, *args, request, uuid=None, **kwargs):         
@@ -90,6 +90,13 @@ class VendaForm(forms.Form):
         else:
             raise Exception(tratar_error(response))
 
+    def definirPedidoVenda(self, request, uuid):
+        data = dict(dados_para_json(self.data, []))    
+        headers = session_get_headers(request)
+        response = requests.patch(URL_RECURSO + str(uuid) + "/pedido", json=data, headers=headers)
+        if not response.status_code in [200, 201]:
+            raise Exception(tratar_error(response))
+
 
 class VendaListForm(forms.Form):
     descricao = forms.CharField(label='Pesquisa', required=False,
@@ -119,7 +126,18 @@ def vendaEdit(request, uuid):
 @require_token
 def venda_render(request, uuid=None):
     template_name = 'venda/venda_edit.html'
-    try:
+    try: 
+        if request.POST.get('btn_pedido_encerrar'):
+            form = VendaForm(request.POST, request=request)
+            messages.success(request, 'EM DESENVOLVIMENTO')
+            return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))
+        
+        if request.POST.get('btn_pedido_salvar'):
+            form = VendaForm(request.POST, request=request)
+            form.definirPedidoVenda(request, uuid)
+            messages.success(request, 'pedido de venda definido com sucesso')
+            return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))
+
         if request.POST.get('btn_item_salvar'):
             formItem = VendaItemForm(request.POST, request=request, venda=uuid)
             formItem.salvar(request, venda=uuid)
@@ -127,7 +145,6 @@ def venda_render(request, uuid=None):
             return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))
 
         if request.POST.get('btn_salvar') or request.POST.get('btn_resumo_salvar'):
-            print(request.POST)
             form = VendaForm(request.POST, request=request)
             uuid = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
@@ -178,4 +195,6 @@ def vendaImprimir(request, uuid):
         response_django = HttpResponse(relatorio_conteudo, content_type=content_type)        
         return response_django
     return HttpResponse('Erro ao gerar o relatório', status=response.status_code)
+
+
 

@@ -8,6 +8,7 @@
 
     {% csrf_token %}
 
+    <input type="hidden" name="status" value={{form.status.value}}>
     <input type="hidden" name="vendedorId" value={{form.vendedorId.value}}>
     <input type="hidden" name="parcelas_max" value="1">
 
@@ -35,11 +36,6 @@
                         <label class="control-label">Vendedor</label>
                         <input type="text" disabled="disabled" class="form-control" value={{form.vendedorNome.value}}
                             title={{form.vendedorNome.value}}>
-                    </div>
-                </div>
-                <div class="row" hidden="true">
-                    <div class="col-12 col-md-12">
-                        {{ form.email|bootstrap }}
                     </div>
                 </div>
 
@@ -98,9 +94,8 @@
                                     <a href="#" class="editar-item" data-item-id="{{item.itemId}}">
                                         <button type="button" class="btn btn-sm" title="editar"> <i
                                                 class="fas fa-edit"></i> </button>
-                                    </a>                                    
-                                    <a
-                                        href="{% url 'url_venda_remove_item' form.vendaId.value item.itemId %}">
+                                    </a>
+                                    <a href="{% url 'url_venda_remove_item' form.vendaId.value item.itemId %}">
                                         <button type="button"
                                             onClick='return confirma("EXCLUIR o item: {{item.descricaoItem}} ?")'
                                             class="btn btn-sm" title="excluir"> <i class="fas fa-trash"></i> </button>
@@ -131,16 +126,16 @@
             <i class="fas fa-save"></i> Salvar
         </button>
         <a href="{% url 'url_venda_add' %}">
-            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i>  
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i>
                 <span class="d-none d-md-inline">Novo</span>
             </button>
-        </a>    
+        </a>
         <a href="{% url 'url_venda_list' %}">
-            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i>  
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i>
                 <span class="d-none d-md-inline">Lista</span>
             </button>
-        </a>    
-        
+        </a>
+
         {{form.valorTotal}}
 
         <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalResumo">
@@ -195,23 +190,43 @@
                             <label class="control-label">{{form.pagamentoId.field.label}}</label>
                             <select id="pagamentoId" name="pagamentoId" class="form-control" required>
                                 {% for item in form.pagamentoId.field.choices %}
-                                    <option value="{{ item.0 }}" {% if item.0 == form.pagamentoId.value %} selected {% endif %} >
-                                        {{ item.1 }}
-                                    </option>
+                                <option value="{{ item.0 }}" {% if item.0 == form.pagamentoId.value %} selected {%endif%}>
+                                    {{ item.1 }}
+                                </option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-12 col-md-2">
                             {{ form.parcelas|bootstrap }}
-                        </div>                        
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-12">
+                            {{ form.email|bootstrap }}
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-12 col-md-12">
                             {{ form.observacao|bootstrap }}
-                        </div>                        
+                        </div>
                     </div>                    
                 </div>
                 <div class="modal-footer">
+
+                    {% if form.status.value == 'ORCAMENTO' %}
+                    <button type="submit" value="btn_pedido_salvar" name="btn_pedido_salvar" class="btn btn-success"
+                        onClick='return confirma("Definir como pedido de venda?")'>
+                        <i class="fas fa-save"></i> Pedido
+                    </button>
+                    {% endif %}
+
+                    {% if form.status.value == 'PEDIDO' %}
+                    <button type="submit" value="btn_pedido_encerrar" name="btn_pedido_encerrar" class="btn btn-success"
+                        onClick='return confirma("Encerrar este pedido de venda?")'>
+                        <i class="fas fa-save"></i> Encerrar Pedido
+                    </button>
+                    {% endif %}                    
+
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                     <button type="submit" value="btn_resumo_salvar" name="btn_resumo_salvar" class="btn btn-primary">
                         <i class="fas fa-save"></i> Salvar
@@ -228,7 +243,7 @@
     $(document).ready(function () {
         $('#pagamentoId').change(function () {
             var pagamentoId = document.getElementById('pagamentoId').value;
-            var url = '{% url "url_formapgto_get" 0 %}'.replace('0', pagamentoId);            
+            var url = '{% url "url_formapgto_get" 0 %}'.replace('0', pagamentoId);
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -301,8 +316,8 @@
                 }
             });
         });
-    });   
-    
+    });
+
 </script>
 
 {% endblock %}
