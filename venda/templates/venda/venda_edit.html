@@ -12,7 +12,7 @@
     <input type="hidden" name="vendedorId" value={{form.vendedorId.value}}>
     <input type="hidden" name="parcelas_max" value="1">
 
-    <fieldset>
+    <fieldset {% if form.naoPodeSerPedido %} disabled {%endif%}>
 
         <div class="card">
             <div class="card-header">
@@ -24,7 +24,7 @@
                     <div class="col-12 col-md-2">
                         <label class="control-label">Código</label>
                         <input type="number" name="vendaId" id="vendaId" disabled="disabled" class="form-control"
-                            value={{ form.vendaId.value }}>
+                            value={{form.vendaId.value}}>
                     </div>
                     <div class="col-12 col-md-6">
                         {{ form.nome|bootstrap }}
@@ -46,7 +46,7 @@
                         <label class="control-label">Produto</label>
                         <div class="input-group">
                             <input type="number" id="produtoId" name="produtoId" class="form-control"
-                                value={{form.produtoId.value}}>
+                                value={{form.produtoId.value}} {%if form.vendaId%} autofocus {%endif%}>
                             <div class="input-group-btn">
                                 <button type="button" id="modalPadraoButton" class="btn btn-dark"
                                     data-titulo="Pesquisa de Produto" data-url="{% url 'url_produto_pesquisa' %}">
@@ -117,12 +117,101 @@
             </div>
 
         </div>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="modalProduto">
+            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Item de Venda</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalContent"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" value="btn_item_salvar" name="btn_item_salvar" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salvar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="modal fade" tabindex="-1" role="dialog" id="modalResumo">
+            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Sobre a Venda</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalContent">
+    
+                        <div class="row">
+                            <div class="col-12 col-md-2">
+                                {{ form.desconto|bootstrap }}
+                            </div>
+                            <div class="col-12 col-md-3">
+                                {{ form.documento|bootstrap }}
+                            </div>
+                            <div class="col-12 col-md-5">
+                                <label class="control-label">{{form.pagamentoId.field.label}}</label>
+                                <select id="pagamentoId" name="pagamentoId" class="form-control" required>
+                                    {% for item in form.pagamentoId.field.choices %}
+                                    <option value="{{ item.0 }}" {% if item.0 == form.pagamentoId.value %} selected {%endif%}>
+                                        {{ item.1 }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                {{ form.parcelas|bootstrap }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-12">
+                                {{ form.email|bootstrap }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-12">
+                                {{ form.observacao|bootstrap }}
+                            </div>
+                        </div>                    
+                    </div>
+                    <div class="modal-footer">
+    
+                        {% if form.status.value == 'ORCAMENTO' %}
+                        <button type="submit" value="btn_pedido_salvar" name="btn_pedido_salvar" class="btn btn-success"
+                            onClick='return confirma("Definir como pedido de venda?")'>
+                            <i class="fas fa-save"></i> Pedido
+                        </button>
+                        {% endif %}
+    
+                        {% if form.status.value == 'PEDIDO' %}
+                        <button type="submit" value="btn_pedido_finalizar" name="btn_pedido_finalizar" class="btn btn-success"
+                            onClick='return confirma("Encerrar este pedido de venda?")'>
+                            <i class="fa fa-sign-out" aria-hidden="true"></i> Finalizar Pedido
+                        </button>
+                        {% endif %}                    
+    
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" value="btn_resumo_salvar" name="btn_resumo_salvar" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salvar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </fieldset>
 
     <br />
 
     <div class="footer">
-        <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+        <button {% if form.naoPodeSerPedido %} disabled {%endif%} type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
             <i class="fas fa-save"></i> Salvar
         </button>
         <a href="{% url 'url_venda_add' %}">
@@ -142,98 +231,12 @@
             <i class="fas fa-calculator"></i>
         </button>
 
+        {% if form.vendaId.value %}
         <a href="{% url 'url_venda_imprimir' form.vendaId.value %}" target="_blank">
             <button type="button" class="btn btn-secondary"> <i class="fas fa-print"></i> Imprimir </button>
         </a>
-
-    </div>
-
-    <div class="modal fade" tabindex="-1" role="dialog" id="modalProduto">
-        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Item de Venda</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="modalContent"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" value="btn_item_salvar" name="btn_item_salvar" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Salvar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" tabindex="-1" role="dialog" id="modalResumo">
-        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Sobre a Venda</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="modalContent">
-
-                    <div class="row">
-                        <div class="col-12 col-md-2">
-                            {{ form.desconto|bootstrap }}
-                        </div>
-                        <div class="col-12 col-md-3">
-                            {{ form.documento|bootstrap }}
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <label class="control-label">{{form.pagamentoId.field.label}}</label>
-                            <select id="pagamentoId" name="pagamentoId" class="form-control" required>
-                                {% for item in form.pagamentoId.field.choices %}
-                                <option value="{{ item.0 }}" {% if item.0 == form.pagamentoId.value %} selected {%endif%}>
-                                    {{ item.1 }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-2">
-                            {{ form.parcelas|bootstrap }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-12">
-                            {{ form.email|bootstrap }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-12">
-                            {{ form.observacao|bootstrap }}
-                        </div>
-                    </div>                    
-                </div>
-                <div class="modal-footer">
-
-                    {% if form.status.value == 'ORCAMENTO' %}
-                    <button type="submit" value="btn_pedido_salvar" name="btn_pedido_salvar" class="btn btn-success"
-                        onClick='return confirma("Definir como pedido de venda?")'>
-                        <i class="fas fa-save"></i> Pedido
-                    </button>
-                    {% endif %}
-
-                    {% if form.status.value == 'PEDIDO' %}
-                    <button type="submit" value="btn_pedido_encerrar" name="btn_pedido_encerrar" class="btn btn-success"
-                        onClick='return confirma("Encerrar este pedido de venda?")'>
-                        <i class="fas fa-save"></i> Encerrar Pedido
-                    </button>
-                    {% endif %}                    
-
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="submit" value="btn_resumo_salvar" name="btn_resumo_salvar" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Salvar
-                    </button>
-                </div>
-            </div>
-        </div>
+        {% endif %}
+        
     </div>
 
 </form>

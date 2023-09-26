@@ -27,7 +27,7 @@ class VendaForm(forms.Form):
     vendedorId = forms.IntegerField(label='Vendedor', required=False)
     vendedorNome = forms.CharField(max_length=100, label='Vendedor', disabled=True)
     status = forms.ChoiceField(choices=STATUS_VENDA, label='Tipo', required=True, initial='ORCAMENTO')
-    nome = forms.CharField(max_length=100, label='Nome do Cliente', widget=forms.DateInput(attrs={'autofocus': 'true', }))
+    nome = forms.CharField(max_length=100, label='Nome do Cliente')
     documento = forms.CharField(max_length=14, label='CPF/CNPJ', required=False)
     fone = forms.CharField(max_length=20, label='Fone/Celular', required=True)
     email = forms.EmailField(label='E-mail', required=False)
@@ -41,7 +41,14 @@ class VendaForm(forms.Form):
     produtoId = forms.IntegerField(label='Produto', required=False)
     descricaoItem = forms.CharField(max_length=100, label='Descrição do produto', disabled=True, required=False)
     quantidade = forms.IntegerField(label='Quantidade', initial=1)
+    created_dt = forms.DateTimeField(label='Data do cadastro', required=False, disabled=True)
+    update_dt = forms.DateTimeField(label='Data do cadastro', required=False, disabled=True)
+    finalizado_dt = forms.DateTimeField(label='Data do cadastro', required=False, disabled=True)
+    cancelado_dt = forms.DateTimeField(label='Data do cadastro', required=False, disabled=True)
     items = []
+
+    def naoPodeSerPedido(self):
+        return self.initial.get('finalizado_dt') or self.initial.get('cancelado_dt')
 
     def __init__(self, *args, request, uuid=None, **kwargs):         
         super(VendaForm, self).__init__(*args, **kwargs)
@@ -127,9 +134,9 @@ def vendaEdit(request, uuid):
 def venda_render(request, uuid=None):
     template_name = 'venda/venda_edit.html'
     try: 
-        if request.POST.get('btn_pedido_encerrar'):
-            form = VendaForm(request.POST, request=request)
-            messages.success(request, 'EM DESENVOLVIMENTO')
+        if request.POST.get('btn_pedido_finalizar'):
+            finalizarPedidoVenda(request, request.POST, uuid)
+            messages.success(request, 'sucesso ao finalizar pedido')
             return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))
         
         if request.POST.get('btn_pedido_salvar'):
@@ -197,4 +204,11 @@ def vendaImprimir(request, uuid):
     return HttpResponse('Erro ao gerar o relatório', status=response.status_code)
 
 
-
+@require_token
+def finalizarPedidoVenda(request, data, uuid):
+    data = dict(dados_para_json(data, []))    
+    # raise Exception(data)
+    headers = session_get_headers(request)
+    response = requests.patch(URL_RECURSO + str(uuid) + "/finalizar", json=data, headers=headers)
+    if not response.status_code in [200, 201]:
+        raise Exception(tratar_error(response))
