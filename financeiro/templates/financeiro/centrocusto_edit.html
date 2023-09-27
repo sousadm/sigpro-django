@@ -1,0 +1,61 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Categoria {% endblock %}
+
+{% block content %}
+<form method="post">
+
+    {% csrf_token %}
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Centro de Custo</h3>
+        </div>
+        <div class="card-body">
+            <div class="col-12 col-md-2">
+                <label class="control-label">Código</label>
+                <input type="number" disabled="disabled" class="form-control" value={{form.id.value}}>
+            </div>
+            <div class="col">
+                {{ form.descricao|bootstrap }}
+            </div>
+            <div class="col">
+                <label class="control-label">{{form.fluxoCaixa.label}}</label>
+                <select id="fluxoCaixa" name="fluxoCaixa" class="form-control" required>
+                    <option value="">Selecione</option>
+                    {% for item in form.fluxoCaixa.field.choices %}
+                        <option value="{{ item.0 }}" {% if item.0 == form.fluxoCaixa.value %} selected {% endif %} >
+                            {{ item.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <label class="control-label">{{form.tipoMovimento.label}}</label>
+                <select id="tipoMovimento" name="tipoMovimento" class="form-control" required>
+                    <option value="">Selecione</option>
+                    {% for item in form.tipoMovimento.field.choices %}
+                        <option value="{{ item.0 }}" {% if item.0 == form.tipoMovimento.value %} selected {% endif %} >
+                            {{ item.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>            
+        </div>
+    </div>
+
+    <div class="footer">
+        <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+            <i class="fas fa-save"></i> Salvar
+        </button>
+        <a href="{% url 'url_centrocusto_add' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i> Novo </button>
+        </a>
+        <a href="{% url 'url_centrocusto_list' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i> Lista </button>
+        </a>
+    </div>
+
+</form>
+{% endblock %}

@@ -21,6 +21,7 @@ from acesso.views import login, home, logout
 from compra.cotacao import cotacaoEdit, cotacaoImprimir, cotacaoListForm, cotacaoNew
 from compra.cotacao_item import cotacaoItemDelete, cotacaoItemEdit, cotacaoItemNew
 from compra.cotacao_orcamento import cotacaoOrcamentoDelete, cotacaoOrcamentoEdit, cotacaoOrcamentoNew
+from financeiro.centrocusto import centrocustoChoices, centrocustoEdit, centrocustoList, centrocustoNew
 from pessoa.Endereco import get_municipios
 from pessoa.cliente import pessoaClienteEdit
 from pessoa.vendedor import pessoaVendedorEdit
@@ -99,5 +100,11 @@ urlpatterns = [
     path('venda-item/<int:uuid>', vendaItemEdit, name='url_vendaitem_edit'),
     path('venda/<int:uuid>/remove-item/<int:item>', vendaItemDelete, name='url_venda_remove_item'),
     path('venda/<int:uuid>/imprimir', vendaImprimir, name='url_venda_imprimir'),
+
+
+    path('centrocusto/', centrocustoList, name='url_centrocusto_list'),
+    path('centrocusto/<int:uuid>', centrocustoEdit, name='url_centrocusto_edit'),
+    path('centrocusto/add', centrocustoNew, name='url_centrocusto_add'),
+    path('get_centrocustos/', centrocustoChoices, name='get_centrocustos'),
 
 ]
