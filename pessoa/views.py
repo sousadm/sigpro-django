@@ -153,7 +153,8 @@ def get_pessoa_uuid(request, uuid):
         headers = session_get_headers(request)
         response = requests.get(URL_RECURSO + str(uuid), headers=headers, params={})
         data = dict(response.json())
-        return JsonResponse(data.get('content')[0])
+        # return JsonResponse(data.get('content')[0])
+        return JsonResponse(data)
     except Exception as e:
         return JsonResponse({})
 
@@ -165,11 +166,7 @@ def pessoaPesquisa(request):
     params = {'sort':'nome,asc'}
     form = PessoaListForm(request.POST)
     page = form.pesquisar(request, params)
-    context = {
-        'form': form,
-        'page': page
-    }
-    return render(request, template_name, context)
+    return render(request, template_name, {'form': form, 'page': page})
 
 
 

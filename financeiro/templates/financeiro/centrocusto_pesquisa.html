@@ -1,0 +1,49 @@
+{% load bootstrap %}
+
+<script>
+
+    $(document).ready(function () {
+        $('.item-button').on('click', function () {
+            var itemRow = $(this).closest('.item-row');
+            var itemId = itemRow.data('id');
+            $('#centroCustoId').val(itemRow.data('id'));
+            $('#centroCustoId').focus();
+        });
+    });
+
+</script>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Fluxo</th>
+                <th>Tipo</th>
+                <th width="90"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in page.object_list %}
+            <tr data-id='{{ item.id }}' 
+                class="item-row" {% if not item.situacao %} class="text-danger" {%endif%}>
+                <td>{{item.descricao|default_if_none:""}}</td>
+                <td>{{item.fluxoCaixa|default_if_none:""}}</td>
+                <td>{{item.tipoMovimento|default_if_none:""}}</td>
+                <td>
+                    <button type="button" class="btn btn-sm item-button" data-dismiss="modal">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4"><span>sem registros</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "core/paginacao.html" %}
+
+</div>

@@ -4,6 +4,7 @@ import requests
 from django import forms
 from django.contrib import messages
 from django.shortcuts import render
+from django.http import HttpResponseRedirect, JsonResponse
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 from core.paginacao import get_page, get_param
 
@@ -54,7 +55,7 @@ class CentroCustoListForm(forms.Form):
     descricao = forms.CharField(label='Pesquisa', required=False,
                                 widget=forms.TextInput(
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
-    def pesquisar(self, request):
+    def pesquisar(self, request, params):
         itens_por_pagina = 5
         self.initial = request.POST or request.GET
         params = get_param(self.initial, itens_por_pagina)
@@ -65,7 +66,9 @@ class CentroCustoListForm(forms.Form):
             self.fields['descricao'].initial = self.initial.get('descricao')
             self.initial = dict(response.json())
             return get_page(self.initial, params)
-        
+
+
+
 
 @require_token
 def centrocustoNew(request):
@@ -109,6 +112,19 @@ def centrocustoList(request):
 
 
 @require_token
+def get_centrocusto_uuid(request, uuid):
+    try:
+        headers = session_get_headers(request)
+        response = requests.get(URL_RECURSO + str(uuid), headers=headers, params={})
+        data = dict(response.json())
+        # return JsonResponse(data.get('content')[0])
+        return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({})
+
+
+
+@require_token
 def centrocustoChoices(request):
     items = []
     response = requests.get(URL_RECURSO, headers=session_get_headers(request))
@@ -117,4 +133,13 @@ def centrocustoChoices(request):
             items.append((n['id'], n['descricao']))
     return items
 
+
+
+@require_token
+def centrocustoPesquisa(request):
+    template_name = 'financeiro/centrocusto_pesquisa.html'
+    params = {'sort':'nome,asc'}
+    form = CentroCustoListForm(request.POST)
+    page = form.pesquisar(request, params)
+    return render(request, template_name, {'form': form, 'page': page})
 

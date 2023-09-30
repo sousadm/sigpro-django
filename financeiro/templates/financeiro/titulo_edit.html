@@ -1,0 +1,206 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Título {% endblock %}
+
+{% block content %}
+<form method="post">
+
+    {% csrf_token %}
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Título</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-12 col-md-2">
+                    <label class="control-label">Código</label>
+                    <input type="number" disabled="disabled" class="form-control" value={{form.tituloId.value}}>
+                </div>
+                <div class="col-12 col-md-6">
+                    {{ form.historico|bootstrap }}
+                </div>            
+                <div class="col-12 col-md-2">
+                    {{ form.documento|bootstrap }}
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="control-label">{{form.portador.label}}</label>
+                    <select id="portador" name="portador" class="form-control" required>
+                        <option value="">Selecione</option>
+                        {% for item in form.portador.field.choices %}
+                            <option value="{{ item.0 }}" {% if item.0 == form.portador.value %} selected {% endif %} >
+                                {{ item.1 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                
+                <div class="col-12 col-md-6">
+                    <label class="control-label" title="código do participante (cadastro de pessoa)">Código / Nome do Participante</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend" style="width: 25%;">
+                            <input type="number" id="participanteId" name="participanteId" class="form-control" value={{form.participanteId.value|default_if_none:""}} >
+                        </div>
+                        <input type="text" id="participante" name="participante" class="form-control" value="{{form.participante.value|default_if_none:''}}" disabled>
+                        <button type="button" id="buttonPesquisaPessoa" class="btn btn-info"
+                            data-titulo="Pesquisa de Pessoa" data-url="{% url 'url_pessoa_pesquisa' %}">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="control-label">Centro de Custo</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend" style="width: 25%;">
+                            <input type="number" id="centroCustoId" name="centroCustoId" class="form-control" value={{form.centroCustoId.value|default_if_none:""}} >
+                        </div>
+                        <input type="text" id="centroCusto" name="centroCusto" class="form-control" value="{{form.centroCusto.value|default_if_none:''}}" disabled>
+                        <button type="button" id="buttonPesquisaCentrocusto" class="btn btn-info"
+                            data-titulo="Pesquisa Centro de Custo" data-url="{% url 'url_centrocusto_pesquisa' %}">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    {{ form.vencimento|bootstrap }}
+                </div>
+                <div class="col-12 col-md-3">
+                    {{ form.previsao_dt|bootstrap }}
+                </div>                
+                <div class="col-12 col-md-3">
+                    {{ form.valor|bootstrap }}
+                </div>
+                <div class="col-12 col-md-3">
+                    {{ form.juro|bootstrap }}
+                </div>
+            </div>                
+
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    {{ form.multa|bootstrap }}
+                </div>
+                <div class="col-12 col-md-3">
+                    {{ form.desconto|bootstrap }}
+                </div>
+                <div class="col-12 col-md-3">
+                    {{ form.baixa_dt|bootstrap }}
+                </div>
+                <div class="col-12 col-md-3">
+                    {{ form.saldo|bootstrap }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer">
+        <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+            <i class="fas fa-save"></i> Salvar
+        </button>
+        <a href="{% url 'url_titulo_add' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i> Novo </button>
+        </a>
+        <a href="{% url 'url_titulo_list' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-list"></i> Lista </button>
+        </a>
+    </div>
+
+</form>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#buttonPesquisaCentrocusto').on('click', function () {
+            $('#modalPadraoPesquisa').modal('show');
+            var url = $(this).data("url");
+            var titulo = $(this).data("titulo");
+            $('#modalPadraoTitulo').text(titulo);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalPadraoContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('#buttonPesquisaPessoa').on('click', function () {
+            $('#modalPadraoPesquisa').modal('show');
+            var url = $(this).data("url");
+            var titulo = $(this).data("titulo");
+            $('#modalPadraoTitulo').text(titulo);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalPadraoContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });    
+
+    $(document).ready(function () {
+        $('#id_vencimento').blur(function () {
+            var id_vencimento = document.getElementById('id_vencimento').value;
+            $('#id_previsao_dt').val(id_vencimento);
+        });
+    });
+
+    $(document).ready(function () {
+        $('#centroCustoId').blur(function () {
+            var centroCustoId = document.getElementById('centroCustoId').value;
+            var url = '{% url "url_centrocusto_get" 0 %}'.replace('0', centroCustoId);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    $('#centroCusto').val(data['descricao']);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            }); 
+        });
+    });
+
+    $(document).ready(function () {
+        $('#participanteId').blur(function () {
+            var participanteId = document.getElementById('participanteId').value;
+            var url = '{% url "url_pessoa_get" 0 %}'.replace('0', participanteId);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    $('#participante').val(data['nome']);
+                    // $('#id_nome').focus();
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            }); 
+        });
+    });    
+
+</script>
+
+
+{% endblock %}

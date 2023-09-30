@@ -21,7 +21,8 @@ from acesso.views import login, home, logout
 from compra.cotacao import cotacaoEdit, cotacaoImprimir, cotacaoListForm, cotacaoNew
 from compra.cotacao_item import cotacaoItemDelete, cotacaoItemEdit, cotacaoItemNew
 from compra.cotacao_orcamento import cotacaoOrcamentoDelete, cotacaoOrcamentoEdit, cotacaoOrcamentoNew
-from financeiro.centrocusto import centrocustoChoices, centrocustoEdit, centrocustoList, centrocustoNew
+from financeiro.centrocusto import centrocustoChoices, centrocustoEdit, centrocustoList, centrocustoNew, centrocustoPesquisa, get_centrocusto_uuid
+from financeiro.titulo import tituloEdit, tituloList, tituloNew
 from pessoa.Endereco import get_municipios
 from pessoa.cliente import pessoaClienteEdit
 from pessoa.vendedor import pessoaVendedorEdit
@@ -79,32 +80,35 @@ urlpatterns = [
     path('cotacao/add', cotacaoNew, name='url_cotacao_add'),
     path('cotacao/<int:uuid>', cotacaoEdit, name='url_cotacao_edit'),
     path('cotacao/<int:uuid>/imprimir', cotacaoImprimir, name='url_cotacao_imprimir'),
-    
     path('cotacao/<int:uuid>/add-item', cotacaoItemNew, name='url_cotacaoitem_add'),
     path('cotacao-item/<int:uuid>', cotacaoItemEdit, name='url_cotacaoitem_edit'),
     path('cotacao/<int:uuid>/remove-item/<int:item>', cotacaoItemDelete, name='url_cotacao_remove_item'),
-
     path('cotacao/<int:uuid>/add-orcamento', cotacaoOrcamentoNew, name='url_orcamento_add'),
     path('cotacao-orcamento/<int:uuid>', cotacaoOrcamentoEdit, name='url_orcamento_edit'),
     path('cotacao/<int:uuid>/remove-orcamento/<int:orcamento>', cotacaoOrcamentoDelete, name='url_cotacao_remove_orcamento'),
 
     path('formapgto/', formapgtoList, name='url_formapgto_list'),
-    path('formapgto/<int:uuid>', formaPgtoEdit, name='url_formapgto_edit'),
     path('formapgto/add', formaPgtoNew, name='url_formapgto_add'),
+    path('formapgto/<int:uuid>', formaPgtoEdit, name='url_formapgto_edit'),
     path('formapgto/<int:uuid>/pesquisa', get_formapgto, name='url_formapgto_get'),    
 
+    path('venda/', vendaList, name='url_venda_list'),
     path('venda/add', vendaNew, name='url_venda_add'),
     path('venda/<int:uuid>', vendaEdit, name='url_venda_edit'),
-    path('venda/', vendaList, name='url_venda_list'),
     path('venda/<int:uuid>/add-item', vendaItemNew, name='url_vendaitem_add'),
     path('venda-item/<int:uuid>', vendaItemEdit, name='url_vendaitem_edit'),
     path('venda/<int:uuid>/remove-item/<int:item>', vendaItemDelete, name='url_venda_remove_item'),
     path('venda/<int:uuid>/imprimir', vendaImprimir, name='url_venda_imprimir'),
 
-
     path('centrocusto/', centrocustoList, name='url_centrocusto_list'),
-    path('centrocusto/<int:uuid>', centrocustoEdit, name='url_centrocusto_edit'),
     path('centrocusto/add', centrocustoNew, name='url_centrocusto_add'),
+    path('centrocusto/<int:uuid>', centrocustoEdit, name='url_centrocusto_edit'),
     path('get_centrocustos/', centrocustoChoices, name='get_centrocustos'),
+    path('centrocusto/pesquisa', centrocustoPesquisa, name='url_centrocusto_pesquisa'),    
+    path('centrocusto/<int:uuid>/pesquisa', get_centrocusto_uuid, name='url_centrocusto_get'),
+
+    path('titulo/', tituloList, name='url_titulo_list'),
+    path('titulo/add', tituloNew, name='url_titulo_add'),
+    path('titulo/<int:uuid>', tituloEdit, name='url_titulo_edit'),
 
 ]

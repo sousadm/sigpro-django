@@ -119,7 +119,7 @@
         </div>
 
         <div class="modal fade" tabindex="-1" role="dialog" id="modalProduto">
-            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Item de Venda</h5>
@@ -139,7 +139,7 @@
         </div>
     
         <div class="modal fade" tabindex="-1" role="dialog" id="modalResumo">
-            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Sobre a Venda</h5>
@@ -244,6 +244,24 @@
 <script>
 
     $(document).ready(function () {
+        $('#id_documento').blur(function () {
+            var documento = document.getElementById('id_documento').value;
+            var url = '{% url "url_pessoa_docto_get" 0 %}'.replace('0', documento);
+            $.ajax({
+                url: url,
+                type: 'GET',  // Ou 'POST' dependendo da sua necessidade
+                success: function (data) {
+                    $('#id_email').val(data['email']);
+                    // $('#id_quantidade').focus();
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
         $('#pagamentoId').change(function () {
             var pagamentoId = document.getElementById('pagamentoId').value;
             var url = '{% url "url_formapgto_get" 0 %}'.replace('0', pagamentoId);
@@ -287,7 +305,7 @@
             var url = '{% url "url_produto_get" 0 %}'.replace('0', produtoId);
             $.ajax({
                 url: url,
-                type: 'GET',  // Ou 'POST' dependendo da sua necessidade
+                type: 'GET',  
                 success: function (data) {
                     $('#id_descricaoItem').val(data['descricao']);
                     $('#id_ncm').val(data['ncm']);

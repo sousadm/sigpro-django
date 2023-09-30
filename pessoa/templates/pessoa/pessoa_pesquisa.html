@@ -6,8 +6,12 @@
         $('.item-button').on('click', function () {
             var itemRow = $(this).closest('.item-row');
             var itemId = itemRow.data('id');
-            $('#documento').val(itemRow.data('id'));
-            $('#documento').focus();
+            $('#pessoaId').val(itemRow.data('id'));
+            $('#pessoaId').focus();
+
+            $('#participanteId').val(itemRow.data('id'));
+            $('#participanteId').focus();            
+
         });
     });
 
@@ -20,23 +24,19 @@
                 <th class="d-none d-sm-table-cell">ID</th>
                 <th>Nome</th>
                 <th>CPF/CNPJ</th>
-                <th class="d-none d-sm-table-cell">E-mail</th>
                 <th>Celular</th>
-                <th class="d-none d-sm-table-cell">Município</th>
                 <th class="d-none d-sm-table-cell">UF</th>
                 <th width="90"></th>
             </tr>
         </thead>
         <tbody>
             {% for item in page.object_list %}
-            <tr data-id='{% if item.cnpj %}{{ item.cnpj|default_if_none:"" }}{% else %}{{ item.cpf|default_if_none:"" }}{% endif %}' 
-                class="item-row" {% if not item.situacaoPessoa %} class="text-danger" {%endif%}>
+            <!-- <tr data-id='{% if item.cnpj %}{{ item.cnpj|default_if_none:"" }}{% else %}{{ item.cpf|default_if_none:"" }}{% endif %}'  -->
+            <tr data-id={{item.pessoaId}} class="item-row" {% if not item.situacaoPessoa %} class="text-danger" {%endif%}>
                 <td class="d-none d-sm-table-cell">{{ item.pessoaId }}</td>
                 <td>{{ item.nome|default_if_none:"" }}</td>
                 <td>{% if item.cnpj %}{{ item.cnpj|default_if_none:"" }}{% else %}{{ item.cpf|default_if_none:"" }}{% endif %}</td>
-                <td class="d-none d-sm-table-cell">{{ item.email|default_if_none:"" }}</td>
                 <td>{{ item.fone|default_if_none:"" }}</td>
-                <td class="d-none d-sm-table-cell">{{ item.municipio }}</td>                        
                 <td class="d-none d-sm-table-cell">{{ item.uf }}</td>
                 <td>
                     <button type="button" class="btn btn-sm item-button" data-dismiss="modal">

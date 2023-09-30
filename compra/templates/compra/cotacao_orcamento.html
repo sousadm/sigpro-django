@@ -67,7 +67,7 @@
                 var url = '{% url "url_pessoa_get" 0 %}'.replace('0', pessoaId);
                 $.ajax({
                     url: url,
-                    type: 'GET',  // Ou 'POST' dependendo da sua necessidade
+                    type: 'GET',
                     success: function (data) {
                         $('#documento').val(data['cpf'] || data['cnpj']);
                         $('#id_nome').val(data['nome']);
@@ -88,7 +88,7 @@
                 var url = '{% url "url_pessoa_docto_get" 0 %}'.replace('0', documento);
                 $.ajax({
                     url: url,
-                    type: 'GET',  // Ou 'POST' dependendo da sua necessidade
+                    type: 'GET',
                     success: function (data) {
                         $('#id_nome').val(data['nome']);
                         $('#id_email').val(data['email']);
