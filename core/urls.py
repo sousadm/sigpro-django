@@ -25,8 +25,10 @@ from financeiro.centrocusto import centrocustoChoices, centrocustoEdit, centrocu
 from financeiro.titulo import tituloEdit, tituloList, tituloNew
 from pessoa.Endereco import get_municipios
 from pessoa.cliente import pessoaClienteEdit
+from pessoa.fornecedor import pessoaFornecedorEdit
+from pessoa.transportador import pessoaTransportadorEdit
 from pessoa.vendedor import pessoaVendedorEdit
-from pessoa.views import get_pessoa_documento, get_pessoa_uuid, pessoaNew, pessoaEdit, pessoaFornecedorEdit, pessoaPesquisa, pessoaTransportadorEdit, pessoaList
+from pessoa.views import get_pessoa_documento, get_pessoa_uuid, pessoaNew, pessoaEdit, pessoaPesquisa, pessoaList
 from produto.categoria import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
 from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew, \
     centroDistribuicaoChoices

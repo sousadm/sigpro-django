@@ -9,7 +9,7 @@ from django.urls import reverse
 from core.controle import require_token, session_get_headers
 from core.settings import URL_API
 from pessoa.Endereco import get_lista_unidade_federacao
-from pessoa.forms import PessoaForm, FornecedorForm, TransportadorForm, PessoaListForm
+from pessoa.forms import PessoaForm, PessoaListForm
 from pessoa.models import TIPO_CHOICES
 
 
@@ -60,55 +60,6 @@ def pessoa_render(request, uuid=None):
     }
     return render(request, template_name, context)
 
-@require_token
-def pessoaFornecedorEdit(request, uuid):
-    template_name = 'pessoa/fornecedor_edit.html'
-    form = FornecedorForm()
-    try:
-
-        if request.POST.get('btn_pessoa'):
-            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
-
-        if request.POST.get('btn_salvar'):
-            form = FornecedorForm(request.POST)
-            form.salvar(request)
-            messages.success(request, 'sucesso ao gravar dados')
-            return HttpResponseRedirect(reverse('url_pessoa_fornecedor', kwargs={'uuid': uuid}))
-
-        if request.POST.get('btn_ativar'):
-            form.ativar(request, request.POST.get('fornecedorId'))
-            return HttpResponseRedirect(reverse('url_pessoa_fornecedor', kwargs={'uuid': uuid}))
-
-    except Exception as e:
-        messages.error(request, e)
-
-    form.pesquisaPorPessoa(request, uuid)
-    return render(request, template_name, {'form': form})
-
-
-def pessoaTransportadorEdit(request, uuid):
-    template_name = 'pessoa/transportador_edit.html'
-    form = TransportadorForm()
-    try:
-
-        if request.POST.get('btn_pessoa'):
-            return HttpResponseRedirect(reverse('url_pessoa_edit', kwargs={'uuid': uuid}))
-
-        if request.POST.get('btn_salvar'):
-            form = TransportadorForm(request.POST)
-            form.salvar(request)
-            messages.success(request, 'sucesso ao gravar dados')
-            return HttpResponseRedirect(reverse('url_pessoa_transportador', kwargs={'uuid': uuid}))
-
-        if request.POST.get('btn_ativar'):
-            form.ativar(request, request.POST.get('transportadorId'))
-            return HttpResponseRedirect(reverse('url_pessoa_transportador', kwargs={'uuid': uuid}))
-
-    except Exception as e:
-        messages.error(request, e)
-
-    form.pesquisaPorPessoa(request, uuid)
-    return render(request, template_name, {'form': form})
 
 @require_token
 def pessoaList(request):

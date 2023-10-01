@@ -1,3 +1,6 @@
+from djmoney.models.fields import MoneyField
+from djmoney.money import Money
+
 import json
 
 import requests
