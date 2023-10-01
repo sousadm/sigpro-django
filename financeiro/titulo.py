@@ -52,7 +52,6 @@ class TituloForm(forms.Form):
                                   widget=forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
     baixa_dt = forms.DateField(label='Dt.Baixa', disabled=True, required=False,
                                widget=forms.DateInput(attrs={'type': 'date', 'placeholder': 'dd/mm/yyyy', 'class': 'form-control', }))
-    valor = forms.DecimalField(label='Valor', decimal_places=2, initial=0)
     multa = forms.DecimalField(label='Multa %', decimal_places=2, initial=0,
                                widget=forms.DateInput(attrs={'title': 'percentual de multa sobre a parcela', }))
     juro = forms.DecimalField(label='Juro %', decimal_places=2, initial=0,
@@ -60,13 +59,16 @@ class TituloForm(forms.Form):
     desconto = forms.DecimalField(label='Desconto R$', decimal_places=2, initial=0,
                                   widget=forms.DateInput(attrs={'title': 'desconto até o dia do vencimento', }))
     saldo = forms.DecimalField(label='Saldo', decimal_places=2, initial=0, disabled=True)
+    valor = forms.DecimalField(label='Valor', decimal_places=2, initial=0)
     modificado = forms.BooleanField()
 
     def __init__(self, *args, request=None, uuid=None, **kwargs):
         super(TituloForm, self).__init__(*args, **kwargs)
         response = requests.get(URL_RECURSO + str(uuid), headers=session_get_headers(request))
         if response.status_code == 200:
+            data = dict(response.json())
             self.initial = response.json()
+            self.fields['valor'].widget.attrs['readonly'] = data.get('modificado') == True
 
     def salvar(self, request, uuid=None):
         data = dados_para_json(self.data)

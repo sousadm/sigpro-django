@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
+    'djmoney',
     'core',
     'acesso',
     'pessoa',
@@ -135,6 +136,8 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 DATE_FORMAT = "d/m/Y"
 USE_L10N = False
+
+USE_THOUSAND_SEPARATOR = True
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
