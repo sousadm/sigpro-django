@@ -1,6 +1,3 @@
-from djmoney.models.fields import MoneyField
-from djmoney.money import Money
-
 import json
 
 import requests
@@ -40,8 +37,7 @@ class TituloForm(forms.Form):
     historico = forms.CharField(max_length=100, label='Histórico', widget=forms.DateInput(
         attrs={'autofocus': 'true', }))
     documento = forms.CharField(max_length=20, label='Documento')
-    portador = forms.ChoiceField(
-        choices=TIPO_DOCUMENTO, initial='BOLETO', label='Portador')
+    portador = forms.ChoiceField(choices=TIPO_DOCUMENTO, initial='BOLETO', label='Portador')
     created_dt = forms.DateTimeField(
         label='Dt.Cadastro', required=False, disabled=True)
     updated_dt = forms.DateTimeField(
