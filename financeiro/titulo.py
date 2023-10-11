@@ -4,6 +4,8 @@ import requests
 from django import forms
 from django.contrib import messages
 from django.shortcuts import render
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 from core.paginacao import get_page, get_param
 
@@ -27,7 +29,7 @@ TIPO_DOCUMENTO = (
 
 
 class TituloForm(forms.Form):
-    tituloId = forms.IntegerField(label='ID', required=False)
+    tituloId = forms.IntegerField(label='ID', required=False, disabled=True)
     participanteId = forms.IntegerField(label='Participante')
     centroCustoId = forms.IntegerField(label='Centro Custo')
     centroCusto = forms.CharField(
@@ -36,7 +38,7 @@ class TituloForm(forms.Form):
         max_length=100, label='Participante', disabled=True, required=True)
     historico = forms.CharField(max_length=100, label='Histórico', widget=forms.DateInput(
         attrs={'autofocus': 'true', }))
-    documento = forms.CharField(max_length=20, label='Documento')
+    documento = forms.CharField(max_length=20, label='Documento', required=False)
     portador = forms.ChoiceField(choices=TIPO_DOCUMENTO, initial='BOLETO', label='Portador')
     created_dt = forms.DateTimeField(
         label='Dt.Cadastro', required=False, disabled=True)
@@ -73,8 +75,9 @@ class TituloForm(forms.Form):
             response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
         else:
             response = requests.post(URL_RECURSO, json=data, headers=headers)
+
         if response.status_code in [200, 201]:
-            return response.json()['tituloId']
+            return response.json()['tituloId'], response.status_code
         else:
             raise Exception(tratar_error(response))
 
@@ -113,8 +116,10 @@ def titulo_render(request, uuid=None):
     try:
         if request.POST.get('btn_salvar'):
             form = TituloForm(request.POST, request=request)
-            uuid = form.salvar(request, uuid)
-            messages.success(request, 'sucesso ao gravar dados')
+            uuid, status_code = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados' )
+            if status_code == 201: 
+                return HttpResponseRedirect(reverse('url_titulo_edit', kwargs={'uuid': uuid}))
 
         form = TituloForm(request=request, uuid=uuid)
         

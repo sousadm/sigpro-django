@@ -39,6 +39,7 @@
                         <th>Participante</th>
                         <th>Histórico</th>
                         <th>Portador</th>
+                        <th>Tipo</th>                        
                         <th>Vencimento</th>
                         <th>Valor</th>
                         <th>Saldo</th>
@@ -53,6 +54,7 @@
                             <label title="{{item.historico|default_if_none:""}}">{{item.historico|default_if_none:""}}</label>
                         </td>
                         <td>{{ item.portador|default_if_none:"" }}</td>
+                        <td>{{ item.tipoMovimento|default_if_none:"" }}</td>                        
                         <td>{{ item.vencimento }}</td>
                         <td>{{ item.valor }}</td>
                         <td>{{ item.saldo }}</td>
