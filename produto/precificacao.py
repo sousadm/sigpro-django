@@ -4,6 +4,8 @@ from django import forms
 from django.contrib import messages
 from django.shortcuts import render
 
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 from core.controle import session_get_headers, tratar_error, require_token, dados_para_json
 from core.paginacao import get_page, get_param
 from core.settings import URL_API
@@ -40,7 +42,7 @@ class PrecificacaoForm(forms.Form):
         else:
             response = requests.post(URL_RECURSO, json=data, headers=headers)
         if response.status_code in [200, 201]:
-            return response.json()['id']
+            return response.json()['id'], response.status_code
         else:
             raise Exception(tratar_error(response))
 
@@ -77,8 +79,11 @@ def precificacao_render(request, uuid=None):
     try:
         if request.POST.get('btn_salvar'):
             form = PrecificacaoForm(request.POST, request=request)
-            uuid = form.salvar(request, uuid)
-            messages.success(request, 'sucesso ao gravar dados')
+            uuid, status_code = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados' )
+            if status_code == 201: 
+                return HttpResponseRedirect(reverse('url_precificacao_edit', kwargs={'uuid': uuid}))
+
     except Exception as e:
         messages.error(request, e)
     form = PrecificacaoForm(request=request, uuid=uuid)

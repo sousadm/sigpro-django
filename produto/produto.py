@@ -8,6 +8,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.urls import reverse
 
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 from core.controle import session_get_headers, tratar_error, dados_para_json, require_token
 from core.paginacao import get_param, get_page
 from core.settings import URL_API
@@ -55,7 +57,7 @@ class ProdutoForm(forms.Form):
         else:
             response = requests.post(URL_RECURSO, json=data, headers=headers)
         if response.status_code in [200, 201]:
-            return response.json()['id']
+            return response.json()['id'], response.status_code
         else:
             raise Exception(tratar_error(response))
         
@@ -101,8 +103,10 @@ def produto_render(request, uuid=None):
 
         if request.POST.get('btn_salvar'):
             form = ProdutoForm(request.POST, request=request)
-            uuid = form.salvar(request, uuid)
-            messages.success(request, 'sucesso ao gravar o registro')
+            uuid, status_code = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados' )
+            if status_code == 201: 
+                return HttpResponseRedirect(reverse('url_produto_edit', kwargs={'uuid': uuid}))
 
         form = ProdutoForm(request=request, uuid=uuid)
 

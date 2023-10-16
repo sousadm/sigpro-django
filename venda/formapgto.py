@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 import requests
 from django import forms
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 from django.contrib import messages
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 from core.paginacao import get_page, get_param
@@ -36,7 +38,7 @@ class FormaPgtoForm(forms.Form):
         else:
             response = requests.post(URL_RECURSO, json=data, headers=headers)
         if response.status_code in [200, 201]:
-            return response.json()['id']
+            return response.json()['id'], response.status_code
         else:
             raise Exception(tratar_error(response))
         
@@ -91,8 +93,11 @@ def formaPgto_render(request, uuid=None):
     try:
         if request.POST.get('btn_salvar'):
             form = FormaPgtoForm(request.POST, request=request)
-            uuid = form.salvar(request, uuid)
-            messages.success(request, 'sucesso ao gravar dados')
+            uuid, status_code = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados' )
+            if status_code == 201: 
+                return HttpResponseRedirect(reverse('url_formapgto_edit', kwargs={'uuid': uuid}))
+            
     except Exception as e:
         messages.error(request, e)
     form = FormaPgtoForm(request=request, uuid=uuid)

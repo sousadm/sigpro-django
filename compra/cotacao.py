@@ -47,7 +47,7 @@ class CotacaoForm(forms.Form):
         else:
             response = requests.post(URL_RECURSO, json=data, headers=headers)
         if response.status_code in [200, 201]:
-            return response.json()['cotacaoId']
+            return response.json()['cotacaoId'], response.status_code
         else:
             raise Exception(tratar_error(response))
         
@@ -79,9 +79,10 @@ def cotacao_render(request, uuid=None):
 
         if request.POST.get('btn_salvar'):
             form = CotacaoForm(request.POST, request=request)
-            uuid = form.salvar(request, uuid)
-            messages.success(request, 'sucesso ao gravar dados')
-            return HttpResponseRedirect(reverse('url_cotacao_edit', kwargs={'uuid': uuid}))
+            uuid, status_code = form.salvar(request, uuid)
+            messages.success(request, 'sucesso ao gravar dados' )
+            if status_code == 201: 
+                return HttpResponseRedirect(reverse('url_cotacao_edit', kwargs={'uuid': uuid}))        
 
     except Exception as e:
         messages.error(request, e)

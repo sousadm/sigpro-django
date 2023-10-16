@@ -225,13 +225,11 @@
             </button>
         </a>
 
+        {% if form.vendaId.value %}
         {{form.valorTotal}}
-
         <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalResumo">
             <i class="fas fa-calculator"></i>
         </button>
-
-        {% if form.vendaId.value %}
         <a href="{% url 'url_venda_imprimir' form.vendaId.value %}" target="_blank">
             <button type="button" class="btn btn-secondary"> <i class="fas fa-print"></i> Imprimir </button>
         </a>

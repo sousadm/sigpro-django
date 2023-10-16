@@ -55,7 +55,7 @@ class CentroCustoListForm(forms.Form):
     descricao = forms.CharField(label='Pesquisa', required=False,
                                 widget=forms.TextInput(
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
-    def pesquisar(self, request, params):
+    def pesquisar(self, request):
         itens_por_pagina = 5
         self.initial = request.POST or request.GET
         params = get_param(self.initial, itens_por_pagina)

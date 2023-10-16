@@ -67,8 +67,6 @@ class VendaForm(forms.Form):
             if vendedor:
                 self.initial['vendedorId'] = vendedor
                 self.initial['vendedorNome'] = session_get(request, 'nome')
-                self.initial['nome'] = 'CLIENTE TESTE INICIAL'
-                self.initial['fone'] = '85-94453322'
 
     def titulo(self):
         for status, titulo in STATUS_VENDA:
@@ -88,12 +86,10 @@ class VendaForm(forms.Form):
             data.pop('quantidade', None)
             
         headers = session_get_headers(request)
-        if uuid:
-            response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
-        else:
-            response = requests.post(URL_RECURSO, json=data, headers=headers)
+        if uuid: response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
+        else: response = requests.post(URL_RECURSO, json=data, headers=headers)
         if response.status_code in [200, 201]:
-            return response.json()['vendaId']
+            return response.json()['vendaId'], response.status_code
         else:
             raise Exception(tratar_error(response))
 
@@ -132,6 +128,7 @@ def vendaEdit(request, uuid):
 
 @require_token
 def venda_render(request, uuid=None):
+    form = VendaForm(request=request, uuid=uuid)
     template_name = 'venda/venda_edit.html'
     try: 
         if request.POST.get('btn_pedido_finalizar'):
@@ -153,16 +150,15 @@ def venda_render(request, uuid=None):
 
         if request.POST.get('btn_salvar') or request.POST.get('btn_resumo_salvar'):
             form = VendaForm(request.POST, request=request)
-            uuid = form.salvar(request, uuid)
+            uuid, status_code = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
-            return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))
+            # if status_code == 201: 
+            return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': uuid}))        
         
     except Exception as e:
         messages.error(request, e)
 
-    form = VendaForm(request=request, uuid=uuid)
-    context = {'form': form}
-    return render(request, template_name, context)
+    return render(request, template_name, {'form': form})
 
 
 @require_token

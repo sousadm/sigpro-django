@@ -5,6 +5,8 @@ from django import forms
 from django.contrib import messages
 from django.shortcuts import render
 
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 from core.controle import session_get_headers, tratar_error, require_token, dados_para_json
 from core.paginacao import get_page, get_param
 from core.settings import URL_API
@@ -25,12 +27,11 @@ class CategoriaForm(forms.Form):
     def salvar(self, request, uuid=None):
         data = dados_para_json(self.data)
         headers = session_get_headers(request)
-        if uuid:
-            response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
-        else:
-            response = requests.post(URL_RECURSO, json=data, headers=headers)
+        if uuid: response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
+        else: response = requests.post(URL_RECURSO, json=data, headers=headers)
+
         if response.status_code in [200, 201]:
-            return response.json()['id']
+            return response.json()['id'], response.status_code
         else:
             raise Exception(tratar_error(response))
 
@@ -63,15 +64,18 @@ def categoriaEdit(request, uuid):
 
 @require_token
 def categoria_render(request, uuid=None):
+    form = CategoriaForm(request=request, uuid=uuid)
     template_name = 'produto/categoria_edit.html'
     try:
         if request.POST.get('btn_salvar'):
             form = CategoriaForm(request.POST, request=request)
-            uuid = form.salvar(request, uuid)
+            uuid, status_code = form.salvar(request, uuid)
             messages.success(request, 'sucesso ao gravar dados')
+            return HttpResponseRedirect(reverse('url_categoria_edit', kwargs={'uuid': uuid}))
+            
     except Exception as e:
         messages.error(request, e)
-    form = CategoriaForm(request=request, uuid=uuid)
+        
     return render(request, template_name, {'form': form})
 
 
