@@ -36,6 +36,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Situação</th>
                             <th>Cliente</th>
                             <th>Data</th>
                             <th>Forma Pgto</th>
@@ -48,6 +49,7 @@
                         {% for item in page.object_list %}
                         <tr>
                             <td>{{ item.vendaId }}</td>                            
+                            <td>{{ item.status|default_if_none:"" }}</td>
                             <td>{{ item.nome|default_if_none:"" }}</td>
                             <td>{{item.created_str}}</td>
                             <td>{{ item.formaPgto|default_if_none:"" }}</td>

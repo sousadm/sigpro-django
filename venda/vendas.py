@@ -86,8 +86,12 @@ class VendaForm(forms.Form):
             data.pop('quantidade', None)
             
         headers = session_get_headers(request)
-        if uuid: response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
+
+        if uuid: 
+            print(URL_RECURSO + str(uuid))
+            response = requests.patch(URL_RECURSO + str(uuid), json=data, headers=headers)
         else: response = requests.post(URL_RECURSO, json=data, headers=headers)
+
         if response.status_code in [200, 201]:
             return response.json()['vendaId'], response.status_code
         else:

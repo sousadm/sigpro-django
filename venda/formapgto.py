@@ -115,10 +115,8 @@ def formapgtoList(request):
 
     except Exception as e:
         messages.error(request, e)
-    context = {
-        'form': form,
-        'page': page
-    }
+
+    context = {'form': form, 'page': page}
     return render(request, template_name, context)
 
 

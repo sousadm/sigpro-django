@@ -50,26 +50,6 @@ class CentroCustoForm(forms.Form):
         else:
             raise Exception(tratar_error(response))
 
-
-class CentroCustoListForm(forms.Form):
-    descricao = forms.CharField(label='Pesquisa', required=False,
-                                widget=forms.TextInput(
-                                    attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
-    def pesquisar(self, request):
-        itens_por_pagina = 5
-        self.initial = request.POST or request.GET
-        params = get_param(self.initial, itens_por_pagina)
-        if self.initial.get('descricao'): params['descricao'] = self.initial.get('descricao')
-        headers = session_get_headers(request)
-        response = requests.get(URL_RECURSO, headers=headers, params=params)
-        if response.status_code == 200:
-            self.fields['descricao'].initial = self.initial.get('descricao')
-            self.initial = dict(response.json())
-            return get_page(self.initial, params)
-
-
-
-
 @require_token
 def centrocustoNew(request):
     return centrocusto_render(request, None)
@@ -93,22 +73,6 @@ def centrocusto_render(request, uuid=None):
 
     form = CentroCustoForm(request=request, uuid=uuid)
     return render(request, template_name, {'form': form})
-
-
-
-@require_token
-def centrocustoList(request):
-    template_name = 'financeiro/centrocusto_list.html'
-    try:
-        form = CentroCustoListForm() \
-            if request.POST.get('btn_listar') \
-            else CentroCustoListForm(request.POST)
-        page = form.pesquisar(request)
-
-    except Exception as e:
-        messages.error(request, e)
-    
-    return render(request, template_name, {'form': form, 'page': page})
 
 
 @require_token
@@ -143,3 +107,37 @@ def centrocustoPesquisa(request):
     page = form.pesquisar(request, params)
     return render(request, template_name, {'form': form, 'page': page})
 
+
+
+class CentroCustoListForm(forms.Form):
+    descricao = forms.CharField(label='Pesquisa', required=False,
+                                widget=forms.TextInput(
+                                    attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
+    def pesquisar(self, request):
+        itens_por_pagina = 5
+        self.initial = request.POST or request.GET
+        params = get_param(self.initial, itens_por_pagina)
+        if self.initial.get('descricao'): 
+            params['descricao'] = self.initial.get('descricao')
+        headers = session_get_headers(request)
+        response = requests.get(URL_RECURSO, headers=headers, params=params)
+        if response.status_code == 200:
+            self.fields['descricao'].initial = self.initial.get('descricao')
+            self.initial = dict(response.json())
+            return get_page(self.initial, params)
+
+
+@require_token
+def centrocustoList(request):
+    template_name = 'financeiro/centrocusto_list.html'
+    try:
+        form = CentroCustoListForm() \
+            if request.POST.get('btn_listar') \
+            else CentroCustoListForm(request.POST)
+        page = form.pesquisar(request)
+
+    except Exception as e:
+        messages.error(request, e)
+        
+    context = {'form': form, 'page': page}
+    return render(request, template_name, context)
