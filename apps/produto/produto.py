@@ -13,9 +13,9 @@ from django.http import HttpResponseRedirect
 from core.controle import session_get_headers, tratar_error, dados_para_json, require_token
 from core.paginacao import get_param, get_page
 from core.settings import URL_API
-from produto.categoria import categoriaChoices
-from produto.models import TIPO_UNIDADE_MEDIDA
-from produto.precificacao import precificacaoChoices
+from apps.produto.categoria import categoriaChoices
+from apps.produto.models import TIPO_UNIDADE_MEDIDA
+from apps.produto.precificacao import precificacaoChoices
 
 TIPO_NEGOCIAVEL = (
     ('True', 'Permite negociação de preço'),

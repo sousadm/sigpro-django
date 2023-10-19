@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from acesso.forms import LoginForm
+from apps.acesso.forms import LoginForm
 from core.controle import session_add_token, session_get, require_token
 from core.settings import URL_API
 

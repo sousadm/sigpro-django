@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect
 from core.controle import session_get_headers, tratar_error, require_token, dados_para_json
 from core.paginacao import get_page, get_param
 from core.settings import URL_API
-from produto.models import TIPO_CATEGORIA
+from apps.produto.models import TIPO_CATEGORIA
 
 URL_RECURSO = URL_API + 'categoria/'
 

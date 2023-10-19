@@ -8,7 +8,7 @@ from django.contrib import messages
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 from core.paginacao import get_page, get_param
 from core.settings import URL_API
-from venda.models import SITUACAO_CADASTRAL, TIPO_PAGAMENTO
+from apps.venda.models import SITUACAO_CADASTRAL, TIPO_PAGAMENTO
 
 # Create your views here.
 

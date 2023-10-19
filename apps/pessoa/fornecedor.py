@@ -7,7 +7,7 @@ from django import forms
 from core.controle import require_token
 
 from core.tipos import TIPO_SITUACAO
-from pessoa.forms import ativar_pessoa_tipo, existe_registro, pesquisa_pessoa, salvar_pessoa_tipo
+from apps.pessoa.forms import ativar_pessoa_tipo, existe_registro, pesquisa_pessoa, salvar_pessoa_tipo
 
 
 @require_token

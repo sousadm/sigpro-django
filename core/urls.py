@@ -17,27 +17,27 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from acesso.views import login, home, logout
-from compra.cotacao import cotacaoEdit, cotacaoImprimir, cotacaoListForm, cotacaoNew
-from compra.cotacao_item import cotacaoItemDelete, cotacaoItemEdit, cotacaoItemNew
-from compra.cotacao_orcamento import cotacaoOrcamentoDelete, cotacaoOrcamentoEdit, cotacaoOrcamentoNew
-from financeiro.centrocusto import centrocustoChoices, centrocustoEdit, centrocustoList, centrocustoNew, centrocustoPesquisa, get_centrocusto_uuid
-from financeiro.titulo import tituloEdit, tituloList, tituloNew
-from pessoa.Endereco import get_municipios
-from pessoa.cliente import pessoaClienteEdit
-from pessoa.fornecedor import pessoaFornecedorEdit
-from pessoa.transportador import pessoaTransportadorEdit
-from pessoa.vendedor import pessoaVendedorEdit
-from pessoa.views import get_pessoa_documento, get_pessoa_uuid, pessoaNew, pessoaEdit, pessoaPesquisa, pessoaList
-from produto.categoria import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
-from produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew, \
+from apps.acesso.views import login, home, logout
+from apps.compra.cotacao import cotacaoEdit, cotacaoImprimir, cotacaoListForm, cotacaoNew
+from apps.compra.cotacao_item import cotacaoItemDelete, cotacaoItemEdit, cotacaoItemNew
+from apps.compra.cotacao_orcamento import cotacaoOrcamentoDelete, cotacaoOrcamentoEdit, cotacaoOrcamentoNew
+from apps.financeiro.centrocusto import centrocustoChoices, centrocustoEdit, centrocustoList, centrocustoNew, centrocustoPesquisa, get_centrocusto_uuid
+from apps.financeiro.titulo import tituloEdit, tituloList, tituloNew
+from apps.pessoa.Endereco import get_municipios
+from apps.pessoa.cliente import pessoaClienteEdit
+from apps.pessoa.fornecedor import pessoaFornecedorEdit
+from apps.pessoa.transportador import pessoaTransportadorEdit
+from apps.pessoa.vendedor import pessoaVendedorEdit
+from apps.pessoa.views import get_pessoa_documento, get_pessoa_uuid, pessoaNew, pessoaEdit, pessoaPesquisa, pessoaList
+from apps.produto.categoria import categoriaList, categoriaEdit, categoriaNew, categoriaChoices
+from apps.produto.distribuicao import centroDistribuicaoList, centroDistribuicaoEdit, centroDistribuicaoNew, \
     centroDistribuicaoChoices
-from produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
-from produto.produto import get_produto, produtoEdit, produtoList, produtoNew, produtoPesquisa
-from produto.estoque import produtoEstoque, produtoEstoqueDetalhe
-from venda.formapgto import formaPgtoEdit, formaPgtoNew, formapgtoList, get_formapgto
-from venda.venda_item import vendaItemDelete, vendaItemEdit, vendaItemNew
-from venda.vendas import vendaEdit, vendaImprimir, vendaList, vendaNew
+from apps.produto.precificacao import precificacaoList, precificacaoEdit, precificacaoNew
+from apps.produto.produto import get_produto, produtoEdit, produtoList, produtoNew, produtoPesquisa
+from apps.produto.estoque import produtoEstoque, produtoEstoqueDetalhe
+from apps.venda.formapgto import formaPgtoEdit, formaPgtoNew, formapgtoList, get_formapgto
+from apps.venda.venda_item import vendaItemDelete, vendaItemEdit, vendaItemNew
+from apps.venda.vendas import vendaEdit, vendaImprimir, vendaList, vendaNew
 
 urlpatterns = [
     path('', home, name='home'),

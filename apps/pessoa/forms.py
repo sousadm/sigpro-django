@@ -9,7 +9,7 @@ from core.controle import format_cnpj, format_cpf, session_get_headers, tratar_e
 from core.paginacao import get_page
 from core.settings import URL_API
 from core.tipos import NIVEL_NEGOCIACAO, TIPO_PROPRIETARIO
-from pessoa.models import TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TIPO_SIM_NAO, REGIME_TRIBUTARIO_CHOICES, \
+from apps.pessoa.models import TIPO_SITUACAO, TIPO_CHOICES, cpf_regex, cnpj_regex, TIPO_SIM_NAO, REGIME_TRIBUTARIO_CHOICES, \
     TIPO_CONTRIBUINTE_CHOICES
 
 # Create your tests here.

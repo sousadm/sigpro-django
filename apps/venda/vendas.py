@@ -10,8 +10,8 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 
 from core.settings import URL_API
-from venda.formapgto import formaDePagamentoChoices
-from venda.venda_item import VendaItemForm
+from apps.venda.formapgto import formaDePagamentoChoices
+from apps.venda.venda_item import VendaItemForm
 
 URL_RECURSO = URL_API + 'venda/'
 URL_RECURSO_ITEM = URL_API + 'vendaitem/'

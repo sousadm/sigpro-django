@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from core.controle import session_get_headers, tratar_error, dados_para_json, require_token
 from core.settings import URL_API
-from produto.distribuicao import centroDistribuicaoChoices
+from apps.produto.distribuicao import centroDistribuicaoChoices
 
 URL_RECURSO = URL_API + 'estoque/'
 

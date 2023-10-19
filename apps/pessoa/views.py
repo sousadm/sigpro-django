@@ -8,9 +8,9 @@ from django.urls import reverse
 
 from core.controle import require_token, session_get_headers
 from core.settings import URL_API
-from pessoa.Endereco import get_lista_unidade_federacao
-from pessoa.forms import PessoaForm, PessoaListForm
-from pessoa.models import TIPO_CHOICES
+from apps.pessoa.Endereco import get_lista_unidade_federacao
+from apps.pessoa.forms import PessoaForm, PessoaListForm
+from apps.pessoa.models import TIPO_CHOICES
 
 
 URL_RECURSO = URL_API + 'pessoa/'

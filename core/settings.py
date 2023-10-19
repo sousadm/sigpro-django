@@ -36,16 +36,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrapform',
     'bootstrap4',
     'djmoney',
+    'apps.produto',
+    'apps.acesso',
+    'apps.pessoa',
+    'apps.compra',
+    'apps.venda',
+    'apps.financeiro',
     'core',
-    'acesso',
-    'pessoa',
-    'produto',
-    'compra',
-    'venda',
-    'financeiro',
-    'bootstrapform',
 ]
 
 MIDDLEWARE = [

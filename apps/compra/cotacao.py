@@ -6,13 +6,13 @@ from django.http import HttpResponseRedirect
 
 from django.urls import reverse
 from django.shortcuts import render
-from compra.cotacao_item import CotacaoItemForm
-from compra.cotacao_orcamento import CotacaoOrcamentoForm
+from apps.compra.cotacao_item import CotacaoItemForm
+from apps.compra.cotacao_orcamento import CotacaoOrcamentoForm
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 from core.paginacao import get_page, get_param
 
 from core.settings import URL_API
-from produto.models import TIPO_UNIDADE_MEDIDA
+from apps.produto.models import TIPO_UNIDADE_MEDIDA
 
 # Create your views here.
 

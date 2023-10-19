@@ -7,7 +7,7 @@ from django.shortcuts import render
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 from core.settings import URL_API
 
-from produto.models import TIPO_UNIDADE_MEDIDA
+from apps.produto.models import TIPO_UNIDADE_MEDIDA
 
 URL_RECURSO = URL_API + 'cotacao/'
 URL_RECURSO_ITEM = URL_API + 'cotacao-item/'

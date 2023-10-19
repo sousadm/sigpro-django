@@ -7,8 +7,8 @@ from django import forms
 from core.controle import require_token
 
 from core.tipos import TIPO_SITUACAO
-from pessoa.forms import ativar_pessoa_tipo, existe_registro, pesquisa_pessoa, salvar_pessoa_tipo
-from pessoa.models import TIPO_SIM_NAO
+from apps.pessoa.forms import ativar_pessoa_tipo, existe_registro, pesquisa_pessoa, salvar_pessoa_tipo
+from apps.pessoa.models import TIPO_SIM_NAO
 
 
 class ClienteForm(forms.Form):

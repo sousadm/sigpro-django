@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from core.controle import dados_para_json, require_token, session_get_headers, tratar_error
 from core.settings import URL_API
-from produto.precificacao import precificacaoChoices
+from apps.produto.precificacao import precificacaoChoices
 
 URL_RECURSO = URL_API + 'cotacao/'
 URL_RECURSO_ORCAMENTO = URL_API + 'cotacao-orcamento/'
