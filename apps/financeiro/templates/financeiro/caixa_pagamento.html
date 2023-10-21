@@ -1,0 +1,84 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Caixa {% endblock %}
+
+{% block content %}
+<form method="post">
+
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card-body">
+                <!-- dados nominais -->
+                <div class="card-body">
+
+                    <div class="form-floating mb-3 mt-3">
+                        <input type="text" class="form-control" id="nominal" placeholder="Nome (cliente / fornecedor)"
+                            name="nominal">
+                        <label for="nominal">Nome (cliente / fornecedor)</label>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-person"></i>Pessoa
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card-body">
+                <!-- valores -->
+                <div class="card-body">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card-body">
+            <!-- títulos a baixar -->
+            <div class="card-body">
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button type="button" class="btn btn-secondary">
+            <i class="fas fa-plus"></i>Título
+        </button>
+        <button type="button" class="btn btn-secondary">
+            <i class="fa fa-user" aria-hidden="true"></i>Participante
+        </button>
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-money"></i> <span class="d-none d-md-inline">Pagamento</span>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <button class="dropdown-item">
+                        <i class="fas fa-edit"></i>Dinheiro
+                    </button>
+                    <button class="dropdown-item">
+                        <i class="fas fa-edit"></i>Débito
+                    </button>
+                    <button class="dropdown-item">
+                        <i class="fas fa-edit"></i>Crédito
+                    </button>
+                    <button class="dropdown-item">
+                        <i class="fas fa-edit"></i>Cheque
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}

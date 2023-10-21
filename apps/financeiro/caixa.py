@@ -50,8 +50,9 @@ class CaixaForm(forms.Form):
 
 
 @require_token
-def caixaNew(request):
-    return caixa_render(request, None)
+def caixaPagamentoNew(request):
+    template = 'financeiro/caixa_pagamento.html'
+    return caixa_render(request=request, template=template)
 
 
 def caixaEdit(request, uuid):
@@ -59,8 +60,8 @@ def caixaEdit(request, uuid):
 
 
 @require_token
-def caixa_render(request, uuid=None):
-    template_name = 'financeiro/caixa_edit.html'
+def caixa_render(request, uuid=None, template=None):
+    template_name = template if template else 'financeiro/caixa_edit.html'
     try:
         if request.POST.get('btn_salvar'):
             form = CaixaForm(request.POST, request=request)

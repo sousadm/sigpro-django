@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %} Caixa {% endblock %}
+
+{% block content %}
+<form method="post">
+
+    {% csrf_token %}
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Caixa</h3>
+        </div>
+        <div class="card-body">
+
+        </div>
+    </div>
+
+    <div class="footer">
+        <button type="submit" value="btn_salvar" name="btn_salvar" class="btn btn-primary">
+            <i class="fas fa-save"></i> Salvar
+        </button>
+        <a href="{% url 'url_centrocusto_add' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i> Pagamento </button>
+        </a>
+        <a href="{% url 'url_centrocusto_add' %}">
+            <button type="button" class="btn btn-secondary"> <i class="fas fa-plus"></i> Recebimento </button>
+        </a>
+    </div>
+
+</form>
+{% endblock %}

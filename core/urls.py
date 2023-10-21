@@ -21,6 +21,7 @@ from apps.acesso.views import login, home, logout
 from apps.compra.cotacao import cotacaoEdit, cotacaoImprimir, cotacaoListForm, cotacaoNew
 from apps.compra.cotacao_item import cotacaoItemDelete, cotacaoItemEdit, cotacaoItemNew
 from apps.compra.cotacao_orcamento import cotacaoOrcamentoDelete, cotacaoOrcamentoEdit, cotacaoOrcamentoNew
+from apps.financeiro.caixa import caixaPagamentoNew
 from apps.financeiro.centrocusto import centrocustoChoices, centrocustoEdit, centrocustoList, centrocustoNew, centrocustoPesquisa, get_centrocusto_uuid
 from apps.financeiro.titulo import tituloEdit, tituloList, tituloNew
 from apps.pessoa.Endereco import get_municipios
@@ -112,5 +113,7 @@ urlpatterns = [
     path('titulo/', tituloList, name='url_titulo_list'),
     path('titulo/add', tituloNew, name='url_titulo_add'),
     path('titulo/<int:uuid>', tituloEdit, name='url_titulo_edit'),
+
+    path('caixa/pagamento', caixaPagamentoNew, name='url_caixa_pagamento'),
 
 ]

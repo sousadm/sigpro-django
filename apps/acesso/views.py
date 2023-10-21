@@ -24,7 +24,7 @@ def login(request):
                     session_add_token(request, response.json())
                     # return HttpResponseRedirect(reverse('home'))
                     # return HttpResponseRedirect(reverse('url_venda_edit', kwargs={'uuid': 7}))
-                    return HttpResponseRedirect(reverse('url_centrocusto_list'))
+                    return HttpResponseRedirect(reverse('url_caixa_pagamento'))
                 else:
                     messages.error(request, 'erro ao acessar o sistema')
         else:
