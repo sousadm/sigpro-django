@@ -8,72 +8,77 @@
 
     {% csrf_token %}
 
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <div class="card-body">
-                <!-- dados nominais -->
-                <div class="card-body">
-
-                    <div class="form-floating mb-3 mt-3">
-                        <input type="text" class="form-control" id="nominal" placeholder="Nome (cliente / fornecedor)"
-                            name="nominal">
-                        <label for="nominal">Nome (cliente / fornecedor)</label>
-                    </div>
-
-                </div>
-                <div class="card-footer">
-                    <button type="button" class="btn btn-primary">
-                        <i class="fas fa-person"></i>Pessoa
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="card-body">
-                <!-- valores -->
-                <div class="card-body">
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
+    <!-- <div class="card-body">
+        <h4 class="bg-dark text-white">Dados Nominais</h4>
         <div class="card-body">
-            <!-- títulos a baixar -->
+
+            <div class="form-floating mb-3 mt-3">
+                <input type="text" class="form-control" id="nominal" placeholder="Nome (cliente / fornecedor)"
+                    name="nominal">
+                <label for="nominal">Nome (cliente / fornecedor)</label>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-primary">
+                <i class="fas fa-person"></i>Pessoa
+            </button>
+        </div>
+    </div> -->
+
+
+    <!-- <div class="row">
+        <div class="col-12 col-md-6">
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card-body">
+                <h4 class="bg-dark text-white">Meios de Pagamentos</h4>
+                <div class="card-body">
+
+
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- <div class="row">
+        <div class="card-body">
+            <h4 class="bg-dark text-white">Titulos</h4>
             <div class="card-body">
 
 
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="footer">
-        <button type="button" class="btn btn-secondary">
-            <i class="fas fa-plus"></i>Título
+
+        <button type="button" id="modalTituloButton" class="btn btn-secondary" data-titulo="Títulos a Pagar"
+            data-url="{% url 'url_titulo_pesquisa' %}?tipoMovimento=PAGAR">
+            <i class="fa-solid fa-file-circle-plus"></i><span class="d-none d-md-inline">Título</span>
         </button>
+
         <button type="button" class="btn btn-secondary">
-            <i class="fa fa-user" aria-hidden="true"></i>Participante
+            <i class="fa-solid fa-user-plus"></i><span class="d-none d-md-inline">Participante</span>
         </button>
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-money"></i> <span class="d-none d-md-inline">Pagamento</span>
+                    <i class="fa-solid fa-coins"></i><span class="d-none d-md-inline">Pagamento</span>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                     <button class="dropdown-item">
-                        <i class="fas fa-edit"></i>Dinheiro
+                        <i class="fa-solid fa-sack-dollar"></i> Dinheiro
                     </button>
                     <button class="dropdown-item">
-                        <i class="fas fa-edit"></i>Débito
+                        <i class="fa-regular fa-credit-card"></i> Débito
                     </button>
                     <button class="dropdown-item">
-                        <i class="fas fa-edit"></i>Crédito
+                        <i class="fa-solid fa-credit-card"></i> Crédito
                     </button>
                     <button class="dropdown-item">
-                        <i class="fas fa-edit"></i>Cheque
+                        <i class="fa fa-money-check-dollar"></i> Cheque
                     </button>
                 </div>
             </div>
@@ -81,4 +86,29 @@
     </div>
 
 </form>
+
+
+<script>
+    $(document).ready(function () {
+        $('#modalTituloButton').on('click', function () {
+            $('#modalPadraoPesquisa').modal('show');
+            var url = $(this).data("url");
+            var titulo = $(this).data("titulo");
+            $('#modalPadraoTitulo').text(titulo);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalPadraoContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+
+
+
 {% endblock %}

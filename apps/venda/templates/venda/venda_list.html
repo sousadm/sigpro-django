@@ -51,7 +51,7 @@
                             <td>{{ item.vendaId }}</td>                            
                             <td>{{ item.status|default_if_none:"" }}</td>
                             <td>{{ item.nome|default_if_none:"" }}</td>
-                            <td>{{item.created_str}}</td>
+                            <td>{{ item.created_str}}</td>
                             <td>{{ item.formaPgto|default_if_none:"" }}</td>
                             <td>{{ item.valorTotal|floatformat:2 }}</td>
                             <td>

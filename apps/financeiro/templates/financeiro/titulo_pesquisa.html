@@ -1,0 +1,82 @@
+{% load bootstrap %}
+
+<div class="row">
+    <div class="col">
+        {{ form.descricao|bootstrap }}
+    </div>
+    <div class="col-auto mb-3 d-flex align-items-end">
+        <button type="button" id="btn_listar" name="btn_listar" class="btn btn-primary">
+            <i class="fas fa-search"></i> Listar
+        </button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>Participante</th>
+                <th>Documento</th>
+                <th>Portador</th>
+                <th>Tipo</th>                        
+                <th>Vencimento</th>
+                <th>Saldo</th>
+                <th width="90"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in page.object_list %}
+            {{ item }}
+            <tr data="{{ item }}" class="item-row">
+                <td>{{ item.participante|default_if_none:"" }}</td>
+                <td>{{ item.cpfCnpj|default_if_none:"" }}</td>
+                <td>{{ item.portador|default_if_none:"" }}</td>
+                <td>{{ item.tipoMovimento|default_if_none:"" }}</td>                        
+                <td>{{ item.vencimento }}</td>
+                <td>{{ item.saldo }}</td>
+                <td>
+                    <button type="button" class="btn btn-sm item-button" data-dismiss="modal">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4"><span>sem registros</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include "core/paginacao.html" %}
+
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('.item-button').on('click', function () {
+            var itemRow = $(this).closest('.data');
+            alert(itemRow);
+        });
+    });
+
+    $(document).ready(function () {
+        $('#btn_listar').click(function (e) {
+            var descricao = document.getElementById('id_descricao').value;
+            var url = '{% url "url_titulo_pesquisa" %}' + "?tipoMovimento=PAGAR&descricao=" + descricao;
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (data) {
+                    $('#modalPadraoContent').html(data);
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        });
+    });
+
+</script>

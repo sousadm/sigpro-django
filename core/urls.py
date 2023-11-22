@@ -23,7 +23,7 @@ from apps.compra.cotacao_item import cotacaoItemDelete, cotacaoItemEdit, cotacao
 from apps.compra.cotacao_orcamento import cotacaoOrcamentoDelete, cotacaoOrcamentoEdit, cotacaoOrcamentoNew
 from apps.financeiro.caixa import caixaPagamentoNew
 from apps.financeiro.centrocusto import centrocustoChoices, centrocustoEdit, centrocustoList, centrocustoNew, centrocustoPesquisa, get_centrocusto_uuid
-from apps.financeiro.titulo import tituloEdit, tituloList, tituloNew
+from apps.financeiro.titulo import tituloEdit, tituloList, tituloNew, tituloPesquisa
 from apps.pessoa.Endereco import get_municipios
 from apps.pessoa.cliente import pessoaClienteEdit
 from apps.pessoa.fornecedor import pessoaFornecedorEdit
@@ -113,6 +113,7 @@ urlpatterns = [
     path('titulo/', tituloList, name='url_titulo_list'),
     path('titulo/add', tituloNew, name='url_titulo_add'),
     path('titulo/<int:uuid>', tituloEdit, name='url_titulo_edit'),
+    path('titulo/pesquisa', tituloPesquisa, name='url_titulo_pesquisa'),    
 
     path('caixa/pagamento', caixaPagamentoNew, name='url_caixa_pagamento'),
 

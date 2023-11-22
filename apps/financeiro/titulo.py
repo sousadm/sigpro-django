@@ -88,11 +88,13 @@ class TituloListForm(forms.Form):
                                     attrs={'autofocus': 'autofocus', 'placeholder': 'digite um valor para pesquisa'}))
     def pesquisar(self, request):
         itens_por_pagina = 5
-        self.initial = request.POST or request.GET
+        self.initial = request.POST or request.GET        
+        
         params = get_param(self.initial, itens_por_pagina)
-        if self.initial.get('descricao'):
-            params['descricao'] = self.initial.get('descricao')
+        if self.initial.get('tipoMovimento'): params['tipoMovimento'] = self.initial.get('tipoMovimento')
+        if self.initial.get('descricao'): params['historico'] = self.initial.get('descricao')
         headers = session_get_headers(request)
+
         response = requests.get(URL_RECURSO, headers=headers, params=params)
         if response.status_code == 200:
             self.fields['descricao'].initial = self.initial.get('descricao')
@@ -141,3 +143,16 @@ def tituloList(request):
         messages.error(request, e)
 
     return render(request, template_name, {'form': form, 'page': page})
+
+
+@require_token
+def tituloPesquisa(request):
+    template_name = 'financeiro/titulo_pesquisa.html'
+    try:
+        form = TituloListForm(request.GET or request.POST)
+        page = form.pesquisar(request)
+    except Exception as e:
+        messages.error(request, e)        
+    return render(request, template_name, {'form': form, 'page': page})
+
+
